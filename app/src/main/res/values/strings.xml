@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Diploma</string>
+    <string name="description_def_author_avatar">default author avatar</string>
+    <string name="description_post_menu">event menu</string>
+    <string name="description_post_like">like event</string>
+    <string name="description_post_share">share event</string>
+    <string name="like">like</string>
+    <string name="share">share</string>
+    <string name="enter">enter</string>
+    <string name="your_password">your password</string>
+    <string name="your_login">your login</string>
+    <string name="choose_avatar">choose avatar</string>
+    <string name="your_name">your name</string>
+    <string name="confirm_your_password">confirm your password</string>
+    <string name="description_content_image">content image</string>
+    <string name="error_loading">error</string>
+    <string name="retry_loading">retry</string>
+    <string name="empty_posts">empty posts</string>
+    <string name="add_post">add post</string>
+    <string name="sign_in">sign in</string>
+    <string name="sign_up">sign up</string>
+    <string name="logout">logout</string>
+    <string name="save">save</string>
+    <string name="menu_edit">edit</string>
+    <string name="menu_remove">refresh</string>
+</resources>

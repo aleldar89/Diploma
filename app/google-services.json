@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "921225756073",
+    "project_id": "diploma-91ff1",
+    "storage_bucket": "diploma-91ff1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:921225756073:android:c8efd2c3f11410055cd8b8",
+        "android_client_info": {
+          "package_name": "ru.netology.diploma"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "921225756073-fi81928u1ngnsiv1frjerqpvgo0t99js.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmPWSMnvTv-7iFiZPC7uKGr-iahKeWTWQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "921225756073-fi81928u1ngnsiv1frjerqpvgo0t99js.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
