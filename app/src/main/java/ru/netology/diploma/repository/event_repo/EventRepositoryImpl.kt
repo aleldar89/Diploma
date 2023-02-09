@@ -11,6 +11,7 @@ import ru.netology.diploma.dao.EventRemoteKeyDao
 import ru.netology.diploma.db.EventsDb
 import ru.netology.diploma.dto.*
 import ru.netology.diploma.entity.EventEntity
+import ru.netology.diploma.entity.PostEntity
 import ru.netology.diploma.error.*
 import java.io.File
 import java.io.IOException
@@ -38,7 +39,19 @@ class EventRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getAll() {
-        TODO("Not yet implemented")
+        try {
+            val response = apiService.getAllEvents()
+            if (!response.isSuccessful) {
+                throw RuntimeException(response.message())
+            }
+            val events = response.body() ?: throw RuntimeException("body is null")
+
+            eventDao.insert(events.map(EventEntity.Companion::fromDto))
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw UnknownError
+        }
     }
 
     override suspend fun save(event: Event) {

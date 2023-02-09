@@ -96,7 +96,7 @@
             tools:text="@sample/post.json/data/content" />
 
         <ImageView
-            android:id="@+id/content_image"
+            android:id="@+id/image_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
@@ -106,12 +106,34 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/content" />
 
+        <VideoView
+            android:id="@+id/video_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:paddingTop="@dimen/common_spacing"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/content" />
+
+        <ImageView
+            android:id="@+id/play_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/content"
+            app:srcCompat="@drawable/ic_baseline_play_circle_filled_36" />
+
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/footer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:barrierDirection="bottom"
-            app:constraint_referenced_ids="content_image" />
+            app:constraint_referenced_ids="image_view, video_view, play_view" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/like"
@@ -125,8 +147,7 @@
             app:icon="@drawable/ic_baseline_thumb_up_alt_24"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/footer"
-            tools:checked="@sample/post.json/data/likedByMe"
-            tools:text="@sample/post.json/data/likes" />
+            tools:checked="@sample/post.json/data/likedByMe" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/share"
@@ -141,6 +162,41 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/footer" />
 
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/footer2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="like, share" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:paddingTop="@dimen/common_spacing"
+            android:paddingBottom="@dimen/common_spacing"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/footer2"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/mentionIds"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:visibility="gone"
+                tools:text="@sample/post.json/data/mentionIds" />
+
+            <TextView
+                android:id="@+id/likeOwnerIds"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:visibility="gone"
+                tools:text="@sample/post.json/data/likeOwnerIds" />
+
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

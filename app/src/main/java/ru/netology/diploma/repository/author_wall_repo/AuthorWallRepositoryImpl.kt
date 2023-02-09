@@ -10,6 +10,7 @@ import ru.netology.diploma.db.AuthorWallDb
 import ru.netology.diploma.dto.Post
 import ru.netology.diploma.entity.PostEntity
 import ru.netology.diploma.error.*
+import java.io.IOException
 import javax.inject.Inject
 
 class AuthorWallRepositoryImpl @Inject constructor(
@@ -34,7 +35,19 @@ class AuthorWallRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getAll() {
-        TODO("Not yet implemented")
+        try {
+            val response = apiService.getAuthorWall()
+            if (!response.isSuccessful) {
+                throw RuntimeException(response.message())
+            }
+            val authorWall = response.body() ?: throw RuntimeException("body is null")
+
+            authorWallDao.insert(authorWall.map(PostEntity.Companion::fromDto))
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw UnknownError
+        }
     }
 
 }

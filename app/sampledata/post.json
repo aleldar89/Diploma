@@ -10,8 +10,10 @@
       "link": "https://netology.ru/",
       "content": "Привет, это новая Нетология!",
       "likedByMe": true,
-      "likes": 100,
-      "participants": "Участники: Вася Пупкин"
+      "likeOwnerIds": "Иван Иванов",
+      "speakerIds": "Гоша Кошкин",
+      "mentionIds": "Вася Пупкин",
+      "participantIds": "Коля Котеночкин"
     }
   ]
 }

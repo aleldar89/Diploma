@@ -11,7 +11,7 @@
         android:padding="@dimen/common_spacing">
 
         <ImageView
-            android:id="@+id/avatar"
+            android:id="@+id/authorAvatar"
             android:layout_width="@dimen/posts_avatar_size"
             android:layout_height="@dimen/posts_avatar_size"
             android:layout_marginBottom="@dimen/common_spacing"
@@ -29,15 +29,15 @@
             android:layout_marginEnd="@dimen/common_spacing"
             android:ellipsize="end"
             android:singleLine="true"
-            app:layout_constraintBottom_toTopOf="@+id/jobPosition"
+            app:layout_constraintBottom_toTopOf="@+id/authorJob"
             app:layout_constraintEnd_toStartOf="@id/menu"
-            app:layout_constraintStart_toEndOf="@id/avatar"
+            app:layout_constraintStart_toEndOf="@id/authorAvatar"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed"
             tools:text="@sample/post.json/data/author" />
 
         <TextView
-            android:id="@+id/jobPosition"
+            android:id="@+id/authorJob"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/common_spacing"
@@ -46,7 +46,7 @@
             android:singleLine="true"
             app:layout_constraintBottom_toTopOf="@id/published"
             app:layout_constraintEnd_toStartOf="@id/menu"
-            app:layout_constraintStart_toEndOf="@id/avatar"
+            app:layout_constraintStart_toEndOf="@id/authorAvatar"
             app:layout_constraintTop_toBottomOf="@id/author"
             app:layout_constraintVertical_chainStyle="packed"
             tools:text="@sample/post.json/data/position" />
@@ -60,8 +60,8 @@
             android:layout_marginBottom="@dimen/common_spacing"
             app:layout_constraintBottom_toBottomOf="@id/header"
             app:layout_constraintEnd_toStartOf="@id/menu"
-            app:layout_constraintStart_toEndOf="@id/avatar"
-            app:layout_constraintTop_toBottomOf="@id/jobPosition"
+            app:layout_constraintStart_toEndOf="@id/authorAvatar"
+            app:layout_constraintTop_toBottomOf="@id/authorJob"
             tools:text="@sample/post.json/data/published" />
 
         <com.google.android.material.button.MaterialButton
@@ -81,7 +81,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:barrierDirection="bottom"
-            app:constraint_referenced_ids="avatar,published, jobPosition,menu" />
+            app:constraint_referenced_ids="authorAvatar, published, authorJob, menu" />
 
         <TextView
             android:id="@+id/content"
@@ -96,7 +96,7 @@
             tools:text="@sample/post.json/data/content" />
 
         <ImageView
-            android:id="@+id/content_image"
+            android:id="@+id/image_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
@@ -106,25 +106,34 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/content" />
 
-        <TextView
-            android:id="@+id/participants"
+        <VideoView
+            android:id="@+id/video_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:autoLink="web"
-            android:lineSpacingMultiplier="1.5"
+            android:adjustViewBounds="true"
             android:paddingTop="@dimen/common_spacing"
-            android:paddingBottom="@dimen/common_spacing"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/content_image"
-            tools:text="@sample/post.json/data/participants" />
+            app:layout_constraintTop_toBottomOf="@id/content" />
+
+        <ImageView
+            android:id="@+id/play_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/content"
+            app:srcCompat="@drawable/ic_baseline_play_circle_filled_36" />
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/footer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:barrierDirection="bottom"
-            app:constraint_referenced_ids="participants" />
+            app:constraint_referenced_ids="image_view, video_view, play_view" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/like"
@@ -138,8 +147,7 @@
             app:icon="@drawable/ic_baseline_thumb_up_alt_24"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/footer"
-            tools:checked="@sample/post.json/data/likedByMe"
-            tools:text="@sample/post.json/data/likes" />
+            tools:checked="@sample/post.json/data/likedByMe" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/share"
@@ -154,6 +162,49 @@
             android:text="@string/share"
             android:textColor="@color/gray"/>
 
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/footer2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="like, share" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:paddingTop="@dimen/common_spacing"
+            android:paddingBottom="@dimen/common_spacing"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/footer2"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/likeOwnerIds"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:visibility="gone"
+                tools:text="@sample/post.json/data/likeOwnerIds" />
+
+            <TextView
+                android:id="@+id/speakerIds"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:visibility="gone"
+                tools:text="@sample/post.json/data/speakerIds" />
+
+            <TextView
+                android:id="@+id/participantsIds"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:visibility="gone"
+                tools:text="@sample/post.json/data/participantIds" />
+
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

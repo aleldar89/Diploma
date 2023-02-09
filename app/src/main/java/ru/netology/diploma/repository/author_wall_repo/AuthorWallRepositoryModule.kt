@@ -12,5 +12,5 @@ interface AuthorWallRepositoryModule {
 
     @Singleton
     @Binds
-    fun bindsMyWallRepository(impl: AuthorWallRepositoryImpl): AuthorWallRepository
+    fun bindsAuthorWallRepository(impl: AuthorWallRepositoryImpl): AuthorWallRepository
 }

@@ -5,6 +5,6 @@ data class Job(
     val name: String,
     val position: String,
     val start: String,
-    val finish: String,
-    val link: String,
+    val finish: String?,
+    val link: String?,
 )

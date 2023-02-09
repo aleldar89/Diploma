@@ -41,7 +41,19 @@ class PostRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getAll() {
-        TODO("Not yet implemented")
+        try {
+            val response = apiService.getAllPosts()
+            if (!response.isSuccessful) {
+                throw RuntimeException(response.message())
+            }
+            val posts = response.body() ?: throw RuntimeException("body is null")
+
+            postDao.insert(posts.map(PostEntity.Companion::fromDto))
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw UnknownError
+        }
     }
 
     override suspend fun save(post: Post) {
