@@ -11,25 +11,28 @@ data class EventEntity(
     val id: Int,
     val authorId: Int,
     val author: String,
-    val authorAvatar: String,
-    val authorJob: String,
+    val authorAvatar: String? = null,
+    val authorJob: String?,
     val content: String,
     val datetime: String,
     val published: String,
     @Embedded
-    val coords: CoordinatesEmbedded,
+    val coords: CoordinatesEmbedded? = null,
     val type: Type,
-    val likeOwnerIds: List<Int>,
+    @Embedded
+    val likeOwnerIds: List<Int>? = null,
     val likedByMe: Boolean,
-    val speakerIds: List<Int>,
-    val participantsIds: List<Int>,
+    @Embedded
+    val speakerIds: List<Int>? = null,
+    @Embedded
+    val participantsIds: List<Int>? = null,
     val participatedByMe: Boolean,
     @Embedded
     val attachment: AttachmentEmbedded? = null,
-    val link: String,
+    val link: String? = null,
     val ownedByMe: Boolean,
-    // @Embedded?
-    val users: List<User>,
+    @Embedded
+    val users: List<UserPreview>,
 ) {
     fun toDto() = Event(
         id = id,
@@ -40,7 +43,7 @@ data class EventEntity(
         content = content,
         datetime = datetime,
         published = published,
-        coords = coords.toDto(),
+        coords = coords?.toDto(),
         type = type,
         likeOwnerIds = likeOwnerIds,
         likedByMe = likedByMe,
@@ -64,7 +67,7 @@ data class EventEntity(
                 content = dto.content,
                 datetime = dto.datetime,
                 published = dto.published,
-                coords = dto.coords.let {
+                coords = dto.coords?.let {
                     CoordinatesEmbedded(it.lat, it.long)
                 },
                 type = dto.type,

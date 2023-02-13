@@ -16,7 +16,7 @@ interface EventDao {
     fun getById(id: Int): EventEntity
 
     @Query("DELETE FROM EventEntity WHERE id = :id")
-    fun removeById(id: Int): EventEntity
+    fun removeById(id: Int)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(event: EventEntity)
@@ -38,9 +38,11 @@ interface EventDao {
     suspend fun saveOld(event: EventEntity) = insert(event)
 
     //TODO вставка/удаление id лайкнувшего пользователя в likeOwnerIds
+
     @Query("""
             UPDATE EventEntity SET
             likedByMe = CASE WHEN likedByMe THEN 0 ELSE 1 END
+            WHERE id = :id
         """)
     suspend fun likeById(id: Int)
 
@@ -51,6 +53,7 @@ interface EventDao {
     suspend fun selectLast(): EventEntity
 
     //TODO вставка/удаление id пользователя-участник в participantsIds
+
     @Query("""
             UPDATE EventEntity SET
             participatedByMe = CASE WHEN participatedByMe THEN 0 ELSE 1 END

@@ -33,7 +33,7 @@ class UserViewHolder(
             user.avatar?.let { avatar.loadAvatar(it) }
 
             userGroup.setOnClickListener {
-                onInteractionListener.onChoose(user)
+                onInteractionListener.onSelect(user)
             }
         }
     }

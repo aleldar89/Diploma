@@ -11,22 +11,24 @@ data class PostEntity(
     val id: Int,
     val authorId: Int,
     val author: String,
-    val authorAvatar: String,
-    val authorJob: String,
+    val authorAvatar: String? = null,
+    val authorJob: String? = null,
     val content: String,
     val published: String,
     @Embedded
-    val coords: CoordinatesEmbedded,
-    val link: String,
-    val likeOwnerIds: List<Int>,
-    val mentionIds: List<Int>,
+    val coords: CoordinatesEmbedded? = null,
+    val link: String? = null,
+    @Embedded
+    val likeOwnerIds: List<Int>? = null,
+    @Embedded
+    val mentionIds: List<Int>? = null,
     val mentionedMe: Boolean,
     val likedByMe: Boolean,
     @Embedded
     val attachment: AttachmentEmbedded? = null,
     val ownedByMe: Boolean,
-    // @Embedded?
-    val users: List<User>,
+    @Embedded
+    val users: List<UserPreview>,
 ) {
     fun toDto() = Post(
         id = id,
@@ -36,7 +38,7 @@ data class PostEntity(
         authorJob = authorJob,
         content = content,
         published = published,
-        coords = coords.toDto(),
+        coords = coords?.toDto(),
         link = link,
         likeOwnerIds = likeOwnerIds,
         mentionIds = mentionIds,
@@ -57,7 +59,7 @@ data class PostEntity(
                 authorJob = dto.authorJob,
                 content = dto.content,
                 published = dto.published,
-                coords = dto.coords.let {
+                coords = dto.coords?.let {
                     CoordinatesEmbedded(it.lat, it.long)
                 },
                 link = dto.link,

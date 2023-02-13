@@ -1,5 +1,6 @@
 package ru.netology.diploma.viewmodel
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,7 +16,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.netology.diploma.auth.AppAuth
-import ru.netology.diploma.dto.AvatarFile
+import ru.netology.diploma.dto.ImageFile
 import ru.netology.diploma.dto.Coordinates
 import ru.netology.diploma.dto.Post
 import ru.netology.diploma.repository.post_repo.PostRepository
@@ -59,9 +60,9 @@ class PostViewModel @Inject constructor(
     val authorization: LiveData<Boolean>
         get() = _authorization
 
-    private val noPhoto = AvatarFile()
+    private val noPhoto = ImageFile()
     private val _media = MutableLiveData(noPhoto)
-    val media: LiveData<AvatarFile>
+    val media: LiveData<ImageFile>
         get() = _media
 
     private val _error = SingleLiveEvent<Exception>()
@@ -188,8 +189,8 @@ class PostViewModel @Inject constructor(
         _media.value = null
     }
 
-    fun changePhoto(file: File) {
-        _media.value = AvatarFile(file)
+    fun changePhoto(uri: Uri, file: File) {
+        _media.value = ImageFile(uri, file)
     }
 
 }

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_main"
+    app:startDestination="@id/postsFeedFragment">
+
+    <fragment
+        android:id="@+id/postsFeedFragment"
+        android:name="ru.netology.diploma.ui.PostsFeedFragment"
+        android:label="PostsFeedFragment" >
+        <action
+            android:id="@+id/action_postsFeedFragment_to_newPostFragment"
+            app:destination="@id/newPostFragment" />
+        <action
+            android:id="@+id/action_postsFeedFragment_to_authFragment"
+            app:destination="@id/authFragment" />
+        <action
+            android:id="@+id/action_postsFeedFragment_to_registrationFragment"
+            app:destination="@id/registrationFragment" />
+        <action
+            android:id="@+id/action_postsFeedFragment_to_myDialogFragment"
+            app:destination="@id/myDialogFragment" />
+        <action
+            android:id="@+id/action_postsFeedFragment_to_selectedPostFragment"
+            app:destination="@id/selectedPostFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/authFragment"
+        android:name="ru.netology.diploma.ui.AuthFragment"
+        android:label="AuthFragment" />
+    <fragment
+        android:id="@+id/registrationFragment"
+        android:name="ru.netology.diploma.ui.RegistrationFragment"
+        android:label="RegistrationFragment" />
+    <fragment
+        android:id="@+id/newPostFragment"
+        android:name="ru.netology.diploma.ui.NewPostFragment"
+        android:label="NewPostFragment" />
+    <fragment
+        android:id="@+id/myDialogFragment"
+        android:name="ru.netology.diploma.ui.MyDialogFragment"
+        android:label="MyDialogFragment" />
+    <fragment
+        android:id="@+id/selectedPostFragment"
+        android:name="ru.netology.diploma.ui.SelectedPostFragment"
+        android:label="SelectedPostFragment" >
+        <action
+            android:id="@+id/action_selectedPostFragment_to_newPostFragment"
+            app:destination="@id/newPostFragment" />
+    </fragment>
+</navigation>

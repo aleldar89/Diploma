@@ -16,7 +16,7 @@ interface PostDao {
     fun getById(id: Int): PostEntity
 
     @Query("DELETE FROM PostEntity WHERE id = :id")
-    fun removeById(id: Int): PostEntity
+    fun removeById(id: Int)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(post: PostEntity)
@@ -38,9 +38,11 @@ interface PostDao {
     suspend fun saveOld(post: PostEntity) = insert(post)
 
     //TODO вставка id лайкнувшего пользователя в likeOwnerIds
+
     @Query("""
             UPDATE PostEntity SET
             likedByMe = CASE WHEN likedByMe THEN 0 ELSE 1 END
+            WHERE id = :id
         """)
     suspend fun likeById(id: Int)
 

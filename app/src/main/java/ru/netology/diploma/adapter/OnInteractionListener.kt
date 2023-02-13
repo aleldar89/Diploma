@@ -7,5 +7,5 @@ interface OnInteractionListener<T> {
     fun onShare(item: T) {}
     fun onUserIds(item: T) {}
     fun onUnauthorized(item: T) {}
-    fun onChoose(item: T) {}
+    fun onSelect(item: T) {}
 }

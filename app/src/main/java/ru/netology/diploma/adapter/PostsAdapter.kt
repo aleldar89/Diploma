@@ -80,6 +80,10 @@ class PostViewHolder(
 
             content.text = post.content
 
+            content.setOnClickListener {
+                onInteractionListener.onSelect(post)
+            }
+
             post.attachment?.let {
                 when (it.type) {
                     //TODO возможно не apply

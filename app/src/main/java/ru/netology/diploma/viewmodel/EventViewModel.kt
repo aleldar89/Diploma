@@ -1,11 +1,13 @@
 package ru.netology.diploma.viewmodel
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.map
+import com.google.android.gms.common.config.GservicesValue.value
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -19,6 +21,7 @@ import ru.netology.diploma.dto.*
 import ru.netology.diploma.repository.event_repo.EventRepository
 import ru.netology.diploma.util.SingleLiveEvent
 import java.io.File
+import java.net.URI
 import javax.inject.Inject
 
 private val empty = Event(
@@ -31,7 +34,7 @@ private val empty = Event(
     datetime = "",
     published = "",
     coords = Coordinates("", ""),
-    type = Type.OFFLINE,
+    type = Type.ONLINE,
     likeOwnerIds = emptyList(),
     likedByMe = false,
     speakerIds = emptyList(),
@@ -61,9 +64,9 @@ class EventViewModel @Inject constructor(
     val authorization: LiveData<Boolean>
         get() = _authorization
 
-    private val noPhoto = AvatarFile()
+    private val noPhoto = ImageFile()
     private val _media = MutableLiveData(noPhoto)
-    val media: LiveData<AvatarFile>
+    val media: LiveData<ImageFile>
         get() = _media
 
     private val _error = SingleLiveEvent<Exception>()
@@ -190,8 +193,8 @@ class EventViewModel @Inject constructor(
         _media.value = null
     }
 
-    fun changePhoto(file: File) {
-        _media.value = AvatarFile(file)
+    fun changePhoto(uri: Uri, file: File) {
+        _media.value = ImageFile(uri, file)
     }
 
 }

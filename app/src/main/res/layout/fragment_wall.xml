@@ -4,14 +4,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activity.WallFragment">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/authorInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/common_spacing"
+        android:layout_margin="@dimen/double_spacing"
         android:gravity="center|top"
         android:orientation="vertical">
 
@@ -31,14 +30,6 @@
             android:layout_marginBottom="@dimen/common_spacing"
             android:gravity="center"
             tools:text="@sample/post.json/data/author" />
-
-        <TextView
-            android:id="@+id/authorJob"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/common_spacing"
-            android:gravity="center"
-            tools:text="@sample/post.json/data/position" />
 
     </LinearLayout>
 

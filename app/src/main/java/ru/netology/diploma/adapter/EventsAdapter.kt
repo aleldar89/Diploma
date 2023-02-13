@@ -80,6 +80,10 @@ class EventViewHolder(
 
             content.text = event.content
 
+            content.setOnClickListener {
+                onInteractionListener.onSelect(event)
+            }
+
             event.attachment?.let {
                 when (it.type) {
                     //TODO возможно не apply

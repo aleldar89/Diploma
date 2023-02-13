@@ -39,12 +39,6 @@ class AppAuth @Inject constructor(
         }
     }
 
-    @InstallIn(SingletonComponent::class)
-    @EntryPoint
-    interface AppAuthEntryPoint {
-        fun getApiService(): ApiService
-    }
-
     /** Требуется ли sendPushToken? */
 
     @Synchronized
