@@ -4,11 +4,11 @@ import ru.netology.diploma.dto.Coordinates
 
 data class CoordinatesEmbedded(
     val lat: String,
-    val long: String,
+    val longitude: String,
 ) {
-    fun toDto() = Coordinates(lat, long)
+    fun toDto() = Coordinates(lat, longitude)
 
     companion object {
-        fun fromDto(dto: Coordinates) = CoordinatesEmbedded(dto.lat, dto.long)
+        fun fromDto(dto: Coordinates) = CoordinatesEmbedded(dto.lat, dto.longitude)
     }
 }

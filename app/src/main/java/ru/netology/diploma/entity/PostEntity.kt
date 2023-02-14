@@ -3,7 +3,8 @@ package ru.netology.diploma.entity
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import ru.netology.diploma.dto.*
+import ru.netology.diploma.dto.Post
+import ru.netology.diploma.dto.UserPreview
 
 @Entity
 data class PostEntity(
@@ -24,7 +25,7 @@ data class PostEntity(
     val mentionIds: List<Int>? = null,
     val mentionedMe: Boolean,
     val likedByMe: Boolean,
-    @Embedded
+    @Embedded(prefix = "attachment_")
     val attachment: AttachmentEmbedded? = null,
     val ownedByMe: Boolean,
     @Embedded
@@ -60,7 +61,7 @@ data class PostEntity(
                 content = dto.content,
                 published = dto.published,
                 coords = dto.coords?.let {
-                    CoordinatesEmbedded(it.lat, it.long)
+                    CoordinatesEmbedded(it.lat, it.longitude)
                 },
                 link = dto.link,
                 likeOwnerIds = dto.likeOwnerIds,

@@ -18,6 +18,7 @@ data class EventEntity(
     val published: String,
     @Embedded
     val coords: CoordinatesEmbedded? = null,
+    @Embedded
     val type: Type,
     @Embedded
     val likeOwnerIds: List<Int>? = null,
@@ -27,7 +28,7 @@ data class EventEntity(
     @Embedded
     val participantsIds: List<Int>? = null,
     val participatedByMe: Boolean,
-    @Embedded
+    @Embedded(prefix = "attachment_")
     val attachment: AttachmentEmbedded? = null,
     val link: String? = null,
     val ownedByMe: Boolean,
@@ -68,7 +69,7 @@ data class EventEntity(
                 datetime = dto.datetime,
                 published = dto.published,
                 coords = dto.coords?.let {
-                    CoordinatesEmbedded(it.lat, it.long)
+                    CoordinatesEmbedded(it.lat, it.longitude)
                 },
                 type = dto.type,
                 likeOwnerIds = dto.likeOwnerIds,
