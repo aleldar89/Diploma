@@ -37,10 +37,10 @@ class Converters {
             .joinToString(separator = ";")
     }
 
-    @TypeConverter
-    fun toType(line: String): Type = Type.valueOf(line)
-
-    @TypeConverter
-    fun fromType(type: Type): String = type.name
+//    @TypeConverter
+//    fun toType(line: String): Type = Type.valueOf(line)
+//
+//    @TypeConverter
+//    fun fromType(type: Type): String = type.name
 
 }

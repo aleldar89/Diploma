@@ -1,6 +1,6 @@
 package ru.netology.diploma.dto
 
-enum class Type{
+enum class Type {
     OFFLINE,
     ONLINE,
 }

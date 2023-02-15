@@ -18,7 +18,6 @@ data class EventEntity(
     val published: String,
     @Embedded
     val coords: CoordinatesEmbedded? = null,
-    @Embedded
     val type: Type,
     @Embedded
     val likeOwnerIds: List<Int>? = null,
