@@ -17,7 +17,8 @@ data class EventEntity(
     val datetime: String,
     val published: String,
     @Embedded
-    val coords: CoordinatesEmbedded? = null,
+    val coords: Coordinates? = null,
+//    val coords: CoordinatesEmbedded? = null,
     val type: Type,
     @Embedded
     val likeOwnerIds: List<Int>? = null,
@@ -28,7 +29,8 @@ data class EventEntity(
     val participantsIds: List<Int>? = null,
     val participatedByMe: Boolean,
     @Embedded(prefix = "attachment_")
-    val attachment: AttachmentEmbedded? = null,
+    val attachment: Attachment? = null,
+//    val attachment: AttachmentEmbedded? = null,
     val link: String? = null,
     val ownedByMe: Boolean,
     @Embedded
@@ -43,14 +45,16 @@ data class EventEntity(
         content = content,
         datetime = datetime,
         published = published,
-        coords = coords?.toDto(),
+        coords = coords,
+//        coords = coords?.toDto(),
         type = type,
         likeOwnerIds = likeOwnerIds,
         likedByMe = likedByMe,
         speakerIds = speakerIds,
         participantsIds = participantsIds,
         participatedByMe = participatedByMe,
-        attachment = attachment?.toDto(),
+        attachment = attachment,
+//        attachment = attachment?.toDto(),
         link = link,
         ownedByMe = ownedByMe,
         users = users,
@@ -67,18 +71,20 @@ data class EventEntity(
                 content = dto.content,
                 datetime = dto.datetime,
                 published = dto.published,
-                coords = dto.coords?.let {
-                    CoordinatesEmbedded(it.lat, it.longitude)
-                },
+                coords = dto.coords,
+//                coords = dto.coords?.let {
+//                    CoordinatesEmbedded(it.lat, it.longitude)
+//                },
                 type = dto.type,
                 likeOwnerIds = dto.likeOwnerIds,
                 likedByMe = dto.likedByMe,
                 speakerIds = dto.speakerIds,
                 participantsIds = dto.participantsIds,
                 participatedByMe = dto.participatedByMe,
-                attachment = dto.attachment?.let {
-                    AttachmentEmbedded(it.url, it.type)
-                },
+                attachment = dto.attachment,
+//                attachment = dto.attachment?.let {
+//                    AttachmentEmbedded(it.url, it.type)
+//                },
                 link = dto.link,
                 ownedByMe = dto.ownedByMe,
                 users = dto.users

@@ -2,6 +2,8 @@ package ru.netology.diploma.entity
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
+import ru.netology.diploma.dto.Attachment
+import ru.netology.diploma.dto.Coordinates
 import ru.netology.diploma.dto.Type
 import ru.netology.diploma.dto.UserPreview
 
@@ -35,6 +37,26 @@ class Converters {
                 Gson().toJson(it)
             }
             .joinToString(separator = ";")
+    }
+
+    @TypeConverter
+    fun toAttachment(attachment: String): Attachment {
+        return Gson().fromJson(attachment, Attachment::class.java)
+    }
+
+    @TypeConverter
+    fun fromAttachment(attachment: Attachment): String {
+        return Gson().toJson(attachment)
+    }
+
+    @TypeConverter
+    fun toCoordinates(coordinates: String): Coordinates {
+        return Gson().fromJson(coordinates, Coordinates::class.java)
+    }
+
+    @TypeConverter
+    fun fromCoordinates(coordinates: Coordinates): String {
+        return Gson().toJson(coordinates)
     }
 
 //    @TypeConverter
