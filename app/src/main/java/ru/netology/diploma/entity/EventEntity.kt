@@ -20,12 +20,9 @@ data class EventEntity(
     val coords: Coordinates? = null,
 //    val coords: CoordinatesEmbedded? = null,
     val type: Type,
-    @Embedded
     val likeOwnerIds: List<Int>? = null,
     val likedByMe: Boolean,
-    @Embedded
     val speakerIds: List<Int>? = null,
-    @Embedded
     val participantsIds: List<Int>? = null,
     val participatedByMe: Boolean,
     @Embedded(prefix = "attachment_")
@@ -33,8 +30,8 @@ data class EventEntity(
 //    val attachment: AttachmentEmbedded? = null,
     val link: String? = null,
     val ownedByMe: Boolean,
-    @Embedded
-    val users: List<UserPreview>,
+    val users: List<Pair<String, UserPreview>>
+//    val users: List<UserPreview>,
 ) {
     fun toDto() = Event(
         id = id,

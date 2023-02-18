@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import ru.netology.diploma.api.ApiService
 import ru.netology.diploma.auth.AppAuth
 import ru.netology.diploma.dto.Post
-import ru.netology.diploma.dto.User
+import ru.netology.diploma.dto.UserResponse
 import ru.netology.diploma.repository.my_wall_repo.MyWallRepository
 import ru.netology.diploma.util.SingleLiveEvent
 import javax.inject.Inject
@@ -34,9 +34,9 @@ class MyWallViewModel @Inject constructor(
 
     val data: Flow<PagingData<Post>> = repository.data.flowOn(Dispatchers.Default)
 
-    private val _user = MutableLiveData<User?>(null)
-    val user: LiveData<User?>
-        get() = _user
+    private val _userResponse = MutableLiveData<UserResponse?>(null)
+    val userResponse: LiveData<UserResponse?>
+        get() = _userResponse
 
     private val _error = SingleLiveEvent<Exception>()
     val error: LiveData<Exception>
@@ -46,7 +46,7 @@ class MyWallViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val myId = appAuth.data.value?.id
-                _user.value = apiService.getByIdUser(myId as Int).body()
+                _userResponse.value = apiService.getByIdUser(myId as Int).body()
             } catch (e: Exception) {
                 _error.value = e
             }

@@ -5,6 +5,7 @@ import androidx.room.Room
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import ru.netology.diploma.dao.PostDao
 import ru.netology.diploma.dao.PostRemoteKeyDao
@@ -17,6 +18,7 @@ class PostsDbModule {
     @Singleton
     @Provides
     fun provideDb(
+        @ApplicationContext
         context: Context
     ): PostsDb = Room.databaseBuilder(context, PostsDb::class.java, "posts.db")
         .fallbackToDestructiveMigration()

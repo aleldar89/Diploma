@@ -17,7 +17,6 @@ import ru.netology.diploma.adapter.OnInteractionListener
 import ru.netology.diploma.adapter.PostsAdapter
 import ru.netology.diploma.databinding.FragmentWallBinding
 import ru.netology.diploma.dto.Post
-import ru.netology.diploma.dto.User
 import ru.netology.diploma.extensions.loadAvatar
 import ru.netology.diploma.mediplayer.MediaLifecycleObserver
 import ru.netology.diploma.util.parseException
@@ -37,7 +36,7 @@ class MyWallFragment : Fragment() {
 
         val adapter = PostsAdapter(object : OnInteractionListener<Post>{}, MediaLifecycleObserver())
 
-        val user = viewModel.user.value
+        val user = viewModel.userResponse.value
         user?.avatar?.let { binding.authorAvatar.loadAvatar(it) }
         binding.author.text = user?.name
 

@@ -22,9 +22,7 @@ data class PostEntity(
     val coords: Coordinates? = null,
 //    val coords: CoordinatesEmbedded? = null,
     val link: String? = null,
-    @Embedded
     val likeOwnerIds: List<Int>? = null,
-    @Embedded
     val mentionIds: List<Int>? = null,
     val mentionedMe: Boolean,
     val likedByMe: Boolean,
@@ -32,8 +30,8 @@ data class PostEntity(
     val attachment: Attachment? = null,
 //    val attachment: AttachmentEmbedded? = null,
     val ownedByMe: Boolean,
-    @Embedded
-    val users: List<UserPreview>,
+    val users: List<Pair<String, UserPreview>>
+//    val users: List<UserPreview>,
 ) {
     fun toDto() = Post(
         id = id,

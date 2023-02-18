@@ -136,7 +136,7 @@ interface ApiService {
 
     /** Users methods */
     @GET("users")
-    suspend fun getUsers(): Response<List<User>>
+    suspend fun getUsers(): Response<List<UserResponse>>
 
     @FormUrlEncoded
     @POST("users/authentication")
@@ -163,7 +163,7 @@ interface ApiService {
     ): Response<Token>
 
     @GET("users/id")
-    suspend fun getByIdUser(@Path("id") id: Int): Response<User>
+    suspend fun getByIdUser(@Path("id") id: Int): Response<UserResponse>
 
 
     /** Wall (Posts) methods */

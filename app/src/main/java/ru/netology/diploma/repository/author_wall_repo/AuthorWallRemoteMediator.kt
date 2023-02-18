@@ -6,7 +6,7 @@ import okio.IOException
 import ru.netology.diploma.api.ApiService
 import ru.netology.diploma.dao.PostDao
 import ru.netology.diploma.dao.PostRemoteKeyDao
-import ru.netology.diploma.db.AuthorWallDb
+import ru.netology.diploma.db.PostsDb
 import ru.netology.diploma.entity.PostEntity
 import ru.netology.diploma.entity.PostRemoteKeyEntity
 import ru.netology.diploma.error.ApiError
@@ -16,7 +16,7 @@ class AuthorWallRemoteMediator(
     private val apiService: ApiService,
     private val authorWallDao: PostDao,
     private val authorWallRemoteKeyDao: PostRemoteKeyDao,
-    private val authorWallDb: AuthorWallDb
+    private val authorWallDb: PostsDb
 ) : RemoteMediator<Int, PostEntity>() {
 
     override suspend fun load(loadType: LoadType, state: PagingState<Int, PostEntity>): MediatorResult {

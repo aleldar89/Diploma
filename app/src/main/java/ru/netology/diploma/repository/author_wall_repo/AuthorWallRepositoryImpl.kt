@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.map
 import ru.netology.diploma.api.ApiService
 import ru.netology.diploma.dao.PostDao
 import ru.netology.diploma.dao.PostRemoteKeyDao
-import ru.netology.diploma.db.AuthorWallDb
+import ru.netology.diploma.db.PostsDb
 import ru.netology.diploma.dto.Post
 import ru.netology.diploma.entity.PostEntity
 import ru.netology.diploma.error.*
@@ -17,7 +17,7 @@ class AuthorWallRepositoryImpl @Inject constructor(
     private val authorWallDao: PostDao,
     private val apiService: ApiService,
     authorWallRemoteKeyDao: PostRemoteKeyDao,
-    authorWallDb: AuthorWallDb
+    authorWallDb: PostsDb
 ) : AuthorWallRepository {
 
     @OptIn(ExperimentalPagingApi::class)
