@@ -23,6 +23,9 @@
         <action
             android:id="@+id/action_postsFeedFragment_to_selectedPostFragment"
             app:destination="@id/selectedPostFragment" />
+        <action
+            android:id="@+id/action_postsFeedFragment_to_myWallFragment"
+            app:destination="@id/myWallFragment" />
     </fragment>
     <fragment
         android:id="@+id/authFragment"
@@ -48,4 +51,8 @@
             android:id="@+id/action_selectedPostFragment_to_newPostFragment"
             app:destination="@id/newPostFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/myWallFragment"
+        android:name="ru.netology.diploma.ui.MyWallFragment"
+        android:label="MyWallFragment" />
 </navigation>

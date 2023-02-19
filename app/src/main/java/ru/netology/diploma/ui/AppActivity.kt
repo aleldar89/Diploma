@@ -66,6 +66,11 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
                     .navigate(R.id.action_postsFeedFragment_to_registrationFragment)
                 true
             }
+            R.id.my_wall -> {
+                findNavController(R.id.nav_host_fragment)
+                    .navigate(R.id.action_postsFeedFragment_to_myWallFragment)
+                true
+            }
             R.id.log_out -> {
                 findNavController(R.id.nav_host_fragment)
                     .navigate(R.id.action_postsFeedFragment_to_myDialogFragment)

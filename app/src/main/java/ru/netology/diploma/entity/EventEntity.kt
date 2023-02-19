@@ -30,8 +30,7 @@ data class EventEntity(
 //    val attachment: AttachmentEmbedded? = null,
     val link: String? = null,
     val ownedByMe: Boolean,
-    val users: List<Pair<String, UserPreview>>
-//    val users: List<UserPreview>,
+    val users: Map<Long, UserPreview>,
 ) {
     fun toDto() = Event(
         id = id,

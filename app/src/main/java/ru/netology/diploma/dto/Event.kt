@@ -19,6 +19,5 @@ data class Event(
     val attachment: Attachment? = null,
     val link: String? = null,
     val ownedByMe: Boolean,
-    val users: List<Pair<String, UserPreview>>
-//    val users: List<UserPreview>,
+    val users: Map<Long, UserPreview>,
 )

@@ -40,7 +40,7 @@ private val empty = Post(
     likedByMe = false,
     attachment = null,
     ownedByMe = false,
-    users = emptyList(),
+    users = emptyMap(),
 )
 
 @ExperimentalCoroutinesApi

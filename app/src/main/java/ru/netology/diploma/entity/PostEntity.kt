@@ -30,8 +30,7 @@ data class PostEntity(
     val attachment: Attachment? = null,
 //    val attachment: AttachmentEmbedded? = null,
     val ownedByMe: Boolean,
-    val users: List<Pair<String, UserPreview>>
-//    val users: List<UserPreview>,
+    val users: Map<Long, UserPreview>,
 ) {
     fun toDto() = Post(
         id = id,

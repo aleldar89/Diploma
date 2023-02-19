@@ -15,6 +15,10 @@
 
     <group android:id="@+id/authorized">
         <item
+            android:id="@+id/my_wall"
+            android:title="@string/my_wall"
+            app:showAsAction="never" />
+        <item
             android:id="@+id/log_out"
             android:title="@string/logout"
             app:showAsAction="never" />

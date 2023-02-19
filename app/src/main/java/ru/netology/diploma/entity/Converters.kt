@@ -2,6 +2,7 @@ package ru.netology.diploma.entity
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import ru.netology.diploma.dto.Attachment
 import ru.netology.diploma.dto.Coordinates
 import ru.netology.diploma.dto.UserPreview
@@ -9,12 +10,17 @@ import ru.netology.diploma.dto.UserPreview
 class Converters {
 
     @TypeConverter
-    fun toIdsList(ids: String): List<Int> = ids
-        .split(",")
-        .map {
-            it.toInt()
+    fun toIdsList(ids: String): List<Int> {
+        return if (ids.isEmpty())
+            emptyList()
+        else {
+            ids
+                .split(",")
+                .map {
+                    it.toInt()
+                }
         }
-        .ifEmpty { emptyList() }
+    }
 
     @TypeConverter
     fun fromIdsList(ids: List<Int>): String = ids
@@ -22,25 +28,16 @@ class Converters {
         .ifBlank { "" }
 
     @TypeConverter
-    fun toUsersList(users: String): List<Pair<String, UserPreview>> {
-        return users
-            .trim()
-            .split(",")
-            .map {
-                Pair(
-                    it.substringBefore(": ").trim(),
-                    Gson().fromJson(it.substringAfter(": ").trim(), UserPreview::class.java)
-                )
-            }
+    fun toUsersMap(users: String): Map<Long, UserPreview> {
+        val gson = Gson()
+        val mapType = object : TypeToken<Map<Long, UserPreview>>() {}.type
+        return gson.fromJson(users, mapType)
     }
 
     @TypeConverter
-    fun fromUsersList(users: List<Pair<String, UserPreview>>): String = users
-        .joinToString(separator = ",") {
-            Gson().toJson(it)
-        }
-        .ifBlank { "" }
-
+    fun fromUsersMap(users: Map<Long, UserPreview>): String {
+        return Gson().toJson(users)
+    }
 
     @TypeConverter
     fun toAttachment(attachment: String): Attachment? {
@@ -63,6 +60,54 @@ class Converters {
     }
 
 }
+
+//    @TypeConverter
+//    fun toUsersMap(users: String): Map<Long, UserPreview> = users
+//        .trim()
+//        .split(",")  //неверный разделитель
+//        .toList()
+//        .associateBy(
+//            {
+//                it.substringBefore(": ").trim().toLong()
+//            },
+//            {
+//                Gson().fromJson(it.substringAfter(": ").trim(), UserPreview::class.java)
+//            }
+//        )
+
+//fun JSONObject.toMap(): Map<Long, UserPreview> = keys().asSequence().associateWith {
+//    when (val value = this[it])
+//    {
+//        is JSONArray ->
+//        {
+//            val map = (0 until value.length()).associate { Pair(it.toString(), value[it]) }
+//            JSONObject(map).toMap().values.toList()
+//        }
+//        is JSONObject -> value.toMap()
+//        JSONObject.NULL -> null
+//        else            -> value
+//    }
+//}
+
+//@TypeConverter
+//fun toUsersList(users: String): List<Pair<String, UserPreview>> {
+//    return users
+//        .trim()
+//        .split(",")
+//        .map {
+//            Pair(
+//                it.substringBefore(": ").trim(),
+//                Gson().fromJson(it.substringAfter(": ").trim(), UserPreview::class.java)
+//            )
+//        }
+//}
+//
+//@TypeConverter
+//fun fromUsersList(users: List<Pair<String, UserPreview>>): String = users
+//    .joinToString(separator = ",") {
+//        Gson().toJson(it)
+//    }
+//    .ifBlank { "" }
 
 //@TypeConverter
 //fun toUsersList(users: String): List<Pair<String, UserPreview>> {

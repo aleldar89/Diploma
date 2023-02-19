@@ -110,6 +110,7 @@ dependencies {
     implementation "com.github.bumptech.glide:glide:$glide_version"
     implementation "com.github.dhaval2404:imagepicker:$imagepicker_version"
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$desugar_version"
+    implementation "com.google.code.gson:gson:2.9.0"
 
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation "androidx.test.ext:junit:$ext_junit_version"

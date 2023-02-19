@@ -43,7 +43,7 @@ private val empty = Event(
     attachment = null,
     link = "",
     ownedByMe = false,
-    users = emptyList(),
+    users = emptyMap(),
 )
 
 

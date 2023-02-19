@@ -27,6 +27,7 @@ class MyWallViewModel @Inject constructor(
     private val apiService: ApiService
 ) : ViewModel() {
 
+    //TODO тут может быть проблема c получением myId
     init {
         getUser()
         loadPosts()
