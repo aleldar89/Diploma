@@ -96,6 +96,38 @@ interface ApiService {
     suspend fun getNewerMyWall(@Path("id") id: Long): Response<List<Post>>
 
 
+    /** Wall (Posts) methods */
+    @GET("{authorId}/wall")
+    suspend fun getAuthorWall(@Path("authorId") id: Int): Response<List<Post>>
+
+    @GET("{authorId}/wall/latest")
+    suspend fun getLatestAuthorWall(
+//        @Path("authorId") id: Int,
+        @Query("count") count: Int
+    ): Response<List<Post>>
+
+    @GET("{authorId}/wall/{postId}/after")
+    suspend fun getAfterAuthorWall(
+//        @Path("authorId") authorId: Int,
+        @Path("postId") postId: Int,
+        @Query("count") count: Int
+    ): Response<List<Post>>
+
+    @GET("{authorId}/wall/{postId}/before")
+    suspend fun getBeforeAuthorWall(
+//        @Path("authorId") authorId: Int,
+        @Path("postId") postId: Int,
+        @Query("count") count: Int
+    ): Response<List<Post>>
+
+    @GET("{authorId}/wall/{postId}/newer")
+    suspend fun getNewerAuthorWall(
+//        @Path("authorId") authorId: Int,
+        @Path("authorId") authorId: Int,
+        @Path("postId") postId: Int
+    ): Response<List<Post>>
+
+
     /** Posts methods */
     @GET("posts")
     suspend fun getAllPosts(): Response<List<Post>>
@@ -164,33 +196,5 @@ interface ApiService {
 
     @GET("users/id")
     suspend fun getByIdUser(@Path("id") id: Int): Response<UserResponse>
-
-
-    /** Wall (Posts) methods */
-    @GET("{authorId}/wall")
-    suspend fun getAuthorWall(): Response<List<Post>>
-
-    @GET("{authorId}/wall/latest")
-    suspend fun getLatestAuthorWall(@Query("count") count: Int): Response<List<Post>>
-
-    @GET("{authorId}/wall/{postId}/after")
-    suspend fun getAfterAuthorWall(
-        @Path("authorId") authorId: Int,
-        @Path("postId") postId: Int,
-        @Query("count") count: Int
-    ): Response<List<Post>>
-
-    @GET("{authorId}/wall/{postId}/before")
-    suspend fun getBeforeAuthorWall(
-        @Path("authorId") authorId: Int,
-        @Path("postId") postId: Int,
-        @Query("count") count: Int
-    ): Response<List<Post>>
-
-    @GET("{authorId}/wall/{postId}/newer")
-    suspend fun getNewerAuthorWall(
-        @Path("authorId") authorId: Int,
-        @Path("postId") postId: Int
-    ): Response<List<Post>>
 
 }

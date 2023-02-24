@@ -26,16 +26,16 @@ class AuthorWallRemoteMediator(
                 LoadType.REFRESH -> {
                     val id = authorWallRemoteKeyDao.max()
                     if (id != null)
-                        apiService.getAfterMyWall(id, state.config.pageSize)
+                        apiService.getAfterAuthorWall(id, state.config.pageSize)
                     else
-                        apiService.getLatestMyWall(state.config.pageSize)
+                        apiService.getLatestAuthorWall(state.config.pageSize)
                 }
 
                 LoadType.PREPEND -> return MediatorResult.Success(true)
 
                 LoadType.APPEND -> {
                     val id = authorWallRemoteKeyDao.min() ?: return MediatorResult.Success(false)
-                    apiService.getBeforeMyWall(id, state.config.pageSize)
+                    apiService.getBeforeAuthorWall(id, state.config.pageSize)
                 }
             }
 

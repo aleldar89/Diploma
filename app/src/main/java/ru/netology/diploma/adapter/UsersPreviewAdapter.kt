@@ -6,12 +6,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.diploma.databinding.UserCardBinding
-import ru.netology.diploma.dto.UserPreview
+import ru.netology.diploma.dto.UserResponse
 import ru.netology.diploma.extensions.loadAvatar
 
-class UserPreviewAdapter(
-    private val onInteractionListener: OnInteractionListener<UserPreview>
-) : ListAdapter<UserPreview, UserViewHolder>(UserDiffCallback()) {
+class UsersPreviewAdapter(
+    private val onInteractionListener: OnInteractionListener<UserResponse>
+) : ListAdapter<UserResponse, UserViewHolder>(UserDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
         val binding = UserCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return UserViewHolder(binding, onInteractionListener)
@@ -25,22 +25,22 @@ class UserPreviewAdapter(
 
 class UserViewHolder(
     private val binding: UserCardBinding,
-    private val onInteractionListener: OnInteractionListener<UserPreview>
+    private val onInteractionListener: OnInteractionListener<UserResponse>
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(user: UserPreview) {
+    fun bind(user: UserResponse) {
         binding.apply {
             name.text = user.name
             user.avatar?.let { avatar.loadAvatar(it) }
 
             userGroup.setOnClickListener {
-                onInteractionListener.onSelect(user)
+                onInteractionListener.onAuthor(user)
             }
         }
     }
 }
 
-class UserDiffCallback : DiffUtil.ItemCallback<UserPreview>() {
-    override fun areItemsTheSame(oldItem: UserPreview, newItem: UserPreview): Boolean {
+class UserDiffCallback : DiffUtil.ItemCallback<UserResponse>() {
+    override fun areItemsTheSame(oldItem: UserResponse, newItem: UserResponse): Boolean {
         if (oldItem::class != newItem::class) {
             return false
         }
@@ -48,7 +48,7 @@ class UserDiffCallback : DiffUtil.ItemCallback<UserPreview>() {
         return oldItem.name == newItem.name
     }
 
-    override fun areContentsTheSame(oldItem: UserPreview, newItem: UserPreview): Boolean {
+    override fun areContentsTheSame(oldItem: UserResponse, newItem: UserResponse): Boolean {
         return oldItem == newItem
     }
 }

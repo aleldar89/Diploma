@@ -1,6 +1,7 @@
 package ru.netology.diploma.viewmodel
 
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,8 +17,8 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.netology.diploma.auth.AppAuth
-import ru.netology.diploma.dto.ImageFile
 import ru.netology.diploma.dto.Coordinates
+import ru.netology.diploma.dto.ImageFile
 import ru.netology.diploma.dto.Post
 import ru.netology.diploma.repository.post_repo.PostRepository
 import ru.netology.diploma.util.SingleLiveEvent

@@ -2,14 +2,10 @@ package ru.netology.diploma.auth
 
 import android.content.Context
 import androidx.core.content.edit
-import dagger.hilt.EntryPoint
-import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import ru.netology.diploma.api.ApiService
 import javax.inject.Inject
 import javax.inject.Singleton
 

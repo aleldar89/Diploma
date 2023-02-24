@@ -2,6 +2,7 @@ package ru.netology.diploma.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -86,7 +87,27 @@ class PostsFeedFragment : Fragment() {
                 )
             }
 
+            override fun onAuthor(post: Post) {
+                findNavController().navigate(
+                    R.id.action_postsFeedFragment_to_authorWallFragment,
+                    Bundle().apply {
+                        textArg = gson.toJson(post)
+                    }
+                )
+            }
+
+            override fun onUserIds(post: Post) {
+                findNavController().navigate(
+                    R.id.action_postsFeedFragment_to_usersFragment,
+                    Bundle().apply {
+                        textArg = gson.toJson(post)
+                    }
+                )
+            }
+
         }, MediaLifecycleObserver())
+
+        binding.list.adapter = adapter
 
         lifecycleScope.launchWhenCreated {
             viewModel.data.collectLatest {

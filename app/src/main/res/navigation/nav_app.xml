@@ -26,6 +26,12 @@
         <action
             android:id="@+id/action_postsFeedFragment_to_myWallFragment"
             app:destination="@id/myWallFragment" />
+        <action
+            android:id="@+id/action_postsFeedFragment_to_authorWallFragment"
+            app:destination="@id/authorWallFragment" />
+        <action
+            android:id="@+id/action_postsFeedFragment_to_usersFragment"
+            app:destination="@id/usersFragment" />
     </fragment>
     <fragment
         android:id="@+id/authFragment"
@@ -55,4 +61,16 @@
         android:id="@+id/myWallFragment"
         android:name="ru.netology.diploma.ui.MyWallFragment"
         android:label="MyWallFragment" />
+    <fragment
+        android:id="@+id/authorWallFragment"
+        android:name="ru.netology.diploma.ui.AuthorWallFragment"
+        android:label="AuthorWallFragment" />
+    <fragment
+        android:id="@+id/usersFragment"
+        android:name="ru.netology.diploma.ui.UsersFragment"
+        android:label="UsersFragment" >
+        <action
+            android:id="@+id/action_usersFragment_to_authorWallFragment"
+            app:destination="@id/authorWallFragment" />
+    </fragment>
 </navigation>

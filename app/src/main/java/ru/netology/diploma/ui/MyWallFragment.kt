@@ -33,7 +33,6 @@ class MyWallFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val binding = FragmentWallBinding.inflate(inflater, container, false)
-
         val adapter = PostsAdapter(object : OnInteractionListener<Post>{}, MediaLifecycleObserver())
 
         val user = viewModel.userResponse.value

@@ -52,7 +52,17 @@ class PostViewHolder(
         binding.apply {
 
             post.authorAvatar?.let { authorAvatar.loadAvatar(it) }
+
+            authorAvatar.setOnClickListener {
+                onInteractionListener.onAuthor(post)
+            }
+
             author.text = post.author
+
+            author.setOnClickListener {
+                onInteractionListener.onAuthor(post)
+            }
+
             authorJob.text = post.authorJob
             published.text = post.published
 
@@ -132,7 +142,7 @@ class PostViewHolder(
             if (post.likeOwnerIds != null) {
                 likeOwnerIds.isVisible = true
                 //TODO превращение likeOwnerIds в аватары с именами аналогично ВК
-                likeOwnerIds.text = post.likeOwnerIds.toString()
+                likeOwnerIds.text = post.likeOwnerIds.size.toString()
             }
 
             likeOwnerIds.setOnClickListener {
@@ -142,7 +152,7 @@ class PostViewHolder(
             if (post.mentionIds != null) {
                 mentionIds.isVisible = true
                 //TODO превращение mentionIds в аватары с именами аналогично ВК
-                mentionIds.text = post.mentionIds.toString()
+                mentionIds.text = post.mentionIds.size.toString()
             }
 
             mentionIds.setOnClickListener {

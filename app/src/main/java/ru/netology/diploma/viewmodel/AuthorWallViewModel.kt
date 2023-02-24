@@ -24,7 +24,37 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthorWallViewModel @Inject constructor(
     private val repository: AuthorWallRepository,
-    private val appAuth: AppAuth,
     private val apiService: ApiService
 ) : ViewModel() {
+
+    val data: Flow<PagingData<Post>> = repository.data.flowOn(Dispatchers.Default)
+
+    private val _userResponse = MutableLiveData<UserResponse?>(null)
+    val userResponse: LiveData<UserResponse?>
+        get() = _userResponse
+
+    private val _error = SingleLiveEvent<Exception>()
+    val error: LiveData<Exception>
+        get() = _error
+
+    private fun getUser(userId: Int) {
+        viewModelScope.launch {
+            try {
+                _userResponse.value = apiService.getByIdUser(userId).body()
+            } catch (e: Exception) {
+                _error.value = e
+            }
+        }
+    }
+
+    fun loadPosts(authorId: Int) {
+        viewModelScope.launch {
+            try {
+                repository.getAll(authorId)
+            } catch (e: Exception) {
+                _error.value = e
+            }
+        }
+    }
+
 }

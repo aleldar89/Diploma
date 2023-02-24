@@ -34,9 +34,9 @@ class AuthorWallRepositoryImpl @Inject constructor(
         it.map(PostEntity::toDto)
     }
 
-    override suspend fun getAll() {
+    override suspend fun getAll(id: Int) {
         try {
-            val response = apiService.getAuthorWall()
+            val response = apiService.getAuthorWall(id)
             if (!response.isSuccessful) {
                 throw RuntimeException(response.message())
             }
