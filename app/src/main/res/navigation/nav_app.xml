@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_main"
     app:startDestination="@id/postsFeedFragment">
 
     <fragment
         android:id="@+id/postsFeedFragment"
-        android:name="ru.netology.diploma.ui.PostsFeedFragment"
+        android:name="ru.netology.diploma.ui.post_fragments.PostsFeedFragment"
         android:label="PostsFeedFragment" >
         <action
             android:id="@+id/action_postsFeedFragment_to_newPostFragment"
@@ -32,6 +33,9 @@
         <action
             android:id="@+id/action_postsFeedFragment_to_usersFragment"
             app:destination="@id/usersFragment" />
+        <action
+            android:id="@+id/action_postsFeedFragment_to_eventsFeedFragment"
+            app:destination="@id/eventsFeedFragment" />
     </fragment>
     <fragment
         android:id="@+id/authFragment"
@@ -43,7 +47,7 @@
         android:label="RegistrationFragment" />
     <fragment
         android:id="@+id/newPostFragment"
-        android:name="ru.netology.diploma.ui.NewPostFragment"
+        android:name="ru.netology.diploma.ui.post_fragments.NewPostFragment"
         android:label="NewPostFragment" />
     <fragment
         android:id="@+id/myDialogFragment"
@@ -51,7 +55,7 @@
         android:label="MyDialogFragment" />
     <fragment
         android:id="@+id/selectedPostFragment"
-        android:name="ru.netology.diploma.ui.SelectedPostFragment"
+        android:name="ru.netology.diploma.ui.post_fragments.SelectedPostFragment"
         android:label="SelectedPostFragment" >
         <action
             android:id="@+id/action_selectedPostFragment_to_newPostFragment"
@@ -73,4 +77,40 @@
             android:id="@+id/action_usersFragment_to_authorWallFragment"
             app:destination="@id/authorWallFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/eventsFeedFragment"
+        android:name="ru.netology.diploma.ui.event_fragments.EventsFeedFragment"
+        android:label="EventsFeedFragment" >
+        <action
+            android:id="@+id/action_eventsFeedFragment_to_postsFeedFragment"
+            app:destination="@id/postsFeedFragment" />
+        <action
+            android:id="@+id/action_eventsFeedFragment_to_usersFragment"
+            app:destination="@id/usersFragment" />
+        <action
+            android:id="@+id/action_eventsFeedFragment_to_authorWallFragment"
+            app:destination="@id/authorWallFragment" />
+        <action
+            android:id="@+id/action_eventsFeedFragment_to_authFragment"
+            app:destination="@id/authFragment" />
+        <action
+            android:id="@+id/action_eventsFeedFragment_to_selectedEventFragment"
+            app:destination="@id/selectedEventFragment" />
+        <action
+            android:id="@+id/action_eventsFeedFragment_to_newEventFragment"
+            app:destination="@id/newEventFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/selectedEventFragment"
+        android:name="ru.netology.diploma.ui.event_fragments.SelectedEventFragment"
+        android:label="SelectedEventFragment" >
+        <action
+            android:id="@+id/action_selectedEventFragment_to_newEventFragment"
+            app:destination="@id/newEventFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newEventFragment"
+        android:name="ru.netology.diploma.ui.event_fragments.NewEventFragment"
+        android:label="fragment_new_event"
+        tools:layout="@layout/fragment_new_event" />
 </navigation>

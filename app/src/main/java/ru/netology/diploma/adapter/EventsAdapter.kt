@@ -1,5 +1,6 @@
 package ru.netology.diploma.adapter
 
+import android.content.res.Resources
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import ru.netology.diploma.R
 import ru.netology.diploma.databinding.CardEventBinding
 import ru.netology.diploma.dto.AttachmentType
 import ru.netology.diploma.dto.Event
+import ru.netology.diploma.extensions.createDate
 import ru.netology.diploma.extensions.loadAvatar
 import ru.netology.diploma.extensions.loadImage
 import ru.netology.diploma.mediplayer.MediaLifecycleObserver
@@ -31,7 +33,6 @@ class EventsAdapter(
 
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
         val event = getItem(position)
-        //TODO почему null-проверка
         event?.let {
             holder.bind(it)
         }
@@ -54,12 +55,12 @@ class EventViewHolder(
             event.authorAvatar?.let { authorAvatar.loadAvatar(it) }
             author.text = event.author
             authorJob.text = event.authorJob
-            published.text = event.published
+            published.text = event.published.createDate()
 
             menu.isVisible = event.ownedByMe
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
-                    inflate(R.menu.options_post)
+                    inflate(R.menu.options_item)
                     setOnMenuItemClickListener { item ->
                         when (item.itemId) {
                             R.id.remove -> {
@@ -84,24 +85,17 @@ class EventViewHolder(
                 onInteractionListener.onSelect(event)
             }
 
+            if (!event.link.isNullOrEmpty()) {
+                link.isVisible = true
+                link.text = event.link
+            }
+
+
             event.attachment?.let {
                 when (it.type) {
-                    //TODO возможно не apply
                     AttachmentType.IMAGE -> imageView.apply {
                         isVisible = true
                         loadImage(it.url)
-                    }
-
-                    AttachmentType.AUDIO -> playView.apply {
-                        isVisible = true
-                        //TODO возможно проблема с нажатием view, а не playView
-                        setOnClickListener {
-                            observer.apply {
-                                mediaPlayer?.stop()
-                                mediaPlayer?.release()
-                                mediaPlayer?.setDataSource(event.attachment.url)
-                            }.play()
-                        }
                     }
 
                     AttachmentType.VIDEO -> videoView.apply {
@@ -111,8 +105,20 @@ class EventViewHolder(
                         setVideoURI(
                             Uri.parse(event.attachment.url)
                         )
+                        seekTo(1)
                         setOnPreparedListener { start() }
                         setOnCompletionListener { stopPlayback() }
+                    }
+
+                    AttachmentType.AUDIO -> playView.apply {
+                        isVisible = true
+                        setOnClickListener {
+                            observer.apply {
+                                mediaPlayer?.stop()
+                                mediaPlayer?.reset()
+                                mediaPlayer?.setDataSource(event.attachment.url)
+                            }.play()
+                        }
                     }
                 }
             }
@@ -129,30 +135,27 @@ class EventViewHolder(
                 onInteractionListener.onShare(event)
             }
 
-            if (event.likeOwnerIds != null) {
+            if (!event.likeOwnerIds.isNullOrEmpty()) {
                 likeOwnerIds.isVisible = true
-                //TODO превращение likeOwnerIds в аватары с именами аналогично ВК
-                likeOwnerIds.text = event.likeOwnerIds.toString()
+                likeOwnerIds.text = "Likes: ${event.likeOwnerIds.size}"
             }
 
             likeOwnerIds.setOnClickListener {
                 onInteractionListener.onUserIds(event)
             }
 
-            if (event.speakerIds != null) {
+            if (!event.speakerIds.isNullOrEmpty()) {
                 speakerIds.isVisible = true
-                //TODO превращение speakerIds в аватары с именами аналогично ВК
-                speakerIds.text = event.speakerIds.toString()
+                speakerIds.text = "Speakers: ${event.speakerIds.size}"
             }
 
             speakerIds.setOnClickListener {
                 onInteractionListener.onUserIds(event)
             }
 
-            if (event.participantsIds != null) {
+            if (!event.participantsIds.isNullOrEmpty()) {
                 participantsIds.isVisible = true
-                //TODO превращение speakerIds в аватары с именами аналогично ВК
-                participantsIds.text = event.participantsIds.toString()
+                participantsIds.text = "Participants: ${event.participantsIds.size}"
             }
 
             participantsIds.setOnClickListener {

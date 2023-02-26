@@ -81,7 +81,7 @@ class PostViewModel @Inject constructor(
             repository.data
                 .map { posts ->
                     posts.map {
-                        it.copy(ownedByMe = auth?.id == it.authorId)
+                        it.copy(ownedByMe = auth?.id == it.authorId) //todo нет токена -> меню поста видимо
                     }
                 }
         }.flowOn(Dispatchers.Default)

@@ -1,4 +1,4 @@
-package ru.netology.diploma.ui
+package ru.netology.diploma.ui.post_fragments
 
 import android.content.Intent
 import android.os.Bundle
@@ -84,26 +84,19 @@ class SelectedPostFragment : Fragment() {
             MediaLifecycleObserver()
         )
 
-        //TODO адаптировать под Paging ради показа новой редакции поста
-//        viewModel.data.observe(viewLifecycleOwner) { posts ->
-//            val currentPost = posts.find { it.id == post.id } ?: run {
-//                findNavController().navigateUp()
-//                return@observe
-//            }
-//            postViewHolder.bind(currentPost)
-//        }
-
-        viewModel.data.map { posts ->
-            lateinit var currentPost: Post
-            posts.map {
-                currentPost = if (it.id == post.id)
-                    it
-                else
-                    post
-            }
-            postViewHolder.bind(currentPost)
-        }
+        postViewHolder.bind(post)
 
         return binding.root
     }
 }
+
+//        viewModel.data.map { posts ->
+//            lateinit var currentPost: Post
+//            posts.map {
+//                currentPost = if (it.id == post.id)
+//                    it
+//                else
+//                    post
+//            }
+//            postViewHolder.bind(currentPost)
+//        }

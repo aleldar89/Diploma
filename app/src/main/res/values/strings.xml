@@ -19,6 +19,8 @@
     <string name="add_post">Add post</string>
     <string name="sign_in">Sign in</string>
     <string name="sign_up">Sign up</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="cancel">Cancel</string>
     <string name="logout">Logout</string>
     <string name="save">Save</string>
     <string name="menu_edit">Edit</string>
@@ -29,4 +31,8 @@
     <string name="chooser_share_post">Share post</string>
     <string name="clear">Clear</string>
     <string name="my_wall">My Wall</string>
+    <string name="mentions">Mentions: %d</string>
+    <string name="speakers">Speakers: %d</string>
+    <string name="participants">Participants: %d</string>
+    <string name="likes">Likes: %d</string>
 </resources>

@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import ru.netology.diploma.databinding.UserCardBinding
+import ru.netology.diploma.databinding.CardUserBinding
 import ru.netology.diploma.dto.UserResponse
 import ru.netology.diploma.extensions.loadAvatar
 
@@ -13,7 +13,7 @@ class UsersPreviewAdapter(
     private val onInteractionListener: OnInteractionListener<UserResponse>
 ) : ListAdapter<UserResponse, UserViewHolder>(UserDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
-        val binding = UserCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = CardUserBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return UserViewHolder(binding, onInteractionListener)
     }
 
@@ -24,7 +24,7 @@ class UsersPreviewAdapter(
 }
 
 class UserViewHolder(
-    private val binding: UserCardBinding,
+    private val binding: CardUserBinding,
     private val onInteractionListener: OnInteractionListener<UserResponse>
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(user: UserResponse) {

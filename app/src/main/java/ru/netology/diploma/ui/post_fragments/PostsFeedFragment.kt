@@ -1,8 +1,7 @@
-package ru.netology.diploma.ui
+package ru.netology.diploma.ui.post_fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +11,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
@@ -107,7 +108,16 @@ class PostsFeedFragment : Fragment() {
 
         }, MediaLifecycleObserver())
 
-        binding.list.adapter = adapter
+        binding.list.apply {
+            this.adapter = adapter
+            val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            this.addItemDecoration(
+                DividerItemDecoration(
+                    context,
+                    layoutManager.orientation
+                )
+            )
+        }
 
         lifecycleScope.launchWhenCreated {
             viewModel.data.collectLatest {
@@ -149,6 +159,10 @@ class PostsFeedFragment : Fragment() {
                 findNavController().navigate(R.id.action_postsFeedFragment_to_newPostFragment)
             else
                 findNavController().navigate(R.id.action_postsFeedFragment_to_authFragment)
+        }
+
+        binding.eventFeed.setOnClickListener {
+            findNavController().navigate(R.id.action_postsFeedFragment_to_eventsFeedFragment)
         }
 
         return binding.root

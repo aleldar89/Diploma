@@ -35,8 +35,6 @@ class AppAuth @Inject constructor(
         }
     }
 
-    /** Требуется ли sendPushToken? */
-
     @Synchronized
     fun saveAuth(token: Token) {
         _data.value = token

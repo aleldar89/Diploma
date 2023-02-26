@@ -1,7 +1,9 @@
 package ru.netology.diploma.adapter
 
+import android.content.res.Resources
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.MediaController
@@ -14,6 +16,7 @@ import ru.netology.diploma.R
 import ru.netology.diploma.databinding.CardPostBinding
 import ru.netology.diploma.dto.AttachmentType
 import ru.netology.diploma.dto.Post
+import ru.netology.diploma.extensions.createDate
 import ru.netology.diploma.extensions.loadAvatar
 import ru.netology.diploma.extensions.loadImage
 import ru.netology.diploma.mediplayer.MediaLifecycleObserver
@@ -31,7 +34,6 @@ class PostsAdapter(
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val post = getItem(position)
-        //TODO почему null-проверка
         post?.let {
             holder.bind(it)
         }
@@ -64,12 +66,13 @@ class PostViewHolder(
             }
 
             authorJob.text = post.authorJob
-            published.text = post.published
+            published.text = post.published.createDate()
 
             menu.isVisible = post.ownedByMe
+
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
-                    inflate(R.menu.options_post)
+                    inflate(R.menu.options_item)
                     setOnMenuItemClickListener { item ->
                         when (item.itemId) {
                             R.id.remove -> {
@@ -94,24 +97,16 @@ class PostViewHolder(
                 onInteractionListener.onSelect(post)
             }
 
+            if (!post.link.isNullOrEmpty()) {
+                link.isVisible = true
+                link.text = post.link
+            }
+
             post.attachment?.let {
                 when (it.type) {
-                    //TODO возможно не apply
                     AttachmentType.IMAGE -> imageView.apply {
                         isVisible = true
                         loadImage(it.url)
-                    }
-
-                    AttachmentType.AUDIO -> playView.apply {
-                        isVisible = true
-                        //TODO возможно проблема с нажатием view, а не playView
-                        setOnClickListener {
-                            observer.apply {
-                                mediaPlayer?.stop()
-                                mediaPlayer?.release()
-                                mediaPlayer?.setDataSource(post.attachment.url)
-                            }.play()
-                        }
                     }
 
                     AttachmentType.VIDEO -> videoView.apply {
@@ -121,8 +116,20 @@ class PostViewHolder(
                         setVideoURI(
                             Uri.parse(post.attachment.url)
                         )
+                        seekTo(1)
                         setOnPreparedListener { start() }
                         setOnCompletionListener { stopPlayback() }
+                    }
+
+                    AttachmentType.AUDIO -> playView.apply {
+                        isVisible = true
+                        setOnClickListener {
+                            observer.apply {
+                                mediaPlayer?.stop()
+                                mediaPlayer?.reset()
+                                mediaPlayer?.setDataSource(post.attachment.url)
+                            }.play()
+                        }
                     }
                 }
             }
@@ -139,20 +146,21 @@ class PostViewHolder(
                 onInteractionListener.onShare(post)
             }
 
-            if (post.likeOwnerIds != null) {
+            if (!post.likeOwnerIds.isNullOrEmpty()) {
                 likeOwnerIds.isVisible = true
-                //TODO превращение likeOwnerIds в аватары с именами аналогично ВК
-                likeOwnerIds.text = post.likeOwnerIds.size.toString()
+                likeOwnerIds.text = "Likes: ${post.likeOwnerIds.size}"
+//                likeOwnerIds.text = Resources
+//                    .getSystem()
+//                    .getString(R.string.likes, post.likeOwnerIds.size)
             }
 
             likeOwnerIds.setOnClickListener {
                 onInteractionListener.onUserIds(post)
             }
 
-            if (post.mentionIds != null) {
+            if (!post.mentionIds.isNullOrEmpty()) {
                 mentionIds.isVisible = true
-                //TODO превращение mentionIds в аватары с именами аналогично ВК
-                mentionIds.text = post.mentionIds.size.toString()
+                mentionIds.text = "Mentions: ${post.mentionIds.size}"
             }
 
             mentionIds.setOnClickListener {

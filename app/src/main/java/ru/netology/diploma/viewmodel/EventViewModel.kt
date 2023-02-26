@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.google.android.gms.common.config.GservicesValue.value
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -21,7 +20,6 @@ import ru.netology.diploma.dto.*
 import ru.netology.diploma.repository.event_repo.EventRepository
 import ru.netology.diploma.util.SingleLiveEvent
 import java.io.File
-import java.net.URI
 import javax.inject.Inject
 
 private val empty = Event(
@@ -90,10 +88,10 @@ class EventViewModel @Inject constructor(
         }.flowOn(Dispatchers.Default)
 
     init {
-        loadPosts()
+        loadEvents()
     }
 
-    fun loadPosts() {
+    fun loadEvents() {
         viewModelScope.launch {
             try {
                 repository.getAll()

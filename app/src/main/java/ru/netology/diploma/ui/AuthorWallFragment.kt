@@ -20,7 +20,6 @@ import ru.netology.diploma.databinding.FragmentWallBinding
 import ru.netology.diploma.dto.Post
 import ru.netology.diploma.extensions.loadAvatar
 import ru.netology.diploma.mediplayer.MediaLifecycleObserver
-import ru.netology.diploma.ui.SelectedPostFragment.Companion.textArg
 import ru.netology.diploma.util.StringArg
 import ru.netology.diploma.util.parseException
 import ru.netology.diploma.viewmodel.AuthorWallViewModel

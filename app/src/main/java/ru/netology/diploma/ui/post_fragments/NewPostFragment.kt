@@ -1,4 +1,4 @@
-package ru.netology.diploma.ui
+package ru.netology.diploma.ui.post_fragments
 
 import android.os.Bundle
 import android.view.*
@@ -56,7 +56,7 @@ class NewPostFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.options_new_post, menu)
+        inflater.inflate(R.menu.options_new_item, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
