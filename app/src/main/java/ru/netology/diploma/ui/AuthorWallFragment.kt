@@ -1,5 +1,6 @@
 package ru.netology.diploma.ui
 
+import android.app.Application
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,29 +8,25 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import ru.netology.diploma.R
 import ru.netology.diploma.adapter.OnInteractionListener
 import ru.netology.diploma.adapter.PostsAdapter
+import ru.netology.diploma.application.DiplomaApplication
 import ru.netology.diploma.databinding.FragmentWallBinding
 import ru.netology.diploma.dto.Post
 import ru.netology.diploma.extensions.loadAvatar
 import ru.netology.diploma.mediplayer.MediaLifecycleObserver
-import ru.netology.diploma.util.StringArg
 import ru.netology.diploma.util.parseException
 import ru.netology.diploma.viewmodel.AuthorWallViewModel
 
 @AndroidEntryPoint
 class AuthorWallFragment : Fragment() {
-
-    companion object {
-        var Bundle.textArg: String? by StringArg
-    }
 
     private val viewModel: AuthorWallViewModel by viewModels()
 
@@ -42,11 +39,10 @@ class AuthorWallFragment : Fragment() {
         val binding = FragmentWallBinding.inflate(inflater, container, false)
         val adapter = PostsAdapter(object : OnInteractionListener<Post> {}, MediaLifecycleObserver())
 
-        val gson = Gson()
-        val post: Post = arguments?.textArg.let { gson.fromJson(it, Post::class.java) }
-
-        post.authorAvatar?.let { binding.authorAvatar.loadAvatar(it) }
-        binding.author.text = post.author
+        viewModel.userResponse.observe(viewLifecycleOwner) {
+            binding.authorAvatar.loadAvatar(it?.avatar!!)
+            binding.author.text = it.name
+        }
 
         lifecycleScope.launchWhenCreated {
             viewModel.data.collectLatest {
@@ -58,7 +54,8 @@ class AuthorWallFragment : Fragment() {
             val errorMessage = parseException(it)
             Snackbar.make(binding.root, errorMessage, Snackbar.LENGTH_LONG)
                 .setAction(R.string.retry_loading) {
-                    viewModel.loadPosts(post.authorId)
+//                    viewModel.loadPosts(post.authorId)
+                    viewModel.loadPosts()
                 }
                 .show()
         }

@@ -2,12 +2,10 @@ package ru.netology.diploma.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.diploma.R
@@ -40,11 +38,10 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
                         textArg = text
                     }
                 )
+        }
 
-            viewModel.data.observe(this) {
-                invalidateOptionsMenu()
-            }
-
+        viewModel.data.observe(this) {
+            invalidateOptionsMenu()
         }
 
     }
@@ -60,22 +57,22 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
         when (item.itemId) {
             R.id.sign_in -> {
                 findNavController(R.id.nav_host_fragment)
-                    .navigate(R.id.action_postsFeedFragment_to_authFragment)
+                    .navigate(R.id.action_global_authFragment)
                 true
             }
             R.id.sign_up -> {
                 findNavController(R.id.nav_host_fragment)
-                    .navigate(R.id.action_postsFeedFragment_to_registrationFragment)
+                    .navigate(R.id.action_global_registrationFragment)
                 true
             }
             R.id.my_wall -> {
                 findNavController(R.id.nav_host_fragment)
-                    .navigate(R.id.action_postsFeedFragment_to_myWallFragment)
+                    .navigate(R.id.action_global_myWallFragment)
                 true
             }
             R.id.log_out -> {
                 findNavController(R.id.nav_host_fragment)
-                    .navigate(R.id.action_postsFeedFragment_to_myDialogFragment)
+                    .navigate(R.id.action_global_myDialogFragment)
                 true
             }
             else -> false

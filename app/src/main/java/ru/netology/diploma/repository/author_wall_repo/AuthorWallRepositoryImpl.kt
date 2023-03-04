@@ -17,8 +17,14 @@ class AuthorWallRepositoryImpl @Inject constructor(
     private val authorWallDao: PostDao,
     private val apiService: ApiService,
     authorWallRemoteKeyDao: PostRemoteKeyDao,
-    authorWallDb: PostsDb
+    authorWallDb: PostsDb,
 ) : AuthorWallRepository {
+
+    private var authorId = 0
+
+    override suspend fun saveAuthorId (id: Int) {
+        authorId = id
+    }
 
     @OptIn(ExperimentalPagingApi::class)
     override val data: Flow<PagingData<Post>> = Pager(
@@ -28,7 +34,8 @@ class AuthorWallRepositoryImpl @Inject constructor(
             apiService = apiService,
             authorWallDao = authorWallDao,
             authorWallRemoteKeyDao = authorWallRemoteKeyDao,
-            authorWallDb = authorWallDb
+            authorWallDb = authorWallDb,
+            authorId = authorId
         )
     ).flow.map {
         it.map(PostEntity::toDto)

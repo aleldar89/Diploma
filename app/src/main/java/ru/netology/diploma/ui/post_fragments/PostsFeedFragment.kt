@@ -1,5 +1,6 @@
 package ru.netology.diploma.ui.post_fragments
 
+import android.app.Application
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
@@ -20,6 +22,7 @@ import kotlinx.coroutines.flow.collectLatest
 import ru.netology.diploma.R
 import ru.netology.diploma.adapter.OnInteractionListener
 import ru.netology.diploma.adapter.PostsAdapter
+import ru.netology.diploma.application.DiplomaApplication
 import ru.netology.diploma.databinding.FragmentPostFeedBinding
 import ru.netology.diploma.dto.Post
 import ru.netology.diploma.mediplayer.MediaLifecycleObserver
@@ -46,16 +49,28 @@ class PostsFeedFragment : Fragment() {
         val gson = Gson()
 
         val adapter = PostsAdapter(object : OnInteractionListener<Post> {
+
             override fun onLike(post: Post) {
-                if (post.likedByMe)
-                    viewModel.dislikeById(post)
-                else
-                    viewModel.likeById(post)
+                if (viewModel.isAuthorized) {
+                    if (post.likedByMe)
+                        viewModel.dislikeById(post)
+                    else
+                        viewModel.likeById(post)
+                } else {
+                    findNavController().navigate(R.id.action_global_authFragment)
+                }
             }
 
             override fun onEdit(post: Post) {
+                findNavController().navigate(
+                    R.id.action_postsFeedFragment_to_newPostFragment,
+                    Bundle().apply {
+                        textArg = post.content
+                    }
+                )
                 viewModel.edit(post)
             }
+
 
             override fun onRemove(post: Post) {
                 viewModel.removeById(post.id)
@@ -74,9 +89,7 @@ class PostsFeedFragment : Fragment() {
             }
 
             override fun onUnauthorized(post: Post) {
-                findNavController().navigate(
-                    R.id.action_postsFeedFragment_to_authFragment
-                )
+                findNavController().navigate(R.id.action_global_authFragment)
             }
 
             override fun onSelect(post: Post) {
@@ -88,15 +101,18 @@ class PostsFeedFragment : Fragment() {
                 )
             }
 
+            //TODO передачу authorId
             override fun onAuthor(post: Post) {
+                viewModel.saveCurrentAuthor(post.authorId)
                 findNavController().navigate(
-                    R.id.action_postsFeedFragment_to_authorWallFragment,
+                    R.id.action_global_authorWallFragment,
                     Bundle().apply {
-                        textArg = gson.toJson(post)
+                        textArg = gson.toJson(post.authorId)
                     }
                 )
             }
 
+            //TODO переделать на метод onClick во вьюхолдере
             override fun onUserIds(post: Post) {
                 findNavController().navigate(
                     R.id.action_postsFeedFragment_to_usersFragment,
@@ -158,7 +174,7 @@ class PostsFeedFragment : Fragment() {
             if (viewModel.isAuthorized)
                 findNavController().navigate(R.id.action_postsFeedFragment_to_newPostFragment)
             else
-                findNavController().navigate(R.id.action_postsFeedFragment_to_authFragment)
+                findNavController().navigate(R.id.action_global_authFragment)
         }
 
         binding.eventFeed.setOnClickListener {

@@ -120,6 +120,12 @@ class NewPostFragment : Fragment() {
             findNavController().navigateUp()
         }
 
+        //todo добавить отмену редактирования
+//        binding.cancel.setOnClickListener {
+//            viewModel.clearEditedData()
+//            findNavController().navigateUp()
+//        }
+
         return binding.root
     }
 }

@@ -6,16 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.diploma.adapter.OnInteractionListener
 import ru.netology.diploma.adapter.UsersPreviewAdapter
 import ru.netology.diploma.databinding.FragmentUsersBinding
 import ru.netology.diploma.dto.Post
-import ru.netology.diploma.dto.UserPreview
 import ru.netology.diploma.dto.UserResponse
-import ru.netology.diploma.ui.AuthorWallFragment.Companion.textArg
 import ru.netology.diploma.util.StringArg
 import ru.netology.diploma.viewmodel.UsersViewModel
 

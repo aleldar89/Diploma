@@ -1,5 +1,6 @@
 package ru.netology.diploma.adapter
 
+import android.content.Context
 import android.content.res.Resources
 import android.net.Uri
 import android.os.Bundle
@@ -28,7 +29,8 @@ class EventsAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
         val binding = CardEventBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return EventViewHolder(binding, onInteractionListener, observer)
+        val context = binding.root.context
+        return EventViewHolder(binding, onInteractionListener, observer, context)
     }
 
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
@@ -43,6 +45,7 @@ class EventViewHolder(
     private val binding: CardEventBinding,
     private val onInteractionListener: OnInteractionListener<Event>,
     private val observer: MediaLifecycleObserver,
+    private val context: Context,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     companion object {
@@ -100,7 +103,6 @@ class EventViewHolder(
 
                     AttachmentType.VIDEO -> videoView.apply {
                         isVisible = true
-                        //TODO возможно проблема с context
                         setMediaController(MediaController(context))
                         setVideoURI(
                             Uri.parse(event.attachment.url)
@@ -125,10 +127,7 @@ class EventViewHolder(
 
             like.isChecked = event.likedByMe
             like.setOnClickListener {
-                if (!event.ownedByMe)
-                    onInteractionListener.onUnauthorized(event)
-                else
-                    onInteractionListener.onLike(event)
+                onInteractionListener.onLike(event)
             }
 
             share.setOnClickListener {
@@ -137,7 +136,9 @@ class EventViewHolder(
 
             if (!event.likeOwnerIds.isNullOrEmpty()) {
                 likeOwnerIds.isVisible = true
-                likeOwnerIds.text = "Likes: ${event.likeOwnerIds.size}"
+                likeOwnerIds.text = context.getString(
+                    R.string.likes, event.likeOwnerIds.size
+                )
             }
 
             likeOwnerIds.setOnClickListener {
@@ -146,7 +147,9 @@ class EventViewHolder(
 
             if (!event.speakerIds.isNullOrEmpty()) {
                 speakerIds.isVisible = true
-                speakerIds.text = "Speakers: ${event.speakerIds.size}"
+                speakerIds.text = context.getString(
+                    R.string.speakers, event.speakerIds.size
+                )
             }
 
             speakerIds.setOnClickListener {
@@ -155,7 +158,9 @@ class EventViewHolder(
 
             if (!event.participantsIds.isNullOrEmpty()) {
                 participantsIds.isVisible = true
-                participantsIds.text = "Participants: ${event.participantsIds.size}"
+                participantsIds.text = context.getString(
+                    R.string.participants, event.participantsIds.size
+                )
             }
 
             participantsIds.setOnClickListener {

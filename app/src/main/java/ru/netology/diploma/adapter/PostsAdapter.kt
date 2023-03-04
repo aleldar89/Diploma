@@ -1,5 +1,6 @@
 package ru.netology.diploma.adapter
 
+import android.content.Context
 import android.content.res.Resources
 import android.net.Uri
 import android.os.Bundle
@@ -29,7 +30,8 @@ class PostsAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val binding = CardPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return PostViewHolder(binding, onInteractionListener, observer)
+        val context = binding.root.context
+        return PostViewHolder(binding, onInteractionListener, observer, context)
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
@@ -44,6 +46,7 @@ class PostViewHolder(
     private val binding: CardPostBinding,
     private val onInteractionListener: OnInteractionListener<Post>,
     private val observer: MediaLifecycleObserver,
+    private val context: Context,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     companion object {
@@ -111,7 +114,6 @@ class PostViewHolder(
 
                     AttachmentType.VIDEO -> videoView.apply {
                         isVisible = true
-                        //TODO возможно проблема с context
                         setMediaController(MediaController(context))
                         setVideoURI(
                             Uri.parse(post.attachment.url)
@@ -135,11 +137,9 @@ class PostViewHolder(
             }
 
             like.isChecked = post.likedByMe
+
             like.setOnClickListener {
-                if (!post.ownedByMe)
-                    onInteractionListener.onUnauthorized(post)
-                else
-                    onInteractionListener.onLike(post)
+                onInteractionListener.onLike(post)
             }
 
             share.setOnClickListener {
@@ -148,10 +148,9 @@ class PostViewHolder(
 
             if (!post.likeOwnerIds.isNullOrEmpty()) {
                 likeOwnerIds.isVisible = true
-                likeOwnerIds.text = "Likes: ${post.likeOwnerIds.size}"
-//                likeOwnerIds.text = Resources
-//                    .getSystem()
-//                    .getString(R.string.likes, post.likeOwnerIds.size)
+                likeOwnerIds.text = context.getString(
+                    R.string.likes, post.likeOwnerIds.size
+                )
             }
 
             likeOwnerIds.setOnClickListener {
@@ -160,7 +159,9 @@ class PostViewHolder(
 
             if (!post.mentionIds.isNullOrEmpty()) {
                 mentionIds.isVisible = true
-                mentionIds.text = "Mentions: ${post.mentionIds.size}"
+                mentionIds.text = context.getString(
+                    R.string.mentions, post.mentionIds.size
+                )
             }
 
             mentionIds.setOnClickListener {

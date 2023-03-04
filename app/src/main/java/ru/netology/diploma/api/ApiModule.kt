@@ -1,6 +1,5 @@
 package ru.netology.diploma.api
 
-import com.google.android.gms.common.api.Api
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,7 +25,7 @@ class ApiModule {
     @Provides
     fun provideLogging(): HttpLoggingInterceptor = HttpLoggingInterceptor().apply {
         if (BuildConfig.DEBUG) {
-            level = HttpLoggingInterceptor.Level.BASIC
+            level = HttpLoggingInterceptor.Level.BODY
         }
     }
 

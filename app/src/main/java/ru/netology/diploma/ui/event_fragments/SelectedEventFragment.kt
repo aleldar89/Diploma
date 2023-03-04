@@ -81,7 +81,7 @@ class SelectedEventFragment : Fragment() {
                     startActivity(shareIntent)
                 }
             },
-            MediaLifecycleObserver()
+            MediaLifecycleObserver(), binding.root.context
         )
 
         eventViewHolder.bind(event)

@@ -22,7 +22,7 @@ class MyDialogFragment : DialogFragment() {
             builder.setTitle(R.string.are_you_sure)
                 .setPositiveButton(R.string.logout) { _, _ ->
                     appAuth.clearAuth()
-                    findNavController().navigate(R.id.postsFeedFragment)
+                    findNavController().navigateUp()
                 }
                 .setNegativeButton(R.string.cancel) { _, _ ->
                     findNavController().navigateUp()

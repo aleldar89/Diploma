@@ -102,27 +102,26 @@ interface ApiService {
 
     @GET("{authorId}/wall/latest")
     suspend fun getLatestAuthorWall(
-//        @Path("authorId") id: Int,
+        @Path("authorId") authorId: Int,
         @Query("count") count: Int
     ): Response<List<Post>>
 
     @GET("{authorId}/wall/{postId}/after")
     suspend fun getAfterAuthorWall(
-//        @Path("authorId") authorId: Int,
+        @Path("authorId") authorId: Int,
         @Path("postId") postId: Int,
         @Query("count") count: Int
     ): Response<List<Post>>
 
     @GET("{authorId}/wall/{postId}/before")
     suspend fun getBeforeAuthorWall(
-//        @Path("authorId") authorId: Int,
+        @Path("authorId") authorId: Int,
         @Path("postId") postId: Int,
         @Query("count") count: Int
     ): Response<List<Post>>
 
     @GET("{authorId}/wall/{postId}/newer")
     suspend fun getNewerAuthorWall(
-//        @Path("authorId") authorId: Int,
         @Path("authorId") authorId: Int,
         @Path("postId") postId: Int
     ): Response<List<Post>>
@@ -177,24 +176,24 @@ interface ApiService {
         @Field("password") password: String
     ): Response<Token>
 
-    @FormUrlEncoded
+    @Multipart
     @POST("users/registration")
     suspend fun registerUser(
-        @Field("login") login: String,
-        @Field("password") password: String,
-        @Field("name") name: String
+        @Part("login") login: RequestBody,
+        @Part("password") password: RequestBody,
+        @Part("name") name: RequestBody,
     ): Response<Token>
 
     @Multipart
     @POST("users/registration")
     suspend fun registerWithPhoto(
-        @Field("login") login: RequestBody,
-        @Field("password") password: RequestBody,
-        @Field("name") name: RequestBody,
+        @Part("login") login: RequestBody,
+        @Part("password") password: RequestBody,
+        @Part("name") name: RequestBody,
         @Part media: MultipartBody.Part
     ): Response<Token>
 
-    @GET("users/id")
+    @GET("users/{id}")
     suspend fun getByIdUser(@Path("id") id: Int): Response<UserResponse>
 
 }

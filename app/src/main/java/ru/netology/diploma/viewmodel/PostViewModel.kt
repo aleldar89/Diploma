@@ -1,11 +1,7 @@
 package ru.netology.diploma.viewmodel
 
 import android.net.Uri
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.map
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -48,7 +44,8 @@ private val empty = Post(
 @HiltViewModel
 class PostViewModel @Inject constructor(
     private val repository: PostRepository,
-    private val appAuth: AppAuth
+    private val appAuth: AppAuth,
+    val state: SavedStateHandle,
 ) : ViewModel() {
 
     val isAuthorized: Boolean
@@ -75,6 +72,18 @@ class PostViewModel @Inject constructor(
     private val _postCreated = SingleLiveEvent<Unit>()
     val postCreated: LiveData<Unit>
         get() = _postCreated
+
+    companion object {
+        private const val AUTHOR_ID = "AUTHOR_ID"
+    }
+
+    fun saveCurrentAuthor(authorId: Int) {
+        state[AUTHOR_ID] = authorId
+    }
+
+//    fun getCurrentAuthor(): Int {
+//        return checkNotNull(savedStateHandle[AUTHOR_ID])
+//    }
 
     val data: Flow<PagingData<Post>> = appAuth.data
         .flatMapLatest { auth ->
@@ -183,7 +192,13 @@ class PostViewModel @Inject constructor(
         if (edited.value?.content == text) {
             return
         }
-        edited.value = edited.value?.copy(content = text)
+        edited.value = edited.value?.copy(
+            content = text,
+
+            //todo захват координат и поле под link в newFragment
+            link = null,
+            coords = null,
+        )
     }
 
     fun clearPhoto() {

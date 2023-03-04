@@ -16,7 +16,7 @@ class MyWallRemoteMediator(
     private val apiService: ApiService,
     private val myWallDao: PostDao,
     private val myWallRemoteKeyDao: PostRemoteKeyDao,
-    private val myWallDb: PostsDb
+    private val myWallDb: PostsDb,
 ) : RemoteMediator<Int, PostEntity>() {
 
     override suspend fun load(loadType: LoadType, state: PagingState<Int, PostEntity>): MediatorResult {

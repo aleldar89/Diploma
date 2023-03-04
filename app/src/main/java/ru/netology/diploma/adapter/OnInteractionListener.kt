@@ -10,3 +10,7 @@ interface OnInteractionListener<T> {
     fun onSelect(item: T) {}
     fun onAuthor(item: T) {}
 }
+
+interface OnUserIdsListener {
+    fun onUserIds(list: List<Int>) {}
+}

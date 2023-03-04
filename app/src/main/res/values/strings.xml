@@ -24,7 +24,7 @@
     <string name="logout">Logout</string>
     <string name="save">Save</string>
     <string name="menu_edit">Edit</string>
-    <string name="menu_remove">Refresh</string>
+    <string name="menu_remove">Remove</string>
     <string name="image_error">Image not captured</string>
     <string name="error_empty_registration_form">No login or password entered</string>
     <string name="error_confirm_password">Сonfirm the password</string>

@@ -8,10 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.paging.map
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.map
 import ru.netology.diploma.R
 import ru.netology.diploma.adapter.OnInteractionListener
 import ru.netology.diploma.adapter.PostViewHolder
@@ -81,7 +79,7 @@ class SelectedPostFragment : Fragment() {
                     startActivity(shareIntent)
                 }
             },
-            MediaLifecycleObserver()
+            MediaLifecycleObserver(), binding.root.context
         )
 
         postViewHolder.bind(post)

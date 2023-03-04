@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.JsonObject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaType
@@ -49,7 +50,11 @@ class RegistrationViewModel @Inject constructor(
     fun registerUser(login: String, password: String, name: String) {
         viewModelScope.launch {
             try {
-                _responseAuthState.value = apiService.registerUser(login, password, name).body()
+                _responseAuthState.value = apiService.registerUser(
+                    login.toRequestBody("text/plain".toMediaType()),
+                    password.toRequestBody("text/plain".toMediaType()),
+                    name.toRequestBody("text/plain".toMediaType()),
+                ).body()
             } catch (e: Exception) {
                 _error.value = e
             }

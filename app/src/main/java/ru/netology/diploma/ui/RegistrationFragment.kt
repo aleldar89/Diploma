@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toFile
 import androidx.core.view.isGone
@@ -12,13 +13,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.github.dhaval2404.imagepicker.ImagePicker
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.diploma.R
 import ru.netology.diploma.databinding.FragmentRegistrationBinding
 import ru.netology.diploma.extensions.createToast
 import ru.netology.diploma.util.AndroidUtils
-import ru.netology.diploma.util.parseException
 import ru.netology.diploma.viewmodel.RegistrationViewModel
 
 @AndroidEntryPoint
@@ -68,9 +67,11 @@ class RegistrationFragment : Fragment() {
         }
 
         viewModel.error.observe(viewLifecycleOwner) { error ->
-            val errorMessage = "${parseException(error)}. Registration failed, try later"
-            Snackbar.make(binding.root, errorMessage, Snackbar.LENGTH_LONG).show()
-            findNavController().navigateUp()
+            Toast.makeText(
+                context,
+                error.message,
+                Toast.LENGTH_LONG
+            ).show()
         }
 
         viewModel.media.observe(viewLifecycleOwner) {

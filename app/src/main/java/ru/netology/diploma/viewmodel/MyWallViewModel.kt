@@ -28,6 +28,12 @@ class MyWallViewModel @Inject constructor(
 ) : ViewModel() {
 
     //TODO тут может быть проблема c получением myId
+//    private val myId: Int
+//        get() = appAuth.data.value?.id!!
+
+    private val myId: Int
+        get() = checkNotNull(appAuth.data.value?.id)
+
     init {
         getUser()
         loadPosts()
@@ -46,8 +52,7 @@ class MyWallViewModel @Inject constructor(
     private fun getUser() {
         viewModelScope.launch {
             try {
-                val myId = appAuth.data.value?.id
-                _userResponse.value = apiService.getByIdUser(myId as Int).body()
+                _userResponse.value = apiService.getByIdUser(myId).body()
             } catch (e: Exception) {
                 _error.value = e
             }
