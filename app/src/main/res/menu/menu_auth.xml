@@ -7,6 +7,7 @@
             android:id="@+id/sign_in"
             android:title="@string/sign_in"
             app:showAsAction="never" />
+
         <item
             android:id="@+id/sign_up"
             android:title="@string/sign_up"
@@ -18,6 +19,12 @@
             android:id="@+id/my_wall"
             android:title="@string/my_wall"
             app:showAsAction="never" />
+
+        <item
+            android:id="@+id/my_jobs"
+            android:title="@string/my_jobs"
+            app:showAsAction="never" />
+
         <item
             android:id="@+id/log_out"
             android:title="@string/logout"

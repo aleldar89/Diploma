@@ -28,20 +28,23 @@ class NewPostFragment : Fragment() {
 
     private val viewModel: PostViewModel by activityViewModels()
 
-    private val imageContract = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        when (result.resultCode) {
-            ImagePicker.RESULT_ERROR -> {
-                Toast.makeText(requireContext(), "Image not captured", Toast.LENGTH_SHORT).show()
-            }
-            else -> {
-                val data = result.data?.data ?: run {
-                    Toast.makeText(requireContext(), "Image not captured", Toast.LENGTH_SHORT).show()
-                    return@registerForActivityResult
+    private val imageContract =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            when (result.resultCode) {
+                ImagePicker.RESULT_ERROR -> {
+                    Toast.makeText(requireContext(), "Image not captured", Toast.LENGTH_SHORT)
+                        .show()
                 }
-                viewModel.changePhoto(data, data.toFile())
+                else -> {
+                    val data = result.data?.data ?: run {
+                        Toast.makeText(requireContext(), "Image not captured", Toast.LENGTH_SHORT)
+                            .show()
+                        return@registerForActivityResult
+                    }
+                    viewModel.changePhoto(data, data.toFile())
+                }
             }
         }
-    }
 
     private var binding: FragmentNewPostBinding? = null
 
@@ -60,13 +63,22 @@ class NewPostFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
-        if (item.itemId == R.id.save) {
-            viewModel.changeContent(binding?.edit?.text?.toString().orEmpty())
-            viewModel.save()
-            AndroidUtils.hideKeyboard(requireView())
-            true
-        } else {
-            false
+        when (item.itemId) {
+            R.id.save -> {
+                viewModel.changeContent(binding?.edit?.text?.toString().orEmpty())
+                viewModel.save()
+                AndroidUtils.hideKeyboard(requireView())
+                true
+            }
+            R.id.cancel -> {
+                viewModel.clearEditedData()
+                AndroidUtils.hideKeyboard(requireView())
+                findNavController().navigateUp()
+                true
+            }
+            else -> {
+                false
+            }
         }
 
     override fun onCreateView(
@@ -82,8 +94,7 @@ class NewPostFragment : Fragment() {
             this.binding = it
         }
 
-        arguments?.textArg
-            ?.let(binding.edit::setText)
+        arguments?.textArg?.let(binding.edit::setText)
 
         viewModel.media.observe(viewLifecycleOwner) {
             if (it == null) {
@@ -119,12 +130,6 @@ class NewPostFragment : Fragment() {
             viewModel.loadPosts()
             findNavController().navigateUp()
         }
-
-        //todo добавить отмену редактирования
-//        binding.cancel.setOnClickListener {
-//            viewModel.clearEditedData()
-//            findNavController().navigateUp()
-//        }
 
         return binding.root
     }

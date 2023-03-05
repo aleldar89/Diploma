@@ -103,5 +103,20 @@
 
     <action android:id="@+id/action_global_authorWallFragment"
         app:destination="@id/authorWallFragment"/>
+    <fragment
+        android:id="@+id/newJobFragment"
+        android:name="ru.netology.diploma.ui.job_fragments.NewJobFragment"
+        android:label="NewJobFragment" />
+    <fragment
+        android:id="@+id/myJobFeedFragment"
+        android:name="ru.netology.diploma.ui.job_fragments.MyJobFeedFragment"
+        android:label="MyJobFeedFragment" >
+        <action
+            android:id="@+id/action_myJobFeedFragment_to_newJobFragment"
+            app:destination="@id/newJobFragment" />
+    </fragment>
+
+    <action android:id="@+id/action_global_myJobFeedFragment"
+        app:destination="@id/myJobFeedFragment" />
 
 </navigation>

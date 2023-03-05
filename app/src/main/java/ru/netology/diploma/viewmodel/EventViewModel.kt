@@ -187,6 +187,10 @@ class EventViewModel @Inject constructor(
         edited.value = edited.value?.copy(content = text)
     }
 
+    fun clearEditedData() {
+        edited.value = empty
+    }
+
     fun clearPhoto() {
         _media.value = null
     }

@@ -25,13 +25,14 @@ import ru.netology.diploma.util.StringArg
 
 class PostsAdapter(
     private val onInteractionListener: OnInteractionListener<Post>,
+    private val onUserIdsListener: OnUserIdsListener,
     private val observer: MediaLifecycleObserver,
 ) : PagingDataAdapter<Post, PostViewHolder>(PostDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val binding = CardPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         val context = binding.root.context
-        return PostViewHolder(binding, onInteractionListener, observer, context)
+        return PostViewHolder(binding, onInteractionListener, onUserIdsListener, observer, context)
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
@@ -45,10 +46,12 @@ class PostsAdapter(
 class PostViewHolder(
     private val binding: CardPostBinding,
     private val onInteractionListener: OnInteractionListener<Post>,
+    private val onUserIdsListener: OnUserIdsListener,
     private val observer: MediaLifecycleObserver,
     private val context: Context,
 ) : RecyclerView.ViewHolder(binding.root) {
 
+    //todo не нужен же?
     companion object {
         var Bundle.textArg: String? by StringArg
     }
@@ -151,10 +154,9 @@ class PostViewHolder(
                 likeOwnerIds.text = context.getString(
                     R.string.likes, post.likeOwnerIds.size
                 )
-            }
-
-            likeOwnerIds.setOnClickListener {
-                onInteractionListener.onUserIds(post)
+                likeOwnerIds.setOnClickListener {
+                    onUserIdsListener.onUserIds(post.likeOwnerIds)
+                }
             }
 
             if (!post.mentionIds.isNullOrEmpty()) {
@@ -162,10 +164,9 @@ class PostViewHolder(
                 mentionIds.text = context.getString(
                     R.string.mentions, post.mentionIds.size
                 )
-            }
-
-            mentionIds.setOnClickListener {
-                onInteractionListener.onUserIds(post)
+                mentionIds.setOnClickListener {
+                    onUserIdsListener.onUserIds(post.mentionIds)
+                }
             }
 
         }

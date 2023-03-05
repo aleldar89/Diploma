@@ -14,6 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import ru.netology.diploma.R
 import ru.netology.diploma.adapter.OnInteractionListener
+import ru.netology.diploma.adapter.OnUserIdsListener
 import ru.netology.diploma.adapter.PostsAdapter
 import ru.netology.diploma.databinding.FragmentWallBinding
 import ru.netology.diploma.dto.Post
@@ -33,7 +34,10 @@ class MyWallFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val binding = FragmentWallBinding.inflate(inflater, container, false)
-        val adapter = PostsAdapter(object : OnInteractionListener<Post>{}, MediaLifecycleObserver())
+        val adapter = PostsAdapter(object : OnInteractionListener<Post>{},
+            object : OnUserIdsListener {},
+            MediaLifecycleObserver()
+        )
 
         val user = viewModel.userResponse.value
         user?.avatar?.let { binding.authorAvatar.loadAvatar(it) }

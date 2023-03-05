@@ -70,6 +70,11 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
                     .navigate(R.id.action_global_myWallFragment)
                 true
             }
+            R.id.my_jobs -> {
+                findNavController(R.id.nav_host_fragment)
+                    .navigate(R.id.action_global_myJobFeedFragment)
+                true
+            }
             R.id.log_out -> {
                 findNavController(R.id.nav_host_fragment)
                     .navigate(R.id.action_global_myDialogFragment)

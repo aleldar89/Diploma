@@ -1,15 +1,13 @@
 package ru.netology.diploma.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.paging.PagingData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onEmpty
 import kotlinx.coroutines.launch
 import ru.netology.diploma.api.ApiService
 import ru.netology.diploma.auth.AppAuth
@@ -27,10 +25,7 @@ class MyWallViewModel @Inject constructor(
     private val apiService: ApiService
 ) : ViewModel() {
 
-    //TODO тут может быть проблема c получением myId
-//    private val myId: Int
-//        get() = appAuth.data.value?.id!!
-
+    //TODO почему myId == null
     private val myId: Int
         get() = checkNotNull(appAuth.data.value?.id)
 
@@ -41,8 +36,8 @@ class MyWallViewModel @Inject constructor(
 
     val data: Flow<PagingData<Post>> = repository.data.flowOn(Dispatchers.Default)
 
-    private val _userResponse = MutableLiveData<UserResponse?>(null)
-    val userResponse: LiveData<UserResponse?>
+    private val _userResponse = MutableLiveData<UserResponse>(null)
+    val userResponse: LiveData<UserResponse>
         get() = _userResponse
 
     private val _error = SingleLiveEvent<Exception>()

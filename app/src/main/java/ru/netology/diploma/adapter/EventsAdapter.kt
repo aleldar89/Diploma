@@ -24,13 +24,14 @@ import ru.netology.diploma.util.StringArg
 
 class EventsAdapter(
     private val onInteractionListener: OnInteractionListener<Event>,
+    private val onUserIdsListener: OnUserIdsListener,
     private val observer: MediaLifecycleObserver,
 ) : PagingDataAdapter<Event, EventViewHolder>(EventDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
         val binding = CardEventBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         val context = binding.root.context
-        return EventViewHolder(binding, onInteractionListener, observer, context)
+        return EventViewHolder(binding, onInteractionListener, onUserIdsListener, observer, context)
     }
 
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
@@ -44,6 +45,7 @@ class EventsAdapter(
 class EventViewHolder(
     private val binding: CardEventBinding,
     private val onInteractionListener: OnInteractionListener<Event>,
+    private val onUserIdsListener: OnUserIdsListener,
     private val observer: MediaLifecycleObserver,
     private val context: Context,
 ) : RecyclerView.ViewHolder(binding.root) {
@@ -139,10 +141,9 @@ class EventViewHolder(
                 likeOwnerIds.text = context.getString(
                     R.string.likes, event.likeOwnerIds.size
                 )
-            }
-
-            likeOwnerIds.setOnClickListener {
-                onInteractionListener.onUserIds(event)
+                likeOwnerIds.setOnClickListener {
+                    onUserIdsListener.onUserIds(event.likeOwnerIds)
+                }
             }
 
             if (!event.speakerIds.isNullOrEmpty()) {
@@ -150,10 +151,9 @@ class EventViewHolder(
                 speakerIds.text = context.getString(
                     R.string.speakers, event.speakerIds.size
                 )
-            }
-
-            speakerIds.setOnClickListener {
-                onInteractionListener.onUserIds(event)
+                speakerIds.setOnClickListener {
+                    onUserIdsListener.onUserIds(event.speakerIds)
+                }
             }
 
             if (!event.participantsIds.isNullOrEmpty()) {
@@ -161,10 +161,9 @@ class EventViewHolder(
                 participantsIds.text = context.getString(
                     R.string.participants, event.participantsIds.size
                 )
-            }
-
-            participantsIds.setOnClickListener {
-                onInteractionListener.onUserIds(event)
+                participantsIds.setOnClickListener {
+                    onUserIdsListener.onUserIds(event.participantsIds)
+                }
             }
 
         }

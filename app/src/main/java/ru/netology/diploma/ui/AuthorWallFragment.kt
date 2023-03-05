@@ -16,6 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import ru.netology.diploma.R
 import ru.netology.diploma.adapter.OnInteractionListener
+import ru.netology.diploma.adapter.OnUserIdsListener
 import ru.netology.diploma.adapter.PostsAdapter
 import ru.netology.diploma.application.DiplomaApplication
 import ru.netology.diploma.databinding.FragmentWallBinding
@@ -37,7 +38,10 @@ class AuthorWallFragment : Fragment() {
     ): View {
 
         val binding = FragmentWallBinding.inflate(inflater, container, false)
-        val adapter = PostsAdapter(object : OnInteractionListener<Post> {}, MediaLifecycleObserver())
+        val adapter = PostsAdapter(object : OnInteractionListener<Post>{},
+            object : OnUserIdsListener {},
+            MediaLifecycleObserver()
+        )
 
         viewModel.userResponse.observe(viewLifecycleOwner) {
             binding.authorAvatar.loadAvatar(it?.avatar!!)
@@ -54,7 +58,6 @@ class AuthorWallFragment : Fragment() {
             val errorMessage = parseException(it)
             Snackbar.make(binding.root, errorMessage, Snackbar.LENGTH_LONG)
                 .setAction(R.string.retry_loading) {
-//                    viewModel.loadPosts(post.authorId)
                     viewModel.loadPosts()
                 }
                 .show()

@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.map
 import ru.netology.diploma.R
 import ru.netology.diploma.adapter.EventViewHolder
 import ru.netology.diploma.adapter.OnInteractionListener
+import ru.netology.diploma.adapter.OnUserIdsListener
 import ru.netology.diploma.databinding.CardEventBinding
 import ru.netology.diploma.dto.Event
 import ru.netology.diploma.mediplayer.MediaLifecycleObserver
@@ -81,7 +82,9 @@ class SelectedEventFragment : Fragment() {
                     startActivity(shareIntent)
                 }
             },
-            MediaLifecycleObserver(), binding.root.context
+            object : OnUserIdsListener {},
+            MediaLifecycleObserver(),
+            binding.root.context
         )
 
         eventViewHolder.bind(event)

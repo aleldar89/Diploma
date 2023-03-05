@@ -81,16 +81,12 @@ class PostViewModel @Inject constructor(
         state[AUTHOR_ID] = authorId
     }
 
-//    fun getCurrentAuthor(): Int {
-//        return checkNotNull(savedStateHandle[AUTHOR_ID])
-//    }
-
     val data: Flow<PagingData<Post>> = appAuth.data
         .flatMapLatest { auth ->
             repository.data
                 .map { posts ->
                     posts.map {
-                        it.copy(ownedByMe = auth?.id == it.authorId) //todo нет токена -> меню поста видимо
+                        it.copy(ownedByMe = auth?.id == it.authorId)
                     }
                 }
         }.flowOn(Dispatchers.Default)
@@ -199,6 +195,10 @@ class PostViewModel @Inject constructor(
             link = null,
             coords = null,
         )
+    }
+
+    fun clearEditedData() {
+        edited.value = empty
     }
 
     fun clearPhoto() {

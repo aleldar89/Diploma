@@ -15,8 +15,8 @@ interface EventRepository {
     suspend fun dislikeById(event: Event)
     suspend fun addParticipantById(id: Int)
     suspend fun removeParticipantById(id: Int)
-
     suspend fun saveWithAttachment(event: Event, file: File)
+
     suspend fun localSave(event: Event)
     suspend fun localRemoveById(id: Int)
     suspend fun selectLast(): Event

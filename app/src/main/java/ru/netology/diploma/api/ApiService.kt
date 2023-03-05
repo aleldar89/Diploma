@@ -70,7 +70,7 @@ interface ApiService {
     suspend fun removeByIdMyJob(@Path("id") id: Int): Response<Unit>
 
     @GET("{id}/jobs")
-    suspend fun getByUserIdJobs(@Path("id") id: Int): Response<Job>
+    suspend fun getByIdUserJobs(@Path("id") id: Int): Response<List<Job>>
 
 
     /** MyWall (Posts) methods */

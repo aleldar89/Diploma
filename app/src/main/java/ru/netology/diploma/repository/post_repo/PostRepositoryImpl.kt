@@ -88,17 +88,6 @@ class PostRepositoryImpl @Inject constructor(
         }
     }
 
-//    override suspend fun getById(id: Int): Post {
-//        try {
-//            //todo проблема с лайком
-//            return postDao.getById(id).toDto()
-//        } catch (e: IOException) {
-//            throw NetworkError
-//        } catch (e: Exception) {
-//            throw UnknownError
-//        }
-//    }
-
     override suspend fun removeById(id: Int) {
         try {
             postDao.removeById(id)

@@ -60,13 +60,22 @@ class NewEventFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
-        if (item.itemId == R.id.save) {
-            viewModel.changeContent(binding?.edit?.text?.toString().orEmpty())
-            viewModel.save()
-            AndroidUtils.hideKeyboard(requireView())
-            true
-        } else {
-            false
+        when (item.itemId) {
+            R.id.save -> {
+                viewModel.changeContent(binding?.edit?.text?.toString().orEmpty())
+                viewModel.save()
+                AndroidUtils.hideKeyboard(requireView())
+                true
+            }
+            R.id.cancel -> {
+                viewModel.clearEditedData()
+                AndroidUtils.hideKeyboard(requireView())
+                findNavController().navigateUp()
+                true
+            }
+            else -> {
+                false
+            }
         }
 
     override fun onCreateView(
@@ -119,12 +128,6 @@ class NewEventFragment : Fragment() {
             viewModel.loadEvents()
             findNavController().navigateUp()
         }
-
-        //todo добавить отмену редактирования
-//        binding.cancel.setOnClickListener {
-//            viewModel.clearEditedData()
-//            findNavController().navigateUp()
-//        }
 
         return binding.root
     }

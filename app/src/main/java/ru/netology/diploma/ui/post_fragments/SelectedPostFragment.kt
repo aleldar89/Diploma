@@ -12,6 +12,7 @@ import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.diploma.R
 import ru.netology.diploma.adapter.OnInteractionListener
+import ru.netology.diploma.adapter.OnUserIdsListener
 import ru.netology.diploma.adapter.PostViewHolder
 import ru.netology.diploma.databinding.CardPostBinding
 import ru.netology.diploma.dto.Post
@@ -79,7 +80,9 @@ class SelectedPostFragment : Fragment() {
                     startActivity(shareIntent)
                 }
             },
-            MediaLifecycleObserver(), binding.root.context
+            object : OnUserIdsListener {},
+            MediaLifecycleObserver(),
+            binding.root.context
         )
 
         postViewHolder.bind(post)

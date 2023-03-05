@@ -38,8 +38,8 @@ class AuthorWallViewModel @Inject constructor(
 
     val data: Flow<PagingData<Post>> = repository.data.flowOn(Dispatchers.Default)
 
-    private val _userResponse = MutableLiveData<UserResponse?>(null)
-    val userResponse: LiveData<UserResponse?>
+    private val _userResponse = MutableLiveData<UserResponse>(null)
+    val userResponse: LiveData<UserResponse>
         get() = _userResponse
 
     private val _error = SingleLiveEvent<Exception>()

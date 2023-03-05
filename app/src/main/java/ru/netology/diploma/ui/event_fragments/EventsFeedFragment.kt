@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.collectLatest
 import ru.netology.diploma.R
 import ru.netology.diploma.adapter.EventsAdapter
 import ru.netology.diploma.adapter.OnInteractionListener
+import ru.netology.diploma.adapter.OnUserIdsListener
 import ru.netology.diploma.databinding.FragmentEventFeedBinding
 import ru.netology.diploma.dto.Event
 import ru.netology.diploma.mediplayer.MediaLifecycleObserver
@@ -44,75 +45,78 @@ class EventsFeedFragment : Fragment() {
 
         val gson = Gson()
 
-        val adapter = EventsAdapter(object : OnInteractionListener<Event> {
+        val adapter = EventsAdapter(
+            object : OnInteractionListener<Event> {
 
-            override fun onLike(event: Event) {
-                if (event.likedByMe)
-                    viewModel.dislikeById(event)
-                else
-                    viewModel.likeById(event)
-            }
-
-            override fun onEdit(event: Event) {
-                findNavController().navigate(
-                    R.id.action_postsFeedFragment_to_newPostFragment,
-                    Bundle().apply {
-                        textArg = event.content
-                    }
-                )
-                viewModel.edit(event)
-            }
-
-            override fun onRemove(event: Event) {
-                viewModel.removeById(event.id)
-            }
-
-            override fun onShare(event: Event) {
-                val intent = Intent().apply {
-                    action = Intent.ACTION_SEND
-                    putExtra(Intent.EXTRA_TEXT, event.content)
-                    type = "text/plain"
+                override fun onLike(event: Event) {
+                    if (event.likedByMe)
+                        viewModel.dislikeById(event)
+                    else
+                        viewModel.likeById(event)
                 }
 
-                val shareIntent =
-                    Intent.createChooser(intent, getString(R.string.chooser_share_post))
-                startActivity(shareIntent)
-            }
+                override fun onEdit(event: Event) {
+                    findNavController().navigate(
+                        R.id.action_postsFeedFragment_to_newPostFragment,
+                        Bundle().apply {
+                            textArg = event.content
+                        }
+                    )
+                    viewModel.edit(event)
+                }
 
-            override fun onUnauthorized(event: Event) {
-                findNavController().navigate(
-                    R.id.action_global_authFragment
-                )
-            }
+                override fun onRemove(event: Event) {
+                    viewModel.removeById(event.id)
+                }
 
-            override fun onSelect(event: Event) {
-                findNavController().navigate(
-                    R.id.action_eventsFeedFragment_to_selectedEventFragment,
-                    Bundle().apply {
-                        textArg = gson.toJson(event)
+                override fun onShare(event: Event) {
+                    val intent = Intent().apply {
+                        action = Intent.ACTION_SEND
+                        putExtra(Intent.EXTRA_TEXT, event.content)
+                        type = "text/plain"
                     }
-                )
-            }
 
-            override fun onAuthor(event: Event) {
-                findNavController().navigate(
-                    R.id.action_global_authorWallFragment,
-                    Bundle().apply {
-                        textArg = gson.toJson(event)
-                    }
-                )
-            }
+                    val shareIntent =
+                        Intent.createChooser(intent, getString(R.string.chooser_share_post))
+                    startActivity(shareIntent)
+                }
 
-            override fun onUserIds(event: Event) {
-                findNavController().navigate(
-                    R.id.action_eventsFeedFragment_to_usersFragment,
-                    Bundle().apply {
-                        textArg = gson.toJson(event)
-                    }
-                )
-            }
+                override fun onUnauthorized(event: Event) {
+                    findNavController().navigate(
+                        R.id.action_global_authFragment
+                    )
+                }
 
-        }, MediaLifecycleObserver())
+                override fun onSelect(event: Event) {
+                    findNavController().navigate(
+                        R.id.action_eventsFeedFragment_to_selectedEventFragment,
+                        Bundle().apply {
+                            textArg = gson.toJson(event)
+                        }
+                    )
+                }
+
+                override fun onAuthor(event: Event) {
+                    findNavController().navigate(
+                        R.id.action_global_authorWallFragment,
+                        Bundle().apply {
+                            textArg = gson.toJson(event)
+                        }
+                    )
+                }
+            },
+            object : OnUserIdsListener {
+                override fun onUserIds(list: List<Int>) {
+                    findNavController().navigate(
+                        R.id.action_eventsFeedFragment_to_usersFragment,
+                        Bundle().apply {
+                            textArg = gson.toJson(list)
+                        }
+                    )
+                }
+            },
+            MediaLifecycleObserver()
+        )
 
         binding.list.apply {
             this.adapter = adapter

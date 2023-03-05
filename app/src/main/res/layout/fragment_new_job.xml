@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/double_spacing">
+
+    <LinearLayout
+        android:id="@+id/job_form"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@android:color/transparent"
+        android:layout_gravity="center">
+
+        <EditText
+            android:id="@+id/position"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/common_spacing"
+            android:gravity="start|top"
+            android:hint="@string/position"
+            android:inputType="textMultiLine" />
+
+        <EditText
+            android:id="@+id/start"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/common_spacing"
+            android:gravity="start|top"
+            android:hint="@string/start"
+            android:inputType="textMultiLine" />
+
+        <EditText
+            android:id="@+id/finish"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/common_spacing"
+            android:gravity="start|top"
+            android:hint="@string/finish"
+            android:inputType="textMultiLine" />
+
+        <EditText
+            android:id="@+id/link"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/common_spacing"
+            android:gravity="start|top"
+            android:hint="@string/link"
+            android:inputType="textMultiLine" />
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
