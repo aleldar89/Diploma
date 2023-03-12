@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -42,6 +44,17 @@ class MyWallFragment : Fragment() {
         val user = viewModel.userResponse.value
         user?.avatar?.let { binding.authorAvatar.loadAvatar(it) }
         binding.author.text = user?.name
+
+        binding.list.apply {
+            this.adapter = adapter
+            val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            this.addItemDecoration(
+                DividerItemDecoration(
+                    context,
+                    layoutManager.orientation
+                )
+            )
+        }
 
         lifecycleScope.launchWhenCreated {
             viewModel.data.collectLatest {

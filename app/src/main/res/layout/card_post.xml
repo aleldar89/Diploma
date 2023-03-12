@@ -8,9 +8,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="@dimen/common_spacing"
-        android:paddingEnd="@dimen/common_spacing"
-        android:paddingTop="@dimen/common_spacing">
+        android:padding="@dimen/common_spacing">
 
         <ImageView
             android:id="@+id/authorAvatar"
@@ -91,7 +89,6 @@
             android:layout_height="wrap_content"
             android:autoLink="web"
             android:paddingTop="@dimen/common_spacing"
-            android:paddingBottom="@dimen/common_spacing"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/header"
@@ -119,8 +116,8 @@
 
         <ImageView
             android:id="@+id/image_view"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:paddingTop="@dimen/common_spacing"
             android:visibility="gone"
@@ -137,8 +134,8 @@
 
         <VideoView
             android:id="@+id/video_view"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:paddingTop="@dimen/common_spacing"
             android:visibility="gone"
@@ -158,6 +155,7 @@
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:adjustViewBounds="true"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/footer3"
@@ -208,19 +206,19 @@
             android:id="@+id/likeOwnerIds"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
+            android:visibility="gone"
             app:layout_constraintEnd_toStartOf="@id/mentionIds"
-            app:layout_constraintTop_toBottomOf="@id/footer5"
-            android:visibility="gone" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/footer5" />
 
         <TextView
             android:id="@+id/mentionIds"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/likeOwnerIds"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/footer5"
-            android:visibility="gone" />
+            app:layout_constraintStart_toEndOf="@id/likeOwnerIds"
+            app:layout_constraintTop_toBottomOf="@id/footer5" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

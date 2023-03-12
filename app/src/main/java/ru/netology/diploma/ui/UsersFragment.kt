@@ -47,7 +47,7 @@ class UsersFragment : Fragment() {
 
         val adapter = UsersPreviewAdapter(object : OnInteractionListener<UserResponse> {
             override fun onAuthor(item: UserResponse) {
-                //todo сохранение id во вьюмодели в SavedStateHandle
+                //todo
                 findNavController().navigate(
                     R.id.action_global_authorWallFragment,
                     Bundle().apply {

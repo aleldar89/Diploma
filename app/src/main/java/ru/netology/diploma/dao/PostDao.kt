@@ -18,17 +18,22 @@ interface PostDao {
     @Query("DELETE FROM PostEntity WHERE id = :id")
     suspend fun removeById(id: Int)
 
+    @Query("DELETE FROM PostEntity")
+    suspend fun clear()
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(post: PostEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(posts: List<PostEntity>)
 
-    @Query("""
+    @Query(
+        """
         UPDATE PostEntity SET
         content = :content
         WHERE id = :id
-        """)
+        """
+    )
     suspend fun updateContentById(id: Int, content: String)
 
     suspend fun save(post: PostEntity) =
@@ -39,11 +44,13 @@ interface PostDao {
 
     //TODO вставка id лайкнувшего пользователя в likeOwnerIds
 
-    @Query("""
+    @Query(
+        """
             UPDATE PostEntity SET
             likedByMe = CASE WHEN likedByMe THEN 0 ELSE 1 END
             WHERE id = :id
-        """)
+        """
+    )
     suspend fun likeById(id: Int)
 
     @Query("UPDATE PostEntity SET id = :id WHERE id = 0")

@@ -7,7 +7,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.onEmpty
 import kotlinx.coroutines.launch
 import ru.netology.diploma.api.ApiService
 import ru.netology.diploma.auth.AppAuth
@@ -25,14 +24,8 @@ class MyWallViewModel @Inject constructor(
     private val apiService: ApiService
 ) : ViewModel() {
 
-    //TODO почему myId == null
     private val myId: Int
         get() = checkNotNull(appAuth.data.value?.id)
-
-    init {
-        getUser()
-        loadPosts()
-    }
 
     val data: Flow<PagingData<Post>> = repository.data.flowOn(Dispatchers.Default)
 
@@ -43,6 +36,11 @@ class MyWallViewModel @Inject constructor(
     private val _error = SingleLiveEvent<Exception>()
     val error: LiveData<Exception>
         get() = _error
+
+    init {
+        getUser()
+        loadPosts()
+    }
 
     private fun getUser() {
         viewModelScope.launch {

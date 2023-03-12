@@ -34,12 +34,12 @@ class RegistrationFragment : Fragment() {
     ) { result->
         when(result.resultCode) {
             ImagePicker.RESULT_ERROR -> {
-                view?.createToast(R.string.image_error)
+                view?.createToast(R.string.media_error)
             }
 
             else -> {
                 val data = result.data?.data ?: run {
-                    view?.createToast(R.string.image_error)
+                    view?.createToast(R.string.media_error)
                     return@registerForActivityResult
                 }
                 viewModel.changePhoto(data, data.toFile())

@@ -1,9 +1,7 @@
 package ru.netology.diploma.adapter
 
 import android.content.Context
-import android.content.res.Resources
 import android.net.Uri
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.MediaController
@@ -20,7 +18,6 @@ import ru.netology.diploma.extensions.createDate
 import ru.netology.diploma.extensions.loadAvatar
 import ru.netology.diploma.extensions.loadImage
 import ru.netology.diploma.mediplayer.MediaLifecycleObserver
-import ru.netology.diploma.util.StringArg
 
 class EventsAdapter(
     private val onInteractionListener: OnInteractionListener<Event>,
@@ -50,10 +47,6 @@ class EventViewHolder(
     private val context: Context,
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    companion object {
-        var Bundle.textArg: String? by StringArg
-    }
-
     fun bind(event: Event) {
         binding.apply {
 
@@ -68,16 +61,14 @@ class EventViewHolder(
                     inflate(R.menu.options_item)
                     setOnMenuItemClickListener { item ->
                         when (item.itemId) {
-                            R.id.remove -> {
-                                onInteractionListener.onRemove(event)
-                                true
-                            }
-
                             R.id.edit -> {
                                 onInteractionListener.onEdit(event)
                                 true
                             }
-
+                            R.id.remove -> {
+                                onInteractionListener.onRemove(event)
+                                true
+                            }
                             else -> false
                         }
                     }
@@ -85,7 +76,6 @@ class EventViewHolder(
             }
 
             content.text = event.content
-
             content.setOnClickListener {
                 onInteractionListener.onSelect(event)
             }
@@ -93,8 +83,9 @@ class EventViewHolder(
             if (!event.link.isNullOrEmpty()) {
                 link.isVisible = true
                 link.text = event.link
+            } else {
+                link.isVisible = false
             }
-
 
             event.attachment?.let {
                 when (it.type) {
@@ -106,9 +97,7 @@ class EventViewHolder(
                     AttachmentType.VIDEO -> videoView.apply {
                         isVisible = true
                         setMediaController(MediaController(context))
-                        setVideoURI(
-                            Uri.parse(event.attachment.url)
-                        )
+                        setVideoURI(Uri.parse(event.attachment.url))
                         seekTo(1)
                         setOnPreparedListener { start() }
                         setOnCompletionListener { stopPlayback() }
@@ -144,6 +133,8 @@ class EventViewHolder(
                 likeOwnerIds.setOnClickListener {
                     onUserIdsListener.onUserIds(event.likeOwnerIds)
                 }
+            } else {
+                likeOwnerIds.isVisible = false
             }
 
             if (!event.speakerIds.isNullOrEmpty()) {
@@ -154,6 +145,8 @@ class EventViewHolder(
                 speakerIds.setOnClickListener {
                     onUserIdsListener.onUserIds(event.speakerIds)
                 }
+            } else {
+                speakerIds.isVisible = false
             }
 
             if (!event.participantsIds.isNullOrEmpty()) {
@@ -164,6 +157,8 @@ class EventViewHolder(
                 participantsIds.setOnClickListener {
                     onUserIdsListener.onUserIds(event.participantsIds)
                 }
+            } else {
+                participantsIds.isVisible = false
             }
 
         }
@@ -175,7 +170,6 @@ class EventDiffCallback : DiffUtil.ItemCallback<Event>() {
         if (oldItem::class != newItem::class) {
             return false
         }
-
         return oldItem.id == newItem.id
     }
 

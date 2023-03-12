@@ -1,5 +1,6 @@
 package ru.netology.diploma.adapter
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.PopupMenu
@@ -9,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.netology.diploma.R
 import ru.netology.diploma.databinding.CardJobBinding
 import ru.netology.diploma.dto.Job
+import ru.netology.diploma.extensions.createDate
+import ru.netology.diploma.util.StringArg
 
 class JobAdapter(
     private val onInteractionListener: OnInteractionListener<Job>
@@ -28,12 +31,13 @@ class JobViewHolder(
     private val binding: CardJobBinding,
     private val onInteractionListener: OnInteractionListener<Job>
 ) : RecyclerView.ViewHolder(binding.root) {
+
     fun bind(job: Job) {
         binding.apply {
 
             position.text = job.position
-            start.text = job.start
-            finish.text = job.finish
+            start.text = job.start.createDate()
+            finish.text = job.finish?.createDate()
             link.text = job.link
 
             menu.setOnClickListener {
@@ -41,16 +45,14 @@ class JobViewHolder(
                     inflate(R.menu.options_item)
                     setOnMenuItemClickListener { item ->
                         when (item.itemId) {
-                            R.id.remove -> {
-                                onInteractionListener.onRemove(job)
-                                true
-                            }
-
                             R.id.edit -> {
                                 onInteractionListener.onEdit(job)
                                 true
                             }
-
+                            R.id.remove -> {
+                                onInteractionListener.onRemove(job)
+                                true
+                            }
                             else -> false
                         }
                     }
@@ -66,7 +68,6 @@ class JobDiffCallback : DiffUtil.ItemCallback<Job>() {
         if (oldItem::class != newItem::class) {
             return false
         }
-
         return oldItem.name == newItem.name
     }
 

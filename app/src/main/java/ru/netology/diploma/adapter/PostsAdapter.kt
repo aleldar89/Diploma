@@ -1,10 +1,8 @@
 package ru.netology.diploma.adapter
 
 import android.content.Context
-import android.content.res.Resources
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.MediaController
@@ -51,46 +49,38 @@ class PostViewHolder(
     private val context: Context,
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    //todo не нужен же?
     companion object {
         var Bundle.textArg: String? by StringArg
     }
+
+    //todo geocoder
 
     fun bind(post: Post) {
         binding.apply {
 
             post.authorAvatar?.let { authorAvatar.loadAvatar(it) }
-
             authorAvatar.setOnClickListener {
                 onInteractionListener.onAuthor(post)
             }
 
             author.text = post.author
-
-            author.setOnClickListener {
-                onInteractionListener.onAuthor(post)
-            }
-
             authorJob.text = post.authorJob
             published.text = post.published.createDate()
 
             menu.isVisible = post.ownedByMe
-
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
                     inflate(R.menu.options_item)
                     setOnMenuItemClickListener { item ->
                         when (item.itemId) {
-                            R.id.remove -> {
-                                onInteractionListener.onRemove(post)
-                                true
-                            }
-
                             R.id.edit -> {
                                 onInteractionListener.onEdit(post)
                                 true
                             }
-
+                            R.id.remove -> {
+                                onInteractionListener.onRemove(post)
+                                true
+                            }
                             else -> false
                         }
                     }
@@ -98,7 +88,6 @@ class PostViewHolder(
             }
 
             content.text = post.content
-
             content.setOnClickListener {
                 onInteractionListener.onSelect(post)
             }
@@ -106,6 +95,8 @@ class PostViewHolder(
             if (!post.link.isNullOrEmpty()) {
                 link.isVisible = true
                 link.text = post.link
+            } else {
+                link.isVisible = false
             }
 
             post.attachment?.let {
@@ -118,9 +109,7 @@ class PostViewHolder(
                     AttachmentType.VIDEO -> videoView.apply {
                         isVisible = true
                         setMediaController(MediaController(context))
-                        setVideoURI(
-                            Uri.parse(post.attachment.url)
-                        )
+                        setVideoURI(Uri.parse(post.attachment.url))
                         seekTo(1)
                         setOnPreparedListener { start() }
                         setOnCompletionListener { stopPlayback() }
@@ -140,7 +129,6 @@ class PostViewHolder(
             }
 
             like.isChecked = post.likedByMe
-
             like.setOnClickListener {
                 onInteractionListener.onLike(post)
             }
@@ -157,6 +145,8 @@ class PostViewHolder(
                 likeOwnerIds.setOnClickListener {
                     onUserIdsListener.onUserIds(post.likeOwnerIds)
                 }
+            } else {
+                likeOwnerIds.isVisible = false
             }
 
             if (!post.mentionIds.isNullOrEmpty()) {
@@ -167,18 +157,20 @@ class PostViewHolder(
                 mentionIds.setOnClickListener {
                     onUserIdsListener.onUserIds(post.mentionIds)
                 }
+            } else {
+                mentionIds.isVisible = false
             }
 
         }
     }
 }
 
+//todo унаследовать итемы от общего интерфейса c id, сделать diffutil универсальным
 class PostDiffCallback : DiffUtil.ItemCallback<Post>() {
     override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {
         if (oldItem::class != newItem::class) {
             return false
         }
-
         return oldItem.id == newItem.id
     }
 

@@ -15,10 +15,8 @@ class AppAuth @Inject constructor(
     private val context: Context
 ) {
     private val prefs = context.getSharedPreferences("auth", Context.MODE_PRIVATE)
-
     private val idKey = "ID_KEY"
     private val tokenKey = "TOKEN_KEY"
-
     private val _data = MutableStateFlow<Token?>(null)
     val data: StateFlow<Token?> = _data.asStateFlow()
 

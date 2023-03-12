@@ -27,5 +27,4 @@ class JobDbModule {
     fun provideJobDao(
         jobsDb: JobsDb
     ): JobDao = jobsDb.jobDao()
-
 }

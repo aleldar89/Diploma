@@ -15,6 +15,7 @@
     <string name="link">Link</string>
     <string name="choose_avatar">Choose avatar</string>
     <string name="your_name">Your name</string>
+    <string name="your_text">Your text</string>
     <string name="position">Your position</string>
     <string name="confirm_your_password">Confirm your password</string>
     <string name="description_content_image">Content image</string>
@@ -31,10 +32,11 @@
     <string name="save">Save</string>
     <string name="menu_edit">Edit</string>
     <string name="menu_remove">Remove</string>
-    <string name="image_error">Image not captured</string>
+    <string name="media_error">Media not captured</string>
     <string name="error_empty_registration_form">No login or password entered</string>
     <string name="error_confirm_password">Confirm the password</string>
-    <string name="chooser_share_post">Share post</string>
+    <string name="share_post">Share post</string>
+    <string name="share_event">Share event</string>
     <string name="clear">Clear</string>
     <string name="my_wall">My Wall</string>
     <string name="my_jobs">My Jobs</string>

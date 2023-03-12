@@ -13,9 +13,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.netology.diploma.auth.AppAuth
-import ru.netology.diploma.dto.Coordinates
-import ru.netology.diploma.dto.ImageFile
-import ru.netology.diploma.dto.Post
+import ru.netology.diploma.dto.*
 import ru.netology.diploma.repository.post_repo.PostRepository
 import ru.netology.diploma.util.SingleLiveEvent
 import java.io.File
@@ -45,7 +43,6 @@ private val empty = Post(
 class PostViewModel @Inject constructor(
     private val repository: PostRepository,
     private val appAuth: AppAuth,
-    val state: SavedStateHandle,
 ) : ViewModel() {
 
     val isAuthorized: Boolean
@@ -58,9 +55,9 @@ class PostViewModel @Inject constructor(
     val authorization: LiveData<Boolean>
         get() = _authorization
 
-    private val noPhoto = ImageFile()
-    private val _media = MutableLiveData(noPhoto)
-    val media: LiveData<ImageFile>
+    private val noAttachment = AttachmentFile()
+    private val _media = MutableLiveData(noAttachment)
+    val media: LiveData<AttachmentFile>
         get() = _media
 
     private val _error = SingleLiveEvent<Exception>()
@@ -72,14 +69,6 @@ class PostViewModel @Inject constructor(
     private val _postCreated = SingleLiveEvent<Unit>()
     val postCreated: LiveData<Unit>
         get() = _postCreated
-
-    companion object {
-        private const val AUTHOR_ID = "AUTHOR_ID"
-    }
-
-    fun saveCurrentAuthor(authorId: Int) {
-        state[AUTHOR_ID] = authorId
-    }
 
     val data: Flow<PagingData<Post>> = appAuth.data
         .flatMapLatest { auth ->
@@ -109,9 +98,9 @@ class PostViewModel @Inject constructor(
         edited.value?.let {
             viewModelScope.launch {
                 try {
-                    when (val mediaModel = _media.value) {
+                    when (val attachment = _media.value) { //todo проверка на вложение
                         null -> repository.save(it)
-                        else -> mediaModel.file?.let { file ->
+                        else -> attachment.file?.let { file ->
                             repository.saveWithAttachment(it, file)
                         }
                     }
@@ -128,7 +117,7 @@ class PostViewModel @Inject constructor(
             }
         }
         edited.value = empty
-        clearPhoto()
+        clearMedia()
     }
 
     fun removeById(id: Int) {
@@ -183,17 +172,16 @@ class PostViewModel @Inject constructor(
         edited.value = post
     }
 
-    fun changeContent(content: String) {
+    fun changeContent(content: String, link: String?, coords: Coordinates?) {
         val text = content.trim()
         if (edited.value?.content == text) {
             return
         }
         edited.value = edited.value?.copy(
+//            ownedByMe = true, //todo меняем ownedByMe?
             content = text,
-
-            //todo захват координат и поле под link в newFragment
-            link = null,
-            coords = null,
+            link = link,
+            coords = coords,
         )
     }
 
@@ -201,12 +189,12 @@ class PostViewModel @Inject constructor(
         edited.value = empty
     }
 
-    fun clearPhoto() {
+    fun clearMedia() {
         _media.value = null
     }
 
-    fun changePhoto(uri: Uri, file: File) {
-        _media.value = ImageFile(uri, file)
+    fun changeMedia(uri: Uri, file: File) {
+        _media.value = AttachmentFile(uri, file)
     }
 
 }

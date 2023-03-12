@@ -76,7 +76,7 @@ class SelectedPostFragment : Fragment() {
                     }
 
                     val shareIntent =
-                        Intent.createChooser(intent, getString(R.string.chooser_share_post))
+                        Intent.createChooser(intent, getString(R.string.share_post))
                     startActivity(shareIntent)
                 }
             },
@@ -90,14 +90,3 @@ class SelectedPostFragment : Fragment() {
         return binding.root
     }
 }
-
-//        viewModel.data.map { posts ->
-//            lateinit var currentPost: Post
-//            posts.map {
-//                currentPost = if (it.id == post.id)
-//                    it
-//                else
-//                    post
-//            }
-//            postViewHolder.bind(currentPost)
-//        }

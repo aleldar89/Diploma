@@ -3,12 +3,14 @@ package ru.netology.diploma.entity
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
 import ru.netology.diploma.dto.Attachment
 import ru.netology.diploma.dto.Coordinates
 import ru.netology.diploma.dto.Post
 import ru.netology.diploma.dto.UserPreview
 
 @Entity
+@TypeConverters(Converters::class)
 data class PostEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
@@ -18,9 +20,9 @@ data class PostEntity(
     val authorJob: String? = null,
     val content: String,
     val published: String,
+//    @Embedded(prefix = "coordinates_")
     @Embedded
     val coords: Coordinates? = null,
-//    val coords: CoordinatesEmbedded? = null,
     val link: String? = null,
     val likeOwnerIds: List<Int>? = null,
     val mentionIds: List<Int>? = null,
@@ -28,7 +30,6 @@ data class PostEntity(
     val likedByMe: Boolean,
     @Embedded(prefix = "attachment_")
     val attachment: Attachment? = null,
-//    val attachment: AttachmentEmbedded? = null,
     val ownedByMe: Boolean,
     val users: Map<Long, UserPreview>,
 ) {
@@ -41,14 +42,12 @@ data class PostEntity(
         content = content,
         published = published,
         coords = coords,
-//        coords = coords?.toDto(),
         link = link,
         likeOwnerIds = likeOwnerIds,
         mentionIds = mentionIds,
         mentionedMe = mentionedMe,
         likedByMe = likedByMe,
         attachment = attachment,
-//        attachment = attachment?.toDto(),
         ownedByMe = ownedByMe,
         users = users,
     )
@@ -64,18 +63,12 @@ data class PostEntity(
                 content = dto.content,
                 published = dto.published,
                 coords = dto.coords,
-//                coords = dto.coords?.let {
-//                    CoordinatesEmbedded(it.lat, it.longitude)
-//                },
                 link = dto.link,
                 likeOwnerIds = dto.likeOwnerIds,
                 mentionIds = dto.mentionIds,
                 mentionedMe = dto.mentionedMe,
                 likedByMe = dto.likedByMe,
                 attachment = dto.attachment,
-//                attachment = dto.attachment?.let {
-//                    AttachmentEmbedded(it.url, it.type)
-//                },
                 ownedByMe = dto.ownedByMe,
                 users = dto.users,
             )

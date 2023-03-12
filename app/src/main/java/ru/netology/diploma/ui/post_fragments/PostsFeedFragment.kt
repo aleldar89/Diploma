@@ -24,6 +24,7 @@ import ru.netology.diploma.adapter.PostsAdapter
 import ru.netology.diploma.databinding.FragmentPostFeedBinding
 import ru.netology.diploma.dto.Post
 import ru.netology.diploma.mediplayer.MediaLifecycleObserver
+import ru.netology.diploma.ui.AuthorWallFragment
 import ru.netology.diploma.util.StringArg
 import ru.netology.diploma.util.parseException
 import ru.netology.diploma.viewmodel.PostViewModel
@@ -33,6 +34,7 @@ class PostsFeedFragment : Fragment() {
 
     companion object {
         var Bundle.textArg: String? by StringArg
+        const val AUTHOR_ID = "AUTHOR_ID"
     }
 
     private val viewModel: PostViewModel by activityViewModels()
@@ -43,7 +45,6 @@ class PostsFeedFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val binding = FragmentPostFeedBinding.inflate(inflater, container, false)
-
         val gson = Gson()
 
         val adapter = PostsAdapter(
@@ -83,7 +84,7 @@ class PostsFeedFragment : Fragment() {
                     }
 
                     val shareIntent =
-                        Intent.createChooser(intent, getString(R.string.chooser_share_post))
+                        Intent.createChooser(intent, getString(R.string.share_post))
                     startActivity(shareIntent)
                 }
 
@@ -101,11 +102,11 @@ class PostsFeedFragment : Fragment() {
                 }
 
                 override fun onAuthor(post: Post) {
-                    viewModel.saveCurrentAuthor(post.authorId)
                     findNavController().navigate(
                         R.id.action_global_authorWallFragment,
                         Bundle().apply {
-                            textArg = gson.toJson(post.authorId)
+                            putInt(AUTHOR_ID, post.authorId)
+                            textArg = gson.toJson(post)
                         }
                     )
                 }
@@ -122,6 +123,8 @@ class PostsFeedFragment : Fragment() {
             },
             MediaLifecycleObserver()
         )
+
+        viewModel.loadPosts()
 
         binding.list.apply {
             this.adapter = adapter

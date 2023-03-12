@@ -53,7 +53,11 @@
     <fragment
         android:id="@+id/authorWallFragment"
         android:name="ru.netology.diploma.ui.AuthorWallFragment"
-        android:label="AuthorWallFragment" />
+        android:label="AuthorWallFragment" >
+        <action
+            android:id="@+id/action_authorWallFragment_to_userJobFeedFragment"
+            app:destination="@id/userJobFeedFragment" />
+    </fragment>
     <fragment
         android:id="@+id/usersFragment"
         android:name="ru.netology.diploma.ui.UsersFragment"
@@ -118,5 +122,9 @@
 
     <action android:id="@+id/action_global_myJobFeedFragment"
         app:destination="@id/myJobFeedFragment" />
+    <fragment
+        android:id="@+id/userJobFeedFragment"
+        android:name="ru.netology.diploma.ui.job_fragments.UserJobFeedFragment"
+        android:label="UserJobFeedFragment" />
 
 </navigation>

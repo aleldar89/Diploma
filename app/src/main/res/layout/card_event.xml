@@ -8,9 +8,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="@dimen/common_spacing"
-        android:paddingEnd="@dimen/common_spacing"
-        android:paddingTop="@dimen/common_spacing">
+        android:padding="@dimen/common_spacing">
 
         <ImageView
             android:id="@+id/authorAvatar"
@@ -91,7 +89,6 @@
             android:layout_height="wrap_content"
             android:autoLink="web"
             android:paddingTop="@dimen/common_spacing"
-            android:paddingBottom="@dimen/common_spacing"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/header"
@@ -156,7 +153,7 @@
         <ImageView
             android:id="@+id/play_view"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:adjustViewBounds="true"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"

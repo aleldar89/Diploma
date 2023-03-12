@@ -1,9 +1,8 @@
 package ru.netology.diploma.entity
 
-import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import ru.netology.diploma.dto.*
+import ru.netology.diploma.dto.Job
 
 @Entity
 data class JobEntity(
@@ -13,7 +12,7 @@ data class JobEntity(
     val position: String,
     val start: String,
     val finish: String? = null,
-    val link: String?  = null,
+    val link: String? = null,
 ) {
     fun toDto() = Job(
         id = id,

@@ -1,4 +1,4 @@
-package ru.netology.diploma.repository.job_repo
+package ru.netology.diploma.repository.my_job_repo
 
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.map
@@ -17,7 +17,6 @@ class MyJobRepositoryImpl @Inject constructor(
     private val apiService: ApiService,
 ) : MyJobRepository {
 
-    //todo можно оставить в виде livedata
     override val data: Flow<List<Job>> = jobDao.getAll()
         .map { list->
             list.map { entity ->
@@ -32,7 +31,6 @@ class MyJobRepositoryImpl @Inject constructor(
                 throw RuntimeException(response.message())
             }
             val jobs = response.body() ?: throw RuntimeException("body is null")
-
             jobDao.insert(jobs.map(JobEntity.Companion::fromDto))
         } catch (e: IOException) {
             throw NetworkError
@@ -78,12 +76,9 @@ class MyJobRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getByIdUserJobs(id: Int): List<Job> {
+    override suspend fun clearDb() {
         try {
-            val response = apiService.getByIdUserJobs(id)
-            return if (!response.isSuccessful) {
-                throw Exception(response.message())
-            } else response.body() ?: emptyList()
+            jobDao.clear()
         } catch (e: IOException) {
             throw NetworkError
         } catch (e: Exception) {

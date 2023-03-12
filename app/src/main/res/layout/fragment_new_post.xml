@@ -6,42 +6,62 @@
     android:layout_height="match_parent"
     tools:context=".ui.post_fragments.NewPostFragment">
 
+    <Button
+        android:id="@+id/clearMedia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginBottom="@dimen/central_button_spacing"
+        android:text="@string/clear" />
+
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <EditText
                 android:id="@+id/edit"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="start|top"
-                android:inputType="textMultiLine"
-                android:background="@android:color/transparent" />
+                android:hint="@string/your_text"
+                android:inputType="textMultiLine" />
+
+            <EditText
+                android:id="@+id/link"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="start|top"
+                android:hint="@string/link"
+                android:inputType="textMultiLine" />
 
             <FrameLayout
                 android:id="@+id/photoContainer"
-                android:visibility="gone"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:visibility="gone">
 
                 <ImageView
-                    android:id="@+id/preview"
+                    android:id="@+id/previewPhoto"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
+            </FrameLayout>
 
-                <Button
-                    android:id="@+id/clearPhoto"
-                    android:layout_gravity="center_horizontal|bottom"
-                    android:text="@string/clear"
-                    android:layout_width="wrap_content"
+            <FrameLayout
+                android:id="@+id/videoContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+                <VideoView
+                    android:id="@+id/previewVideo"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
-
             </FrameLayout>
 
         </LinearLayout>
@@ -50,26 +70,40 @@
 
     <LinearLayout
         android:id="@+id/bottomAppBar"
-        android:orientation="horizontal"
+        style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:backgroundTint="@color/blue"
-        style="@style/Widget.MaterialComponents.BottomAppBar.Colored">
+        android:orientation="horizontal">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/gallery"
-            app:icon="@drawable/ic_insert_photo_24"
+            android:id="@+id/galleryMusic"
             style="@style/Widget.AppTheme.IconButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_baseline_library_music_24" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/take_photo"
-            app:icon="@drawable/ic_photo_camera_24"
+            android:id="@+id/galleryVideo"
             style="@style/Widget.AppTheme.IconButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_baseline_video_file_24" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/galleryImage"
+            style="@style/Widget.AppTheme.IconButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_insert_photo_24" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/takePhoto"
+            style="@style/Widget.AppTheme.IconButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_photo_camera_24" />
 
     </LinearLayout>
 

@@ -73,7 +73,7 @@ interface ApiService {
     suspend fun getByIdUserJobs(@Path("id") id: Int): Response<List<Job>>
 
 
-    /** MyWall (Posts) methods */
+    /** MyWall methods */
     @GET("my/wall")
     suspend fun getMyWall(): Response<List<Post>>
 
@@ -96,7 +96,7 @@ interface ApiService {
     suspend fun getNewerMyWall(@Path("id") id: Long): Response<List<Post>>
 
 
-    /** Wall (Posts) methods */
+    /** AuthorWall methods */
     @GET("{authorId}/wall")
     suspend fun getAuthorWall(@Path("authorId") id: Int): Response<List<Post>>
 

@@ -39,4 +39,6 @@ fun String.toJob(): Job {
     return gson.fromJson(this, Job::class.java)
 }
 
-fun String.toEditable() = Editable.Factory.getInstance().newEditable(this)
+fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
+
+fun String.dateFormatter(): String = this + "T00:00:00.000Z"

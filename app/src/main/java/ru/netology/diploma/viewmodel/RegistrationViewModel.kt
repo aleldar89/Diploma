@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.gson.JsonObject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaType
@@ -15,7 +14,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import ru.netology.diploma.api.ApiService
 import ru.netology.diploma.auth.AppAuth
 import ru.netology.diploma.auth.Token
-import ru.netology.diploma.dto.ImageFile
+import ru.netology.diploma.dto.AttachmentFile
 import ru.netology.diploma.util.SingleLiveEvent
 import java.io.File
 import javax.inject.Inject
@@ -26,13 +25,13 @@ class RegistrationViewModel @Inject constructor(
     private val apiService: ApiService
 ) : ViewModel() {
 
-    private val noPhoto = ImageFile()
+    private val noPhoto = AttachmentFile()
     private val _media = MutableLiveData(noPhoto)
-    val media: LiveData<ImageFile>
+    val media: LiveData<AttachmentFile>
         get() = _media
 
     fun changePhoto(uri: Uri, file: File) {
-        _media.value = ImageFile(uri, file)
+        _media.value = AttachmentFile(uri, file)
     }
 
     private val _responseAuthState = MutableLiveData<Token?>(null)

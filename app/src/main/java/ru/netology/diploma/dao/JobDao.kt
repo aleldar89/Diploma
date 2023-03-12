@@ -19,6 +19,9 @@ interface JobDao {
     @Query("DELETE FROM JobEntity WHERE id = :id")
     suspend fun removeById(id: Int)
 
+    @Query("DELETE FROM JobEntity")
+    suspend fun clear()
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(job: JobEntity)
 

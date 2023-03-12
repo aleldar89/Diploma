@@ -1,4 +1,4 @@
-package ru.netology.diploma.repository.job_repo
+package ru.netology.diploma.repository.my_job_repo
 
 import dagger.Binds
 import dagger.Module

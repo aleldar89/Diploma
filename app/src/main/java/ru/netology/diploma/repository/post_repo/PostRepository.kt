@@ -9,11 +9,11 @@ interface PostRepository {
     val data: Flow<PagingData<Post>>
     suspend fun getAll()
     suspend fun save(post: Post)
+    suspend fun saveWithAttachment(post: Post, file: File)
     suspend fun getById(id: Int): Post
     suspend fun removeById(id: Int)
     suspend fun likeById(post: Post)
     suspend fun dislikeById(post: Post)
-    suspend fun saveWithAttachment(post: Post, file: File)
 
     suspend fun localSave(post: Post)
     suspend fun localRemoveById(id: Int)

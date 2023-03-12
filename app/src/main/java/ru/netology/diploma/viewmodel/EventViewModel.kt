@@ -62,9 +62,9 @@ class EventViewModel @Inject constructor(
     val authorization: LiveData<Boolean>
         get() = _authorization
 
-    private val noPhoto = ImageFile()
-    private val _media = MutableLiveData(noPhoto)
-    val media: LiveData<ImageFile>
+    private val noAttachment = AttachmentFile()
+    private val _media = MutableLiveData(noAttachment)
+    val media: LiveData<AttachmentFile>
         get() = _media
 
     private val _error = SingleLiveEvent<Exception>()
@@ -105,9 +105,9 @@ class EventViewModel @Inject constructor(
         edited.value?.let {
             viewModelScope.launch {
                 try {
-                    when (val mediaModel = _media.value) {
+                    when (val attachment = _media.value) {
                         null -> repository.save(it)
-                        else -> mediaModel.file?.let { file ->
+                        else -> attachment.file?.let { file ->
                             repository.saveWithAttachment(it, file)
                         }
                     }
@@ -124,7 +124,7 @@ class EventViewModel @Inject constructor(
             }
         }
         edited.value = empty
-        clearPhoto()
+        clearMedia()
     }
 
     fun removeById(id: Int) {
@@ -179,24 +179,29 @@ class EventViewModel @Inject constructor(
         edited.value = event
     }
 
-    fun changeContent(content: String) {
+    fun changeContent(content: String, datetime: String, link: String?, coords: Coordinates?) {
         val text = content.trim()
         if (edited.value?.content == text) {
             return
         }
-        edited.value = edited.value?.copy(content = text)
+        edited.value = edited.value?.copy(
+            content = text,
+            datetime = datetime,
+            link = link,
+            coords = coords,
+        )
     }
 
     fun clearEditedData() {
         edited.value = empty
     }
 
-    fun clearPhoto() {
+    fun clearMedia() {
         _media.value = null
     }
 
-    fun changePhoto(uri: Uri, file: File) {
-        _media.value = ImageFile(uri, file)
+    fun changeMedia(uri: Uri, file: File) {
+        _media.value = AttachmentFile(uri, file)
     }
 
 }

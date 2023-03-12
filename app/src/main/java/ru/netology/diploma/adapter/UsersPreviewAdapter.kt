@@ -44,7 +44,6 @@ class UserDiffCallback : DiffUtil.ItemCallback<UserResponse>() {
         if (oldItem::class != newItem::class) {
             return false
         }
-
         return oldItem.name == newItem.name
     }
 

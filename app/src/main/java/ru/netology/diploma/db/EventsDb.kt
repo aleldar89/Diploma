@@ -11,7 +11,7 @@ import ru.netology.diploma.entity.EventRemoteKeyEntity
 
 @Database(entities = [EventEntity::class, EventRemoteKeyEntity::class], version = 1)
 @TypeConverters(Converters::class)
-abstract class EventsDb: RoomDatabase() {
+abstract class EventsDb : RoomDatabase() {
     abstract fun eventDao(): EventDao
     abstract fun eventRemoteKeyDao(): EventRemoteKeyDao
 }

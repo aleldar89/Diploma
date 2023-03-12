@@ -9,7 +9,7 @@ import ru.netology.diploma.api.ApiService
 import ru.netology.diploma.auth.AppAuth
 import ru.netology.diploma.dto.Job
 import ru.netology.diploma.dto.UserResponse
-import ru.netology.diploma.repository.job_repo.MyJobRepository
+import ru.netology.diploma.repository.my_job_repo.MyJobRepository
 import ru.netology.diploma.util.SingleLiveEvent
 import javax.inject.Inject
 
@@ -30,14 +30,8 @@ class MyJobViewModel @Inject constructor(
     private val apiService: ApiService,
 ) : ViewModel() {
 
-    //TODO почему myId == null
     private val myId: Int
         get() = checkNotNull(appAuth.data.value?.id)
-
-    init {
-        getUser()
-        loadJobs()
-    }
 
     private val _userResponse = MutableLiveData<UserResponse>(null)
     val userResponse: LiveData<UserResponse>
@@ -51,6 +45,12 @@ class MyJobViewModel @Inject constructor(
     val jobCreated: LiveData<Unit>
         get() = _jobCreated
 
+    init {
+        clearJobs()
+        getUser()
+        loadJobs()
+    }
+
     private fun getUser() {
         viewModelScope.launch {
             try {
@@ -62,8 +62,6 @@ class MyJobViewModel @Inject constructor(
     }
 
     private val edited = MutableLiveData(empty)
-
-    //todo добавить data из чужих job
 
     val data = repository.data.asLiveData(Dispatchers.Default)
 
@@ -113,17 +111,14 @@ class MyJobViewModel @Inject constructor(
         }
     }
 
-    fun changeContent(position: String, start: String, finish: String?, link: String?) {
-        val positionText = position.trim()
-        val startText = start.trim()
-        val finishText = finish?.trim()
-        val linkText = link?.trim()
+    fun changeContent(name: String, position: String, start: String, finish: String?, link: String?) {
 
         edited.value = edited.value?.copy(
-            position = positionText,
-            start = startText,
-            finish = finishText,
-            link = linkText,
+            name = name,
+            position = position,
+            start = start,
+            finish = finish,
+            link = link,
         )
     }
 
@@ -133,6 +128,16 @@ class MyJobViewModel @Inject constructor(
 
     fun clearEditedData() {
         edited.value = empty
+    }
+
+    fun clearJobs() {
+        viewModelScope.launch {
+            try {
+                repository.clearDb()
+            } catch (e: Exception) {
+                _error.value = e
+            }
+        }
     }
 
 }

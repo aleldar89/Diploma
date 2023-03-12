@@ -20,19 +20,21 @@ import ru.netology.diploma.databinding.FragmentJobFeedBinding
 import ru.netology.diploma.dto.Job
 import ru.netology.diploma.dto.Post
 import ru.netology.diploma.extensions.loadAvatar
+import ru.netology.diploma.ui.AuthorWallFragment.Companion.textArg
 import ru.netology.diploma.ui.post_fragments.PostsFeedFragment.Companion.textArg
 import ru.netology.diploma.util.StringArg
 import ru.netology.diploma.util.parseException
 import ru.netology.diploma.viewmodel.MyJobViewModel
+import ru.netology.diploma.viewmodel.UserJobViewModel
 
 @AndroidEntryPoint
-class MyJobFeedFragment : Fragment() {
+class UserJobFeedFragment : Fragment() {
 
     companion object {
         var Bundle.textArg: String? by StringArg
     }
 
-    private val viewModel: MyJobViewModel by viewModels()
+    private val viewModel: UserJobViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,25 +43,8 @@ class MyJobFeedFragment : Fragment() {
     ): View {
         val binding = FragmentJobFeedBinding.inflate(inflater, container, false)
 
-        val gson = Gson()
+        val adapter = JobAdapter(object : OnInteractionListener<Job>{})
 
-        val adapter = JobAdapter(object : OnInteractionListener<Job>{
-            override fun onRemove(item: Job) {
-                viewModel.removeById(item.id)
-            }
-
-            override fun onEdit(item: Job) {
-                findNavController().navigate(
-                    R.id.action_myJobFeedFragment_to_newJobFragment,
-                    Bundle().apply {
-                        textArg = gson.toJson(item)
-                    }
-                )
-                viewModel.edit(item)
-            }
-        })
-
-        //todo аватар и имя появляются после ухода на другой фрагмент и возвращения
         binding.author.text = viewModel.userResponse.value?.name
         viewModel.userResponse.value?.avatar?.let { binding.authorAvatar.loadAvatar(it) }
 
@@ -88,9 +73,7 @@ class MyJobFeedFragment : Fragment() {
                 .show()
         }
 
-        binding.fab.setOnClickListener {
-            findNavController().navigate(R.id.action_myJobFeedFragment_to_newJobFragment)
-        }
+        binding.fab.isVisible = false
 
         return binding.root
 

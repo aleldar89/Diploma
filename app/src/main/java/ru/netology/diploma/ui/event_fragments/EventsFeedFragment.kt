@@ -77,7 +77,7 @@ class EventsFeedFragment : Fragment() {
                     }
 
                     val shareIntent =
-                        Intent.createChooser(intent, getString(R.string.chooser_share_post))
+                        Intent.createChooser(intent, getString(R.string.share_event))
                     startActivity(shareIntent)
                 }
 

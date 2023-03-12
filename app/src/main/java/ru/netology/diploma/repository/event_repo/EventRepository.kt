@@ -9,13 +9,13 @@ interface EventRepository {
     val data: Flow<PagingData<Event>>
     suspend fun getAll()
     suspend fun save(event: Event)
+    suspend fun saveWithAttachment(event: Event, file: File)
     suspend fun getById(id: Int): Event
     suspend fun removeById(id: Int)
     suspend fun likeById(event: Event)
     suspend fun dislikeById(event: Event)
     suspend fun addParticipantById(id: Int)
     suspend fun removeParticipantById(id: Int)
-    suspend fun saveWithAttachment(event: Event, file: File)
 
     suspend fun localSave(event: Event)
     suspend fun localRemoveById(id: Int)

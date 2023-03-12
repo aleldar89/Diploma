@@ -6,14 +6,12 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 
 class MediaLifecycleObserver : LifecycleEventObserver {
-
     var mediaPlayer: MediaPlayer? = MediaPlayer()
 
     fun play() {
         mediaPlayer?.setOnPreparedListener {
             it.start()
         }
-
         mediaPlayer?.prepareAsync()
     }
 
@@ -28,5 +26,4 @@ class MediaLifecycleObserver : LifecycleEventObserver {
             else -> Unit
         }
     }
-
 }

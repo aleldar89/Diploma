@@ -42,6 +42,7 @@ class MyWallRepositoryImpl @Inject constructor(
             }
             val myWall = response.body() ?: throw RuntimeException("body is null")
 
+            myWallDao.clear()
             myWallDao.insert(myWall.map(PostEntity.Companion::fromDto))
         } catch (e: IOException) {
             throw NetworkError
