@@ -24,7 +24,6 @@ import ru.netology.diploma.adapter.PostsAdapter
 import ru.netology.diploma.databinding.FragmentPostFeedBinding
 import ru.netology.diploma.dto.Post
 import ru.netology.diploma.mediplayer.MediaLifecycleObserver
-import ru.netology.diploma.ui.AuthorWallFragment
 import ru.netology.diploma.util.StringArg
 import ru.netology.diploma.util.parseException
 import ru.netology.diploma.viewmodel.PostViewModel
@@ -35,6 +34,7 @@ class PostsFeedFragment : Fragment() {
     companion object {
         var Bundle.textArg: String? by StringArg
         const val AUTHOR_ID = "AUTHOR_ID"
+        const val ID_ARRAY = "ID_ARRAY"
     }
 
     private val viewModel: PostViewModel by activityViewModels()
@@ -116,7 +116,7 @@ class PostsFeedFragment : Fragment() {
                     findNavController().navigate(
                         R.id.action_postsFeedFragment_to_usersFragment,
                         Bundle().apply {
-                            textArg = gson.toJson(list)
+                            putIntArray(ID_ARRAY, list.toIntArray())
                         }
                     )
                 }

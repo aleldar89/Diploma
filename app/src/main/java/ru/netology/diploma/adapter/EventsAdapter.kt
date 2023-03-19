@@ -100,7 +100,8 @@ class EventViewHolder(
                         setVideoURI(Uri.parse(event.attachment.url))
                         seekTo(1)
                         setOnPreparedListener { start() }
-                        setOnCompletionListener { stopPlayback() }
+//                        setOnCompletionListener { stopPlayback() }
+                        setOnCompletionListener { start() }
                     }
 
                     AttachmentType.AUDIO -> playView.apply {

@@ -1,16 +1,21 @@
 package ru.netology.diploma.extensions
 
+import android.location.Geocoder
+import android.os.Build
 import android.text.Editable
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.google.gson.Gson
 import ru.netology.diploma.R
+import ru.netology.diploma.dto.Coordinates
 import ru.netology.diploma.dto.Job
+import ru.netology.diploma.dto.Post
 
 fun ImageView.loadImage(url: String, vararg transforms: BitmapTransformation = emptyArray()) =
     Glide.with(this)
@@ -42,3 +47,16 @@ fun String.toJob(): Job {
 fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
 
 fun String.dateFormatter(): String = this + "T00:00:00.000Z"
+
+//fun Geocoder.getCityName(coors: Coordinates): String {
+//    var cityName = ""
+//    val addresses = this.getFromLocation(
+//        coors.lat?.toDouble()!!,
+//        coors.longitude?.toDouble()!!,
+//        1
+//    )
+//    if (addresses != null) {
+//        cityName = addresses[0].locality
+//    }
+//    return cityName
+//}

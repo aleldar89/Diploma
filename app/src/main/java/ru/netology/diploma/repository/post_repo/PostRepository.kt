@@ -1,5 +1,6 @@
 package ru.netology.diploma.repository.post_repo
 
+import android.net.Uri
 import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
 import ru.netology.diploma.dto.Post
@@ -9,7 +10,8 @@ interface PostRepository {
     val data: Flow<PagingData<Post>>
     suspend fun getAll()
     suspend fun save(post: Post)
-    suspend fun saveWithAttachment(post: Post, file: File)
+    suspend fun saveWithImage(post: Post, file: File)
+    suspend fun saveWithMV(post: Post, uri: Uri)
     suspend fun getById(id: Int): Post
     suspend fun removeById(id: Int)
     suspend fun likeById(post: Post)

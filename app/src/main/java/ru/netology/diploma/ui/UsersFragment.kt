@@ -7,6 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,10 +27,6 @@ import ru.netology.diploma.viewmodel.UsersViewModel
 @AndroidEntryPoint
 class UsersFragment : Fragment() {
 
-    companion object {
-        var Bundle.textArg: String? by StringArg
-    }
-
     private val viewModel: UsersViewModel by viewModels()
 
     override fun onCreateView(
@@ -37,27 +36,25 @@ class UsersFragment : Fragment() {
     ): View {
         val binding = FragmentUsersBinding.inflate(inflater, container, false)
 
-        val gson = Gson()
-        val listType = object : TypeToken<List<Int>>() {}.type
-        val list: List<Int> = arguments?.textArg.let {
-            gson.fromJson(it, listType)
-        }
-
-        viewModel.getUsersById(list)
-
         val adapter = UsersPreviewAdapter(object : OnInteractionListener<UserResponse> {
             override fun onAuthor(item: UserResponse) {
-                //todo
-                findNavController().navigate(
-                    R.id.action_global_authorWallFragment,
-                    Bundle().apply {
-                        textArg = gson.toJson(item.id)
-                    }
-                )
+                //todo переход на стену пользователя
+//                findNavController().navigate(
+//                    R.id.action_global_authorWallFragment
+//                )
             }
         })
 
-        binding.list.adapter = adapter
+        binding.list.apply {
+            this.adapter = adapter
+            val layoutManager = GridLayoutManager(context, 2)
+            this.addItemDecoration(
+                DividerItemDecoration(
+                    context,
+                    layoutManager.orientation
+                )
+            )
+        }
 
         viewModel.users.observe(viewLifecycleOwner) {
             adapter.submitList(it)

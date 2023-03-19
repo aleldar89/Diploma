@@ -1,10 +1,15 @@
 package ru.netology.diploma.repository.post_repo
 
+import android.content.Context
+import android.net.Uri
 import androidx.paging.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import ru.netology.diploma.api.ApiService
 import ru.netology.diploma.dao.PostDao
 import ru.netology.diploma.dao.PostRemoteKeyDao
@@ -23,7 +28,8 @@ class PostRepositoryImpl @Inject constructor(
     private val postDao: PostDao,
     private val apiService: ApiService,
     postRemoteKeyDao: PostRemoteKeyDao,
-    postsDb: PostsDb
+    postsDb: PostsDb,
+    private val context: Context,
 ) : PostRepository {
 
     @OptIn(ExperimentalPagingApi::class)
@@ -70,6 +76,68 @@ class PostRepositoryImpl @Inject constructor(
                     postDao.updateId(_post.id)
                 }
             }
+
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw UnknownError
+        }
+    }
+
+    override suspend fun saveWithImage(post: Post, file: File) {
+        try {
+            val media = upload(file)
+
+            val response = apiService.savePost(
+                post.copy(
+                    attachment = Attachment(
+                        url = media.url,
+                        type = AttachmentType.IMAGE
+                    )
+                )
+            )
+
+            if (!response.isSuccessful) {
+                throw RuntimeException(response.message())
+            } else {
+                val _post = response.body()
+                if (_post != null) {
+                    postDao.updateId(_post.id)
+                }
+            }
+            val body = response.body() ?: throw ApiError(response.code(), response.message())
+            postDao.insert(PostEntity.fromDto(body))
+
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw UnknownError
+        }
+    }
+
+    override suspend fun saveWithMV(post: Post, uri: Uri) {
+        try {
+            val media = uploadMV(uri)
+
+            val response = apiService.savePost(
+                post.copy(
+                    attachment = Attachment(
+                        url = media.url,
+                        type = AttachmentType.VIDEO
+                    )
+                )
+            )
+
+            if (!response.isSuccessful) {
+                throw RuntimeException(response.message())
+            } else {
+                val _post = response.body()
+                if (_post != null) {
+                    postDao.updateId(_post.id)
+                }
+            }
+            val body = response.body() ?: throw ApiError(response.code(), response.message())
+            postDao.insert(PostEntity.fromDto(body))
 
         } catch (e: IOException) {
             throw NetworkError
@@ -132,37 +200,6 @@ class PostRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun saveWithAttachment(post: Post, file: File) {
-        try {
-            val media = upload(file)
-
-            val response = apiService.savePost(
-                post.copy(
-                    attachment = Attachment(
-                        url = media.url,
-                        type = AttachmentType.IMAGE
-                    )
-                )
-            )
-
-            if (!response.isSuccessful) {
-                throw RuntimeException(response.message())
-            } else {
-                val _post = response.body()
-                if (_post != null) {
-                    postDao.updateId(_post.id)
-                }
-            }
-            val body = response.body() ?: throw ApiError(response.code(), response.message())
-            postDao.insert(PostEntity.fromDto(body))
-
-        } catch (e: IOException) {
-            throw NetworkError
-        } catch (e: Exception) {
-            throw UnknownError
-        }
-    }
-
     override suspend fun localSave(post: Post) {
         try {
             val postEntity = PostEntity.fromDto(post)
@@ -195,16 +232,68 @@ class PostRepositoryImpl @Inject constructor(
     }
 
     private suspend fun upload(file: File): Media {
-        val media = MultipartBody.Part.createFormData(
-            "file", file.name, file.asRequestBody()
-        )
+        try {
+            val media = MultipartBody.Part.createFormData(
+                "file", file.name, file.asRequestBody()
+            )
+            val response = apiService.upload(media)
+            if (!response.isSuccessful) {
+                throw ApiError(response.code(), response.message())
+            }
 
-        val response = apiService.upload(media)
-        if (!response.isSuccessful) {
-            throw ApiError(response.code(), response.message())
+            return response.body() ?: throw ApiError(response.code(), response.message())
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw UnknownError
         }
+    }
 
-        return response.body() ?: throw ApiError(response.code(), response.message())
+//    private suspend fun uploadMV(uri: Uri): Media {
+//        try {
+//            val media = MultipartBody.Part.createFormData(
+//                "file",
+//                "file",
+//                withContext(Dispatchers.Default) {
+//                    requireNotNull(
+//                        context.contentResolver.openInputStream(uri)
+//                    )
+//                        .readBytes()
+//                        .toRequestBody()
+//                }
+//            )
+//            val response = apiService.upload(media)
+//            if (!response.isSuccessful) {
+//                throw ApiError(response.code(), response.message())
+//            }
+//
+//            return response.body() ?: throw ApiError(response.code(), response.message())
+//        } catch (e: IOException) {
+//            throw NetworkError
+//        } catch (e: Exception) {
+//            throw UnknownError
+//        }
+//    }
+
+    private suspend fun uploadMV(uri: Uri): Media {
+        context.contentResolver.openInputStream(uri).use { inputStream ->
+            val media = MultipartBody.Part.createFormData(
+                "file",
+                "file",
+                withContext(Dispatchers.Default) {
+                    requireNotNull(
+                        inputStream
+                    )
+                        .readBytes()
+                        .toRequestBody()
+                }
+            )
+            val response = apiService.upload(media)
+            if (!response.isSuccessful) {
+                throw ApiError(response.code(), response.message())
+            }
+            return response.body() ?: throw ApiError(response.code(), response.message())
+        }
     }
 
 }

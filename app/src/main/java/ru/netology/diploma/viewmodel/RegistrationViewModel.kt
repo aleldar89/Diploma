@@ -14,7 +14,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import ru.netology.diploma.api.ApiService
 import ru.netology.diploma.auth.AppAuth
 import ru.netology.diploma.auth.Token
-import ru.netology.diploma.dto.AttachmentFile
+import ru.netology.diploma.dto.AttachmentImage
 import ru.netology.diploma.util.SingleLiveEvent
 import java.io.File
 import javax.inject.Inject
@@ -25,13 +25,13 @@ class RegistrationViewModel @Inject constructor(
     private val apiService: ApiService
 ) : ViewModel() {
 
-    private val noPhoto = AttachmentFile()
+    private val noPhoto = AttachmentImage()
     private val _media = MutableLiveData(noPhoto)
-    val media: LiveData<AttachmentFile>
+    val media: LiveData<AttachmentImage>
         get() = _media
 
     fun changePhoto(uri: Uri, file: File) {
-        _media.value = AttachmentFile(uri, file)
+        _media.value = AttachmentImage(uri, file)
     }
 
     private val _responseAuthState = MutableLiveData<Token?>(null)

@@ -34,7 +34,7 @@
         android:id="@+id/newPostFragment"
         android:name="ru.netology.diploma.ui.post_fragments.NewPostFragment"
         android:label="NewPostFragment" />
-    <fragment
+    <dialog
         android:id="@+id/myDialogFragment"
         android:name="ru.netology.diploma.ui.MyDialogFragment"
         android:label="MyDialogFragment" />

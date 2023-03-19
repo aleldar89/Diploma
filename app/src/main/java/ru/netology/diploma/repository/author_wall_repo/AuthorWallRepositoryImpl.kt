@@ -34,7 +34,7 @@ class AuthorWallRepositoryImpl @Inject constructor(
     @OptIn(ExperimentalPagingApi::class)
     override val data: Flow<PagingData<Post>> = Pager(
         config = PagingConfig(pageSize = 10, enablePlaceholders = false),
-        pagingSourceFactory = { authorWallDao.getPagingSource() },
+        pagingSourceFactory = { authorWallDao.getPagingSourceByAuthor(authorId.value ?: 0) },
         remoteMediator = AuthorWallRemoteMediator(
             apiService = apiService,
             authorWallDao = authorWallDao,
@@ -53,8 +53,6 @@ class AuthorWallRepositoryImpl @Inject constructor(
                 throw RuntimeException(response.message())
             }
             val authorWall = response.body() ?: throw RuntimeException("body is null")
-
-            authorWallDao.clear() //todo оставить чистку db здесь?
             authorWallDao.insert(authorWall.map(PostEntity.Companion::fromDto))
         } catch (e: IOException) {
             throw NetworkError
@@ -62,15 +60,5 @@ class AuthorWallRepositoryImpl @Inject constructor(
             throw UnknownError
         }
     }
-
-//    override suspend fun clearDb() {
-//        try {
-//            authorWallDao.clear()
-//        } catch (e: IOException) {
-//            throw NetworkError
-//        } catch (e: Exception) {
-//            throw UnknownError
-//        }
-//    }
 
 }

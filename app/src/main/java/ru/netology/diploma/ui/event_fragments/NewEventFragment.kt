@@ -235,7 +235,6 @@ class NewEventFragment : Fragment() {
                             currentLocation = Coordinates(
                                 lat = location.latitude.toString().dropLast(1),
                                 longitude = location.longitude.toString().dropLast(1)
-//                                long = location.longitude.toString().dropLast(1)
                             )
                         } else {
                             return@addOnSuccessListener

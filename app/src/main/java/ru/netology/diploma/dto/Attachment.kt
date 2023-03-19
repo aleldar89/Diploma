@@ -14,7 +14,11 @@ enum class AttachmentType {
     VIDEO,
 }
 
-data class AttachmentFile(
+data class AttachmentImage(
     val uri: Uri? = null,
     val file: File? = null
+)
+
+data class AttachmentMV(
+    val uri: Uri? = null
 )

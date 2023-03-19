@@ -76,14 +76,4 @@ class AuthorWallViewModel @Inject constructor(
         }
     }
 
-//    fun clearPosts() {
-//        viewModelScope.launch {
-//            try {
-//                repository.clearDb()
-//            } catch (e: Exception) {
-//                _error.value = e
-//            }
-//        }
-//    }
-
 }

@@ -53,8 +53,6 @@ class PostViewHolder(
         var Bundle.textArg: String? by StringArg
     }
 
-    //todo geocoder
-
     fun bind(post: Post) {
         binding.apply {
 
@@ -112,7 +110,8 @@ class PostViewHolder(
                         setVideoURI(Uri.parse(post.attachment.url))
                         seekTo(1)
                         setOnPreparedListener { start() }
-                        setOnCompletionListener { stopPlayback() }
+//                        setOnCompletionListener { stopPlayback() }
+                        setOnCompletionListener { start() }
                     }
 
                     AttachmentType.AUDIO -> playView.apply {
@@ -165,7 +164,6 @@ class PostViewHolder(
     }
 }
 
-//todo унаследовать итемы от общего интерфейса c id, сделать diffutil универсальным
 class PostDiffCallback : DiffUtil.ItemCallback<Post>() {
     override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {
         if (oldItem::class != newItem::class) {

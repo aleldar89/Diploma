@@ -77,7 +77,7 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
             }
             R.id.log_out -> {
                 findNavController(R.id.nav_host_fragment)
-                    .navigate(R.id.action_global_myDialogFragment) //todo не всплывает фрагмент
+                    .navigate(R.id.action_global_myDialogFragment)
                 true
             }
             else -> false

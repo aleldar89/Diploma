@@ -12,14 +12,14 @@ interface PostDao {
     @Query("SELECT * FROM PostEntity ORDER BY id DESC")
     fun getPagingSource(): PagingSource<Int, PostEntity>
 
+    @Query("SELECT * FROM PostEntity WHERE authorId = :authorId ORDER BY id DESC")
+    fun getPagingSourceByAuthor(authorId: Int): PagingSource<Int, PostEntity>
+
     @Query("SELECT * FROM PostEntity WHERE id = :id")
     suspend fun getById(id: Int): PostEntity
 
     @Query("DELETE FROM PostEntity WHERE id = :id")
     suspend fun removeById(id: Int)
-
-    @Query("DELETE FROM PostEntity")
-    suspend fun clear()
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(post: PostEntity)

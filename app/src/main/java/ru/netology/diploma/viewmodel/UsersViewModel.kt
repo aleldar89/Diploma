@@ -1,45 +1,38 @@
 package ru.netology.diploma.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import android.os.Bundle
+import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.netology.diploma.dto.UserPreview
 import ru.netology.diploma.dto.UserResponse
 import ru.netology.diploma.repository.users_repo.UsersRepository
+import ru.netology.diploma.util.StringArg
 import javax.inject.Inject
 
 @HiltViewModel
 class UsersViewModel @Inject constructor(
-    private val repository: UsersRepository
+    private val repository: UsersRepository,
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-    private val _data = MutableLiveData(emptyList<UserResponse>())
+    companion object {
+        const val ID_ARRAY = "ID_ARRAY"
+    }
+
+    private var ids: IntArray = checkNotNull(savedStateHandle[ID_ARRAY])
+
+    private val _data = MutableLiveData(listOf<UserResponse>())
     val data: LiveData<List<UserResponse>>
         get() = _data
 
-    private val _users = MutableLiveData(emptyList<UserResponse>())
+    private val _users = MutableLiveData(listOf<UserResponse>())
     val users: LiveData<List<UserResponse>>
         get() = _users
 
-    private val _user = MutableLiveData<UserResponse>()
-    val user: LiveData<UserResponse>
-        get() = _user
-
     init {
         getUsers()
-    }
-
-    fun getUsersById(idList: List<Int>) {
-        viewModelScope.launch {
-            val result = mutableListOf<UserResponse>()
-            idList.forEach { id ->
-                result.add(data.value?.get(id)!!) //todo можно рациональнее
-            }
-            _users.value = result
-        }
+        getUsersById(ids)
     }
 
     private fun getUsers() {
@@ -52,13 +45,16 @@ class UsersViewModel @Inject constructor(
         }
     }
 
-    fun getUserById(id: Int) {
+    private fun getUsersById(ids: IntArray) {
         viewModelScope.launch {
-            try {
-                _user.value = repository.getUserById(id)
-            } catch (e: Exception) {
-                println("Users loading error")
+            val result = mutableListOf<UserResponse>()
+            ids.forEach { id ->
+                data.value?.forEach {
+                    if (id == it.id)
+                        result.add(it)
+                }
             }
+            _users.value = result
         }
     }
 

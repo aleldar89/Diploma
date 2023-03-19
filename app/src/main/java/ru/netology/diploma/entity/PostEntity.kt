@@ -20,7 +20,6 @@ data class PostEntity(
     val authorJob: String? = null,
     val content: String,
     val published: String,
-//    @Embedded(prefix = "coordinates_")
     @Embedded
     val coords: Coordinates? = null,
     val link: String? = null,

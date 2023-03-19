@@ -18,7 +18,6 @@ data class EventEntity(
     val content: String,
     val datetime: String,
     val published: String,
-//    @Embedded(prefix = "coordinates_")
     @Embedded
     val coords: Coordinates? = null,
     val type: Type,

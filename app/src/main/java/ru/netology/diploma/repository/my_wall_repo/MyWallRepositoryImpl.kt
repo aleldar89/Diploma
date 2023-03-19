@@ -4,6 +4,7 @@ import androidx.paging.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import ru.netology.diploma.api.ApiService
+import ru.netology.diploma.auth.AppAuth
 import ru.netology.diploma.dao.PostDao
 import ru.netology.diploma.dao.PostRemoteKeyDao
 import ru.netology.diploma.db.PostsDb
@@ -17,13 +18,20 @@ class MyWallRepositoryImpl @Inject constructor(
     private val myWallDao: PostDao,
     private val apiService: ApiService,
     myWallRemoteKeyDao: PostRemoteKeyDao,
-    myWallDb: PostsDb
+    myWallDb: PostsDb,
+    private val appAuth: AppAuth,
 ) : MyWallRepository {
+
+    private val myId: Int?
+        get() = appAuth
+            .data
+            .value
+            ?.id
 
     @OptIn(ExperimentalPagingApi::class)
     override val data: Flow<PagingData<Post>> = Pager(
         config = PagingConfig(pageSize = 10, enablePlaceholders = false),
-        pagingSourceFactory = { myWallDao.getPagingSource() },
+        pagingSourceFactory = { myWallDao.getPagingSourceByAuthor(myId ?: 0) },
         remoteMediator = MyWallRemoteMediator(
             apiService = apiService,
             myWallDao = myWallDao,
@@ -41,8 +49,6 @@ class MyWallRepositoryImpl @Inject constructor(
                 throw RuntimeException(response.message())
             }
             val myWall = response.body() ?: throw RuntimeException("body is null")
-
-            myWallDao.clear()
             myWallDao.insert(myWall.map(PostEntity.Companion::fromDto))
         } catch (e: IOException) {
             throw NetworkError

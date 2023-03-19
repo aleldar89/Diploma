@@ -5,12 +5,12 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.provider.MediaStore
-import android.provider.MediaStore.ACTION_VIDEO_CAPTURE
 import android.view.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.net.toFile
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.coroutineScope
@@ -26,7 +26,6 @@ import ru.netology.diploma.extensions.createToast
 import ru.netology.diploma.util.AndroidUtils
 import ru.netology.diploma.util.StringArg
 import ru.netology.diploma.viewmodel.PostViewModel
-import java.io.File
 
 @AndroidEntryPoint
 class NewPostFragment : Fragment() {
@@ -52,11 +51,11 @@ class NewPostFragment : Fragment() {
                 view?.createToast(R.string.media_error)
             }
             else -> {
-                val data = result.data?.data ?: run {
+                val uri = result.data?.data ?: run {
                     view?.createToast(R.string.media_error)
                     return@registerForActivityResult
                 }
-                viewModel.changeMedia(data, data.toFile())
+                viewModel.changeImage(uri, uri.toFile())
             }
         }
     }
@@ -65,13 +64,11 @@ class NewPostFragment : Fragment() {
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            val data = result.data?.data ?: run {
+            val uri = result.data?.data ?: run {
                 view?.createToast(R.string.media_error)
                 return@registerForActivityResult
             }
-            viewModel.changeMedia(data, data.toFile()) //todo Exception: Uri lacks 'file' scheme
-//            viewModel.changeMedia(data, File(data.path))
-//            viewModel.changeMedia(data, File(data.toString()))
+            viewModel.changeMediaMV(uri)
         } else {
             view?.createToast(R.string.media_error)
         }
@@ -133,29 +130,28 @@ class NewPostFragment : Fragment() {
 
         arguments?.textArg?.let(binding.edit::setText)
 
-        //todo вернуть
-//        viewModel.image.observe(viewLifecycleOwner) {
-//            if (it == null) {
-//                binding.photoContainer.isGone = true
-//                return@observe
-//            }
-//
-//            binding.photoContainer.isVisible = true
-//            binding.previewPhoto.setImageURI(it.uri)
-//        }
-//
-//        viewModel.media.observe(viewLifecycleOwner) {
-//            if (it == null) {
-//                binding.videoContainer.isGone = true
-//                return@observe
-//            }
-//
-//            binding.videoContainer.isVisible = true
-//            binding.previewVideo.apply {
-//                setVideoURI(it.uri)
-//                seekTo(1)
-//            }
-//        }
+        viewModel.image.observe(viewLifecycleOwner) {
+            if (it == null) {
+                binding.photoContainer.isGone = true
+                return@observe
+            } else {
+                binding.photoContainer.isVisible = true
+                binding.previewPhoto.setImageURI(it.uri)
+            }
+        }
+
+        viewModel.mediaMV.observe(viewLifecycleOwner) {
+            if (it == null) {
+                binding.videoContainer.isGone = true
+                return@observe
+            } else {
+                binding.videoContainer.isVisible = true
+                binding.previewVideo.apply {
+                    setVideoURI(it.uri)
+                    seekTo(1)
+                }
+            }
+        }
 
         binding.takePhoto.setOnClickListener {
             ImagePicker.Builder(this)
@@ -176,7 +172,6 @@ class NewPostFragment : Fragment() {
         binding.galleryVideo.setOnClickListener {
             val intent = Intent()
                 .setType("video/*")
-//                .setAction(ACTION_VIDEO_CAPTURE)
                 .setAction(Intent.ACTION_GET_CONTENT)
             mvContract.launch(intent)
         }
@@ -202,17 +197,16 @@ class NewPostFragment : Fragment() {
 
     private fun getCurrentLocation() {
         lifecycle.coroutineScope.launchWhenCreated {
-            when {
+            when (PackageManager.PERMISSION_GRANTED) {
                 ContextCompat.checkSelfPermission(
                     requireContext(),
                     Manifest.permission.ACCESS_FINE_LOCATION
-                ) == PackageManager.PERMISSION_GRANTED -> {
+                ) -> {
                     fusedLocationClient.lastLocation.addOnSuccessListener { location ->
                         if (location != null) {
                             currentLocation = Coordinates(
                                 lat = location.latitude.toString().dropLast(1),
                                 longitude = location.longitude.toString().dropLast(1)
-//                                long = location.longitude.toString().dropLast(1)
                             )
                         } else {
                             return@addOnSuccessListener
