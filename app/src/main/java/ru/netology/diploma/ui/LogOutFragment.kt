@@ -11,7 +11,7 @@ import ru.netology.diploma.auth.AppAuth
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MyDialogFragment : DialogFragment() {
+class LogOutFragment : DialogFragment() {
 
     @Inject
     lateinit var appAuth: AppAuth

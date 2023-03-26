@@ -35,9 +35,9 @@
         android:name="ru.netology.diploma.ui.post_fragments.NewPostFragment"
         android:label="NewPostFragment" />
     <dialog
-        android:id="@+id/myDialogFragment"
-        android:name="ru.netology.diploma.ui.MyDialogFragment"
-        android:label="MyDialogFragment" />
+        android:id="@+id/logOutFragment"
+        android:name="ru.netology.diploma.ui.LogOutFragment"
+        android:label="LogOutFragment" />
     <fragment
         android:id="@+id/selectedPostFragment"
         android:name="ru.netology.diploma.ui.post_fragments.SelectedPostFragment"
@@ -99,8 +99,8 @@
     <action android:id="@+id/action_global_registrationFragment"
         app:destination="@id/registrationFragment" />
 
-    <action android:id="@+id/action_global_myDialogFragment"
-        app:destination="@id/myDialogFragment" />
+    <action android:id="@+id/action_global_logOutFragment"
+        app:destination="@id/logOutFragment" />
 
     <action android:id="@+id/action_global_myWallFragment"
         app:destination="@id/myWallFragment" />
@@ -110,7 +110,11 @@
     <fragment
         android:id="@+id/newJobFragment"
         android:name="ru.netology.diploma.ui.job_fragments.NewJobFragment"
-        android:label="NewJobFragment" />
+        android:label="NewJobFragment" >
+        <action
+            android:id="@+id/action_newJobFragment_to_datePickFragment"
+            app:destination="@id/datePickFragment" />
+    </fragment>
     <fragment
         android:id="@+id/myJobFeedFragment"
         android:name="ru.netology.diploma.ui.job_fragments.MyJobFeedFragment"
@@ -126,5 +130,9 @@
         android:id="@+id/userJobFeedFragment"
         android:name="ru.netology.diploma.ui.job_fragments.UserJobFeedFragment"
         android:label="UserJobFeedFragment" />
+    <dialog
+        android:id="@+id/datePickFragment"
+        android:name="ru.netology.diploma.ui.DatePickFragment"
+        android:label="DatePickFragment" />
 
 </navigation>

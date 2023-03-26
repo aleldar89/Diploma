@@ -45,8 +45,10 @@ class UserJobFeedFragment : Fragment() {
 
         val adapter = JobAdapter(object : OnInteractionListener<Job>{})
 
-        binding.author.text = viewModel.userResponse.value?.name
-        viewModel.userResponse.value?.avatar?.let { binding.authorAvatar.loadAvatar(it) }
+        viewModel.userResponse.observe(viewLifecycleOwner) {
+            binding.author.text = it?.name
+            binding.authorAvatar.loadAvatar(it?.avatar.orEmpty())
+        }
 
         binding.list.apply {
             this.adapter = adapter

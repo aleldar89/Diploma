@@ -22,3 +22,16 @@ data class AttachmentImage(
 data class AttachmentMV(
     val uri: Uri? = null
 )
+
+//sealed interface MediaAttach {
+//    val uri: Uri?
+//}
+//
+//data class AttachmentImage(
+//    override val uri: Uri? = null,
+//    val file: File? = null
+//) : MediaAttach
+//
+//data class AttachmentMV(
+//    override val uri: Uri? = null,
+//) : MediaAttach

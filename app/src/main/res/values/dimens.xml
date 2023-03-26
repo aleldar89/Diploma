@@ -7,4 +7,5 @@
     <dimen name="icon_button_min_size">48dp</dimen>
     <dimen name="double_spacing">32dp</dimen>
     <dimen name="central_button_spacing">64dp</dimen>
+    <dimen name="video_view_height">200dp</dimen>
 </resources>

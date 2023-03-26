@@ -32,13 +32,13 @@ class UsersViewModel @Inject constructor(
 
     init {
         getUsers()
-        getUsersById(ids)
     }
 
     private fun getUsers() {
         viewModelScope.launch {
             try {
                 _data.value = repository.getUsers()
+                getUsersById(ids)
             } catch (e: Exception) {
                 println("Users loading error")
             }

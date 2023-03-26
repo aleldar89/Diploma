@@ -1,26 +1,18 @@
 package ru.netology.diploma.ui.job_fragments
 
-import android.annotation.SuppressLint
 import android.app.DatePickerDialog
-import android.os.Build
 import android.os.Bundle
 import android.view.*
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.diploma.R
 import ru.netology.diploma.databinding.FragmentNewJobBinding
-import ru.netology.diploma.dto.Job
-import ru.netology.diploma.dto.UserPreview
-import ru.netology.diploma.extensions.createDate
 import ru.netology.diploma.extensions.dateFormatter
 import ru.netology.diploma.extensions.toEditable
 import ru.netology.diploma.extensions.toJob
-import ru.netology.diploma.ui.post_fragments.NewPostFragment.Companion.textArg
+import ru.netology.diploma.ui.post_fragments.PostsFeedFragment.Companion.textArg
 import ru.netology.diploma.util.AndroidUtils
 import ru.netology.diploma.util.StringArg
 import ru.netology.diploma.viewmodel.MyJobViewModel
@@ -128,6 +120,15 @@ class NewJobFragment : Fragment() {
                 cal.get(Calendar.MONTH),
                 cal.get(Calendar.DAY_OF_MONTH)).show()
         }
+
+//        binding.finish.setOnClickListener {
+//            findNavController().navigate(
+//                R.id.action_newJobFragment_to_datePickFragment,
+////                Bundle().apply {
+////                    textArg = gson.toJson(post)
+////                }
+////            )
+//        }
 
         viewModel.jobCreated.observe(viewLifecycleOwner) {
             viewModel.loadJobs()

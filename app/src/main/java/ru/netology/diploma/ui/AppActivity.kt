@@ -77,7 +77,7 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
             }
             R.id.log_out -> {
                 findNavController(R.id.nav_host_fragment)
-                    .navigate(R.id.action_global_myDialogFragment)
+                    .navigate(R.id.action_global_logOutFragment)
                 true
             }
             else -> false
