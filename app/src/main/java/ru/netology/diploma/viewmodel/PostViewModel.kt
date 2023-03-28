@@ -55,13 +55,9 @@ class PostViewModel @Inject constructor(
     val authorization: LiveData<Boolean>
         get() = _authorization
 
-    private val _image = MutableLiveData(AttachmentImage())
-    val image: LiveData<AttachmentImage>
-        get() = _image
-
-    private val _mediaMV = MutableLiveData(AttachmentMV())
-    val mediaMV: LiveData<AttachmentMV>
-        get() = _mediaMV
+    private val _media: MutableLiveData<MediaAttachment?> = MutableLiveData(null)
+    val media: LiveData<MediaAttachment?>
+        get() = _media
 
     private val _error = SingleLiveEvent<Exception>()
     val error: LiveData<Exception>
@@ -98,19 +94,21 @@ class PostViewModel @Inject constructor(
     }
 
     fun save() {
-        edited.value?.let {
+        edited.value?.let { post ->
             viewModelScope.launch {
                 try {
-                    if (image.value == null && mediaMV.value == null) {
-                        repository.save(it)
-                    } else if (image.value != null) {
-                        image.value?.file?.let { file ->
-                            repository.saveWithImage(it, file)
+                    when (media.value) {
+                        is ImageAttachment -> media.value?.let { it as ImageAttachment
+                            repository.saveWithImage(post, it.file!!)
                         }
-                    } else if (mediaMV.value != null)
-                        mediaMV.value?.uri?.let { uri ->
-                            repository.saveWithMV(it, uri)
+                        is AudioAttachment -> media.value?.uri?.let { uri ->
+                            repository.saveWithAudio(post, uri)
                         }
+                        is VideoAttachment -> media.value?.uri?.let { uri ->
+                            repository.saveWithVideo(post, uri)
+                        }
+                        null -> repository.save(post)
+                    }
                 } catch (e: Exception) {
                     val last = repository.selectLast()
                     try {
@@ -195,16 +193,23 @@ class PostViewModel @Inject constructor(
         edited.value = empty
     }
 
+    fun attachImage(uri: Uri, file: File?) {
+        clearMedia()
+        _media.value = ImageAttachment(uri, file)
+    }
+
+    fun attachVideo(uri: Uri) {
+        clearMedia()
+        _media.value = VideoAttachment(uri)
+    }
+
+    fun attachAudio(uri: Uri) {
+        clearMedia()
+        _media.value = AudioAttachment(uri)
+    }
+
     fun clearMedia() {
-        _image.value = null
-    }
-
-    fun changeImage(uri: Uri, file: File?) {
-        _image.value = AttachmentImage(uri, file)
-    }
-
-    fun changeMediaMV(uri: Uri) {
-        _mediaMV.value = AttachmentMV(uri)
+        _media.value = null
     }
 
 }

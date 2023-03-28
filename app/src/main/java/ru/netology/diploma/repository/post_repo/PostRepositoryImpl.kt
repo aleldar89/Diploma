@@ -115,15 +115,46 @@ class PostRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun saveWithMV(post: Post, uri: Uri) {
+    override suspend fun saveWithVideo(post: Post, uri: Uri) {
         try {
-            val media = uploadMV(uri)
+            val media = upload(uri)
 
             val response = apiService.savePost(
                 post.copy(
                     attachment = Attachment(
                         url = media.url,
                         type = AttachmentType.VIDEO
+                    )
+                )
+            )
+
+            if (!response.isSuccessful) {
+                throw RuntimeException(response.message())
+            } else {
+                val _post = response.body()
+                if (_post != null) {
+                    postDao.updateId(_post.id)
+                }
+            }
+            val body = response.body() ?: throw ApiError(response.code(), response.message())
+            postDao.insert(PostEntity.fromDto(body))
+
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw UnknownError
+        }
+    }
+
+    override suspend fun saveWithAudio(post: Post, uri: Uri) {
+        try {
+            val media = upload(uri)
+
+            val response = apiService.savePost(
+                post.copy(
+                    attachment = Attachment(
+                        url = media.url,
+                        type = AttachmentType.AUDIO
                     )
                 )
             )
@@ -249,33 +280,7 @@ class PostRepositoryImpl @Inject constructor(
         }
     }
 
-//    private suspend fun uploadMV(uri: Uri): Media {
-//        try {
-//            val media = MultipartBody.Part.createFormData(
-//                "file",
-//                "file",
-//                withContext(Dispatchers.Default) {
-//                    requireNotNull(
-//                        context.contentResolver.openInputStream(uri)
-//                    )
-//                        .readBytes()
-//                        .toRequestBody()
-//                }
-//            )
-//            val response = apiService.upload(media)
-//            if (!response.isSuccessful) {
-//                throw ApiError(response.code(), response.message())
-//            }
-//
-//            return response.body() ?: throw ApiError(response.code(), response.message())
-//        } catch (e: IOException) {
-//            throw NetworkError
-//        } catch (e: Exception) {
-//            throw UnknownError
-//        }
-//    }
-
-    private suspend fun uploadMV(uri: Uri): Media {
+    private suspend fun upload(uri: Uri): Media {
         context.contentResolver.openInputStream(uri).use { inputStream ->
             val media = MultipartBody.Part.createFormData(
                 "file",

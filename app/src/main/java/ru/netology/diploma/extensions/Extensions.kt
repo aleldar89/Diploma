@@ -1,21 +1,16 @@
 package ru.netology.diploma.extensions
 
-import android.location.Geocoder
-import android.os.Build
 import android.text.Editable
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.google.gson.Gson
 import ru.netology.diploma.R
-import ru.netology.diploma.dto.Coordinates
 import ru.netology.diploma.dto.Job
-import ru.netology.diploma.dto.Post
 
 fun ImageView.loadImage(url: String, vararg transforms: BitmapTransformation = emptyArray()) =
     Glide.with(this)

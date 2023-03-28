@@ -6,19 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".ui.post_fragments.NewPostFragment">
 
-    <Button
-        android:id="@+id/clearMedia"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|bottom"
-        android:layout_marginBottom="@dimen/central_button_spacing"
-        android:text="@string/clear" />
-
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -40,32 +31,25 @@
                 android:hint="@string/link"
                 android:inputType="textMultiLine" />
 
-            <FrameLayout
-                android:id="@+id/photoContainer"
+            <ImageView
+                android:id="@+id/previewImage"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone">
+                android:visibility="gone"
+                android:layout_height="wrap_content" />
 
-                <ImageView
-                    android:id="@+id/previewPhoto"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </FrameLayout>
-
-            <FrameLayout
-                android:id="@+id/videoContainer"
+            <VideoView
+                android:id="@+id/previewVideo"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone">
+                android:visibility="gone"
+                android:layout_height="@dimen/media_view_height" />
 
-                <VideoView
-                    android:id="@+id/previewVideo"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/video_view_height" />
-            </FrameLayout>
-
+            <ImageView
+                android:id="@+id/previewAudio"
+                android:layout_width="match_parent"
+                android:visibility="gone"
+                android:layout_height="@dimen/media_view_height"
+                app:srcCompat="@drawable/ic_baseline_play_circle_filled_36" />
         </LinearLayout>
-
     </ScrollView>
 
     <LinearLayout
@@ -74,11 +58,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:backgroundTint="@color/blue"
         android:orientation="horizontal">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/galleryMusic"
+            android:id="@+id/gallery_audio"
             style="@style/Widget.AppTheme.IconButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -104,7 +87,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:icon="@drawable/ic_photo_camera_24" />
-
     </LinearLayout>
+
+    <Button
+        android:id="@+id/clearMedia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginBottom="@dimen/central_button_spacing"
+        android:text="@string/clear" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

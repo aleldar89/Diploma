@@ -11,7 +11,8 @@ interface PostRepository {
     suspend fun getAll()
     suspend fun save(post: Post)
     suspend fun saveWithImage(post: Post, file: File)
-    suspend fun saveWithMV(post: Post, uri: Uri)
+    suspend fun saveWithVideo(post: Post, uri: Uri)
+    suspend fun saveWithAudio(post: Post, uri: Uri)
     suspend fun getById(id: Int): Post
     suspend fun removeById(id: Int)
     suspend fun likeById(post: Post)

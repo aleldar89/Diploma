@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -23,12 +22,8 @@ import ru.netology.diploma.adapter.OnUserIdsListener
 import ru.netology.diploma.adapter.PostsAdapter
 import ru.netology.diploma.databinding.FragmentWallBinding
 import ru.netology.diploma.dto.Post
-import ru.netology.diploma.extensions.createToast
 import ru.netology.diploma.extensions.loadAvatar
 import ru.netology.diploma.mediplayer.MediaLifecycleObserver
-import ru.netology.diploma.ui.post_fragments.PostsFeedFragment
-import ru.netology.diploma.ui.post_fragments.PostsFeedFragment.Companion.textArg
-import ru.netology.diploma.ui.post_fragments.SelectedPostFragment.Companion.textArg
 import ru.netology.diploma.util.StringArg
 import ru.netology.diploma.util.parseException
 import ru.netology.diploma.viewmodel.AuthorWallViewModel
@@ -43,11 +38,6 @@ class AuthorWallFragment : Fragment() {
 
     private val viewModel: AuthorWallViewModel by viewModels()
 
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        viewModel.clearPosts()
-//        super.onCreate(savedInstanceState)
-//    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -58,17 +48,13 @@ class AuthorWallFragment : Fragment() {
         val adapter = PostsAdapter(
             object : OnInteractionListener<Post> {},
             object : OnUserIdsListener {},
-            MediaLifecycleObserver()
+            MediaLifecycleObserver(),
         )
 
-        val gson = Gson()
-        val post: Post = arguments?.textArg.let { gson.fromJson(it, Post::class.java) }
-
-        post.authorAvatar?.let { binding.authorAvatar.loadAvatar(it) }
-        binding.author.text = post.author
-
-//        binding.author.text = viewModel.userResponse.value?.name
-//        viewModel.userResponse.value?.avatar?.let { binding.authorAvatar.loadAvatar(it) }
+        viewModel.userResponse.observe(viewLifecycleOwner) {
+            binding.author.text = it?.name
+            binding.authorAvatar.loadAvatar(it?.avatar.orEmpty())
+        }
 
         binding.list.apply {
             this.adapter = adapter

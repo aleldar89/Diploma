@@ -99,8 +99,7 @@ class EventViewHolder(
                         setMediaController(MediaController(context))
                         setVideoURI(Uri.parse(event.attachment.url))
                         seekTo(1)
-                        setOnPreparedListener { start() }
-//                        setOnCompletionListener { stopPlayback() }
+                        setOnPreparedListener { pause() }
                         setOnCompletionListener { start() }
                     }
 

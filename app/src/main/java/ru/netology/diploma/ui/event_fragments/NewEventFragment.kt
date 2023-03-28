@@ -72,7 +72,6 @@ class NewEventFragment : Fragment() {
                 view?.createToast(R.string.media_error)
                 return@registerForActivityResult
             }
-//            viewModel.changeVideo(data, data.toFile()) //todo Exception: Uri lacks 'file' scheme
             viewModel.changeMedia(data, File(data.path))
         } else {
             view?.createToast(R.string.media_error)
@@ -158,29 +157,6 @@ class NewEventFragment : Fragment() {
             ).show()
         }
 
-//        viewModel.image.observe(viewLifecycleOwner) {
-//            if (it == null) {
-//                binding.photoContainer.isGone = true
-//                return@observe
-//            }
-//
-//            binding.photoContainer.isVisible = true
-//            binding.previewPhoto.setImageURI(it.uri)
-//        }
-//
-//        viewModel.media.observe(viewLifecycleOwner) {
-//            if (it == null) {
-//                binding.videoContainer.isGone = true
-//                return@observe
-//            }
-//
-//            binding.videoContainer.isVisible = true
-//            binding.previewVideo.apply {
-//                setVideoURI(it.uri)
-//                seekTo(1)
-//            }
-//        }
-
         binding.takePhoto.setOnClickListener {
             ImagePicker.Builder(this)
                 .crop()
@@ -204,7 +180,7 @@ class NewEventFragment : Fragment() {
             mvContract.launch(intent)
         }
 
-        binding.galleryMusic.setOnClickListener {
+        binding.galleryAudio.setOnClickListener {
             val intent = Intent()
                 .setType("audio/*")
                 .setAction(Intent.ACTION_GET_CONTENT)

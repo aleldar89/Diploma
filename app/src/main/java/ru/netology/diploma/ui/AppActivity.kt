@@ -7,6 +7,7 @@ import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
+import com.yandex.mapkit.MapKitFactory
 import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.diploma.R
 import ru.netology.diploma.adapter.PostViewHolder.Companion.textArg
@@ -19,6 +20,8 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        MapKitFactory.setApiKey("e35ce02e-18b3-4678-9859-286826ff3245")
+        MapKitFactory.initialize(this)
 
         intent?.let {
             if (it.action != Intent.ACTION_SEND) {

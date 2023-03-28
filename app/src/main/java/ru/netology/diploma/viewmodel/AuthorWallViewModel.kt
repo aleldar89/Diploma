@@ -30,21 +30,21 @@ class AuthorWallViewModel @Inject constructor(
 
     private val authorId: Int = checkNotNull(savedStateHandle[AUTHOR_ID])
 
-    init {
-        saveAuthorId(authorId)
-        getUser()
-        loadPosts()
-    }
-
     val data: Flow<PagingData<Post>> = repository.data.flowOn(Dispatchers.Default)
 
-    private val _userResponse = MutableLiveData<UserResponse>()
+    private val _userResponse = MutableLiveData<UserResponse>(null)
     val userResponse: LiveData<UserResponse>
         get() = _userResponse
 
     private val _error = SingleLiveEvent<Exception>()
     val error: LiveData<Exception>
         get() = _error
+
+    init {
+        saveAuthorId(authorId)
+        getUser()
+        loadPosts()
+    }
 
     fun saveAuthorId(id: Int) {
         viewModelScope.launch {

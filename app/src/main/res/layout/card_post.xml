@@ -16,7 +16,6 @@
             android:layout_height="@dimen/posts_avatar_size"
             android:layout_marginBottom="@dimen/common_spacing"
             android:contentDescription="@string/description_def_author_avatar"
-            app:layout_constraintBottom_toBottomOf="@id/header"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@sample/post.json/data/authorAvatar" />
@@ -57,12 +56,24 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/common_spacing"
             android:layout_marginEnd="@dimen/common_spacing"
-            android:layout_marginBottom="@dimen/common_spacing"
-            app:layout_constraintBottom_toBottomOf="@id/header"
+            app:layout_constraintBottom_toTopOf="@id/location"
             app:layout_constraintEnd_toStartOf="@id/menu"
             app:layout_constraintStart_toEndOf="@id/authorAvatar"
             app:layout_constraintTop_toBottomOf="@id/authorJob"
             tools:text="@sample/post.json/data/published" />
+
+        <TextView
+            android:id="@+id/location"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/common_spacing"
+            android:layout_marginEnd="@dimen/common_spacing"
+            android:layout_marginBottom="@dimen/common_spacing"
+            app:layout_constraintBottom_toBottomOf="@id/header"
+            app:layout_constraintEnd_toStartOf="@id/menu"
+            app:layout_constraintStart_toEndOf="@id/authorAvatar"
+            app:layout_constraintTop_toBottomOf="@id/published"
+            tools:text="@sample/post.json/data/location" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/menu"
@@ -72,7 +83,6 @@
             android:layout_marginBottom="@dimen/common_spacing"
             android:contentDescription="@string/description_post_menu"
             app:icon="@drawable/ic_baseline_more_horiz_24"
-            app:layout_constraintBottom_toBottomOf="@id/header"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -81,7 +91,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:barrierDirection="bottom"
-            app:constraint_referenced_ids="authorAvatar, published, authorJob, menu" />
+            app:constraint_referenced_ids="authorAvatar, published, authorJob, menu, location" />
 
         <TextView
             android:id="@+id/content"
@@ -135,7 +145,7 @@
         <VideoView
             android:id="@+id/video_view"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/video_view_height"
+            android:layout_height="@dimen/media_view_height"
             android:adjustViewBounds="true"
             android:paddingTop="@dimen/common_spacing"
             android:visibility="gone"

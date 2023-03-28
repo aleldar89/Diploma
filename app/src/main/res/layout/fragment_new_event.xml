@@ -59,7 +59,7 @@
                 android:visibility="gone">
 
                 <ImageView
-                    android:id="@+id/previewPhoto"
+                    android:id="@+id/previewImage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </FrameLayout>
@@ -90,7 +90,7 @@
         android:orientation="horizontal">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/galleryMusic"
+            android:id="@+id/gallery_audio"
             style="@style/Widget.AppTheme.IconButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

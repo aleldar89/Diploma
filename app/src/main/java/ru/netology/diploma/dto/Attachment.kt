@@ -14,24 +14,19 @@ enum class AttachmentType {
     VIDEO,
 }
 
-data class AttachmentImage(
-    val uri: Uri? = null,
+sealed interface MediaAttachment {
+    val uri: Uri?
+}
+
+data class ImageAttachment(
+    override val uri: Uri? = null,
     val file: File? = null
-)
+) : MediaAttachment
 
-data class AttachmentMV(
-    val uri: Uri? = null
-)
+data class VideoAttachment(
+    override val uri: Uri? = null
+) : MediaAttachment
 
-//sealed interface MediaAttach {
-//    val uri: Uri?
-//}
-//
-//data class AttachmentImage(
-//    override val uri: Uri? = null,
-//    val file: File? = null
-//) : MediaAttach
-//
-//data class AttachmentMV(
-//    override val uri: Uri? = null,
-//) : MediaAttach
+data class AudioAttachment(
+    override val uri: Uri? = null
+) : MediaAttachment

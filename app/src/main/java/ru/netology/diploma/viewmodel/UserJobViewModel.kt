@@ -48,7 +48,6 @@ class UserJobViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 _userResponse.value = apiService.getByIdUser(authorId).body()
-                //todo возможно ошибка аналогично usersFragment
             } catch (e: Exception) {
                 _error.value = e
             }

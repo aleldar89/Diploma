@@ -62,9 +62,9 @@ class EventViewModel @Inject constructor(
     val authorization: LiveData<Boolean>
         get() = _authorization
 
-    private val noAttachment = AttachmentImage()
+    private val noAttachment = ImageAttachment()
     private val _media = MutableLiveData(noAttachment)
-    val media: LiveData<AttachmentImage>
+    val media: LiveData<ImageAttachment>
         get() = _media
 
     private val _error = SingleLiveEvent<Exception>()
@@ -201,7 +201,7 @@ class EventViewModel @Inject constructor(
     }
 
     fun changeMedia(uri: Uri, file: File) {
-        _media.value = AttachmentImage(uri, file)
+        _media.value = ImageAttachment(uri, file)
     }
 
 }

@@ -21,8 +21,12 @@ import com.google.android.gms.location.LocationServices
 import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.diploma.R
 import ru.netology.diploma.databinding.FragmentNewPostBinding
+import ru.netology.diploma.dto.AudioAttachment
 import ru.netology.diploma.dto.Coordinates
+import ru.netology.diploma.dto.ImageAttachment
+import ru.netology.diploma.dto.VideoAttachment
 import ru.netology.diploma.extensions.createToast
+import ru.netology.diploma.mediplayer.MediaLifecycleObserver
 import ru.netology.diploma.util.AndroidUtils
 import ru.netology.diploma.util.StringArg
 import ru.netology.diploma.viewmodel.PostViewModel
@@ -36,12 +40,11 @@ class NewPostFragment : Fragment() {
         var currentLocation: Coordinates? = null
     }
 
+    private val viewModel: PostViewModel by activityViewModels()
+    private val observer = MediaLifecycleObserver()
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {}
-
-    private val viewModel: PostViewModel by activityViewModels()
 
     private val imageContract = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -55,12 +58,12 @@ class NewPostFragment : Fragment() {
                     view?.createToast(R.string.media_error)
                     return@registerForActivityResult
                 }
-                viewModel.changeImage(uri, uri.toFile())
+                viewModel.attachImage(uri, uri.toFile())
             }
         }
     }
 
-    private val mvContract = registerForActivityResult(
+    private val videoContract = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
@@ -68,7 +71,21 @@ class NewPostFragment : Fragment() {
                 view?.createToast(R.string.media_error)
                 return@registerForActivityResult
             }
-            viewModel.changeMediaMV(uri)
+            viewModel.attachVideo(uri)
+        } else {
+            view?.createToast(R.string.media_error)
+        }
+    }
+
+    private val audioContract = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val uri = result.data?.data ?: run {
+                view?.createToast(R.string.media_error)
+                return@registerForActivityResult
+            }
+            viewModel.attachAudio(uri)
         } else {
             view?.createToast(R.string.media_error)
         }
@@ -106,6 +123,7 @@ class NewPostFragment : Fragment() {
             }
             R.id.cancel -> {
                 viewModel.clearEditedData()
+                viewModel.clearMedia()
                 AndroidUtils.hideKeyboard(requireView())
                 findNavController().navigateUp()
                 true
@@ -130,25 +148,36 @@ class NewPostFragment : Fragment() {
 
         arguments?.textArg?.let(binding.edit::setText)
 
-        viewModel.image.observe(viewLifecycleOwner) {
-            if (it == null) {
-                binding.photoContainer.isGone = true
-                return@observe
-            } else {
-                binding.photoContainer.isVisible = true
-                binding.previewPhoto.setImageURI(it.uri)
-            }
-        }
-
-        viewModel.mediaMV.observe(viewLifecycleOwner) {
-            if (it == null) {
-                binding.videoContainer.isGone = true
-                return@observe
-            } else {
-                binding.videoContainer.isVisible = true
-                binding.previewVideo.apply {
-                    setVideoURI(it.uri)
-                    seekTo(1)
+        viewModel.media.observe(viewLifecycleOwner) { media ->
+            when (media) {
+                is ImageAttachment -> {
+                    binding.previewImage.isVisible = true
+                    binding.previewImage.setImageURI(media.uri)
+                }
+                is VideoAttachment -> {
+                    binding.previewVideo.isVisible = true
+                    binding.previewVideo.apply {
+                        setVideoURI(media.uri)
+                        seekTo(1)
+                    }
+                }
+                is AudioAttachment -> {
+                    binding.previewAudio.isVisible = true
+                    binding.previewAudio.apply {
+                        setOnClickListener {
+                            observer.apply {
+                                mediaPlayer?.stop()
+                                mediaPlayer?.reset()
+                                mediaPlayer?.setDataSource(context, media.uri!!)
+                            }.play()
+                        }
+                    }
+                }
+                null -> {
+                    binding.previewImage.isGone = true
+                    binding.previewVideo.isGone = true
+                    binding.previewAudio.isGone = true
+                    return@observe
                 }
             }
         }
@@ -173,14 +202,14 @@ class NewPostFragment : Fragment() {
             val intent = Intent()
                 .setType("video/*")
                 .setAction(Intent.ACTION_GET_CONTENT)
-            mvContract.launch(intent)
+            videoContract.launch(intent)
         }
 
-        binding.galleryMusic.setOnClickListener {
+        binding.galleryAudio.setOnClickListener {
             val intent = Intent()
                 .setType("audio/*")
                 .setAction(Intent.ACTION_GET_CONTENT)
-            mvContract.launch(intent)
+            audioContract.launch(intent)
         }
 
         binding.clearMedia.setOnClickListener {
