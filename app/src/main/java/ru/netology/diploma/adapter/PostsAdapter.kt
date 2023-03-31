@@ -36,14 +36,12 @@ class PostsAdapter(
     private val onInteractionListener: OnInteractionListener<Post>,
     private val onUserIdsListener: OnUserIdsListener,
     private val observer: MediaLifecycleObserver,
-//    private val userLocation: UserLocation
 ) : PagingDataAdapter<Post, PostViewHolder>(PostDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val binding = CardPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         val context = binding.root.context
         return PostViewHolder(binding, onInteractionListener, onUserIdsListener, observer, context)
-//        return PostViewHolder(binding, onInteractionListener, onUserIdsListener, observer, context, userLocation)
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {

@@ -44,12 +44,3 @@ data class Event(
     val ownedByMe: Boolean,
     val users: Map<Long, UserPreview>,
 ) : FeedItem
-
-data class Job(
-    override val id: Int,
-    val name: String,
-    val position: String,
-    val start: String,
-    val finish: String?,
-    val link: String?,
-) : FeedItem

@@ -124,8 +124,6 @@ class PostsFeedFragment : Fragment() {
             MediaLifecycleObserver(),
         )
 
-        viewModel.loadPosts()
-
         binding.list.apply {
             this.adapter = adapter
             val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)

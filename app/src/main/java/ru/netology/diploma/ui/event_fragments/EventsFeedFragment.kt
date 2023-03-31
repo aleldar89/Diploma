@@ -23,6 +23,7 @@ import ru.netology.diploma.adapter.OnUserIdsListener
 import ru.netology.diploma.databinding.FragmentEventFeedBinding
 import ru.netology.diploma.dto.Event
 import ru.netology.diploma.mediplayer.MediaLifecycleObserver
+import ru.netology.diploma.ui.post_fragments.PostsFeedFragment
 import ru.netology.diploma.ui.post_fragments.PostsFeedFragment.Companion.textArg
 import ru.netology.diploma.util.StringArg
 import ru.netology.diploma.util.parseException
@@ -110,7 +111,7 @@ class EventsFeedFragment : Fragment() {
                     findNavController().navigate(
                         R.id.action_eventsFeedFragment_to_usersFragment,
                         Bundle().apply {
-                            textArg = gson.toJson(list)
+                            putIntArray(PostsFeedFragment.ID_ARRAY, list.toIntArray())
                         }
                     )
                 }

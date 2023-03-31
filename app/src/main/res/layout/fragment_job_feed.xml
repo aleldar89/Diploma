@@ -10,16 +10,15 @@
         android:id="@+id/authorInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/double_spacing"
-        android:gravity="center|top"
-        android:orientation="vertical">
+        android:layout_margin="@dimen/common_spacing"
+        android:gravity="top"
+        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/authorAvatar"
             android:layout_width="@dimen/posts_avatar_size"
             android:layout_height="@dimen/posts_avatar_size"
             android:layout_gravity="center"
-            android:layout_marginBottom="@dimen/common_spacing"
             android:contentDescription="@string/description_def_author_avatar"
             tools:srcCompat="@sample/post.json/data/authorAvatar" />
 
@@ -27,16 +26,14 @@
             android:id="@+id/author"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/common_spacing"
             android:gravity="center"
             tools:text="@sample/post.json/data/author" />
-
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="150dp">
+        android:layout_marginTop="80dp">
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefresh"

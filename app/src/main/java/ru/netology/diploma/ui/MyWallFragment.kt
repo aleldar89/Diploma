@@ -41,9 +41,10 @@ class MyWallFragment : Fragment() {
             MediaLifecycleObserver(),
         )
 
-        val user = viewModel.userResponse.value
-        user?.avatar?.let { binding.authorAvatar.loadAvatar(it) }
-        binding.author.text = user?.name
+        viewModel.userResponse.observe(viewLifecycleOwner) {
+            binding.author.text = it?.name
+            binding.authorAvatar.loadAvatar(it?.avatar.orEmpty())
+        }
 
         binding.list.apply {
             this.adapter = adapter

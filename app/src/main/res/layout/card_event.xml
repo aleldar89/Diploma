@@ -16,7 +16,6 @@
             android:layout_height="@dimen/posts_avatar_size"
             android:layout_marginBottom="@dimen/common_spacing"
             android:contentDescription="@string/description_def_author_avatar"
-            app:layout_constraintBottom_toBottomOf="@id/header"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@sample/post.json/data/authorAvatar" />
@@ -32,7 +31,7 @@
             app:layout_constraintBottom_toTopOf="@+id/authorJob"
             app:layout_constraintEnd_toStartOf="@id/menu"
             app:layout_constraintStart_toEndOf="@id/authorAvatar"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@id/authorAvatar"
             app:layout_constraintVertical_chainStyle="packed"
             tools:text="@sample/post.json/data/author" />
 
@@ -57,7 +56,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/common_spacing"
             android:layout_marginEnd="@dimen/common_spacing"
-            android:layout_marginBottom="@dimen/common_spacing"
             app:layout_constraintBottom_toBottomOf="@id/header"
             app:layout_constraintEnd_toStartOf="@id/menu"
             app:layout_constraintStart_toEndOf="@id/authorAvatar"
@@ -72,7 +70,6 @@
             android:layout_marginBottom="@dimen/common_spacing"
             android:contentDescription="@string/description_post_menu"
             app:icon="@drawable/ic_baseline_more_horiz_24"
-            app:layout_constraintBottom_toBottomOf="@id/header"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -87,8 +84,9 @@
             android:id="@+id/content"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/little_spacing"
+            android:layout_marginBottom="@dimen/little_spacing"
             android:autoLink="web"
-            android:paddingTop="@dimen/common_spacing"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/header"
@@ -99,13 +97,24 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:autoLink="web"
-            android:paddingTop="@dimen/common_spacing"
             android:paddingBottom="@dimen/common_spacing"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/content"
             tools:text="@sample/post.json/data/link" />
+
+        <TextView
+            android:id="@+id/location"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:autoLink="web"
+            android:paddingBottom="@dimen/little_spacing"
+            android:textStyle="italic"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/content"
+            tools:text="@sample/post.json/data/location" />
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/footer"
@@ -125,13 +134,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/footer" />
 
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/footer2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:barrierDirection="bottom"
-            app:constraint_referenced_ids="image_view" />
-
         <VideoView
             android:id="@+id/video_view"
             android:layout_width="0dp"
@@ -141,14 +143,7 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/footer2" />
-
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/footer3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:barrierDirection="bottom"
-            app:constraint_referenced_ids="video_view" />
+            app:layout_constraintTop_toBottomOf="@id/footer" />
 
         <ImageView
             android:id="@+id/play_view"
@@ -158,11 +153,11 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/footer3"
+            app:layout_constraintTop_toBottomOf="@id/footer"
             app:srcCompat="@drawable/ic_baseline_play_circle_filled_36" />
 
         <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/footer4"
+            android:id="@+id/footer2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:barrierDirection="bottom"
@@ -173,13 +168,14 @@
             style="@style/Widget.AppTheme.LikeCheckBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/little_spacing"
             android:checkable="true"
             android:contentDescription="@string/description_post_like"
             android:text="@string/like"
             android:textColor="@color/gray"
             app:icon="@drawable/ic_baseline_thumb_up_alt_24"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/footer4"
+            app:layout_constraintTop_toBottomOf="@id/footer2"
             tools:checked="@sample/post.json/data/likedByMe" />
 
         <com.google.android.material.button.MaterialButton
@@ -187,47 +183,40 @@
             style="@style/Widget.AppTheme.IconButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/common_spacing"
+            android:layout_marginTop="@dimen/little_spacing"
             android:contentDescription="@string/description_post_share"
+            android:text="@string/share"
+            android:textColor="@color/gray"
             app:icon="@drawable/ic_baseline_ios_share_24"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/footer4"
-            android:text="@string/share"
-            android:textColor="@color/gray"/>
-
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/footer5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:barrierDirection="bottom"
-            app:constraint_referenced_ids="like, share" />
+            app:layout_constraintTop_toBottomOf="@id/footer2" />
 
         <TextView
             android:id="@+id/likeOwnerIds"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
+            android:visibility="gone"
             app:layout_constraintEnd_toStartOf="@id/speakerIds"
-            app:layout_constraintTop_toBottomOf="@id/footer5"
-            android:visibility="gone" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/like" />
 
         <TextView
             android:id="@+id/speakerIds"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/likeOwnerIds"
+            android:visibility="gone"
             app:layout_constraintEnd_toStartOf="@id/participantsIds"
-            app:layout_constraintTop_toBottomOf="@id/footer5"
-            android:visibility="gone" />
+            app:layout_constraintStart_toEndOf="@id/likeOwnerIds"
+            app:layout_constraintTop_toBottomOf="@id/like"/>
 
         <TextView
             android:id="@+id/participantsIds"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/speakerIds"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/footer5"
-            android:visibility="gone" />
+            app:layout_constraintStart_toEndOf="@id/speakerIds"
+            app:layout_constraintTop_toBottomOf="@id/like"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

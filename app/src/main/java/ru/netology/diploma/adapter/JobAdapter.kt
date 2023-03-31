@@ -1,6 +1,5 @@
 package ru.netology.diploma.adapter
 
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.PopupMenu
@@ -11,7 +10,6 @@ import ru.netology.diploma.R
 import ru.netology.diploma.databinding.CardJobBinding
 import ru.netology.diploma.dto.Job
 import ru.netology.diploma.extensions.createDate
-import ru.netology.diploma.util.StringArg
 
 class JobAdapter(
     private val onInteractionListener: OnInteractionListener<Job>

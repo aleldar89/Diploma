@@ -18,9 +18,7 @@ import ru.netology.diploma.adapter.JobAdapter
 import ru.netology.diploma.adapter.OnInteractionListener
 import ru.netology.diploma.databinding.FragmentJobFeedBinding
 import ru.netology.diploma.dto.Job
-import ru.netology.diploma.dto.Post
 import ru.netology.diploma.extensions.loadAvatar
-import ru.netology.diploma.ui.post_fragments.PostsFeedFragment.Companion.textArg
 import ru.netology.diploma.util.StringArg
 import ru.netology.diploma.util.parseException
 import ru.netology.diploma.viewmodel.MyJobViewModel

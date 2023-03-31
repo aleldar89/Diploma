@@ -7,24 +7,18 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.diploma.R
 import ru.netology.diploma.adapter.JobAdapter
 import ru.netology.diploma.adapter.OnInteractionListener
 import ru.netology.diploma.databinding.FragmentJobFeedBinding
 import ru.netology.diploma.dto.Job
-import ru.netology.diploma.dto.Post
 import ru.netology.diploma.extensions.loadAvatar
-import ru.netology.diploma.ui.AuthorWallFragment.Companion.textArg
-import ru.netology.diploma.ui.post_fragments.PostsFeedFragment.Companion.textArg
 import ru.netology.diploma.util.StringArg
 import ru.netology.diploma.util.parseException
-import ru.netology.diploma.viewmodel.MyJobViewModel
 import ru.netology.diploma.viewmodel.UserJobViewModel
 
 @AndroidEntryPoint

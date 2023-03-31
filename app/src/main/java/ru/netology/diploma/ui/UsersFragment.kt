@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.diploma.R
 import ru.netology.diploma.adapter.OnInteractionListener
@@ -46,6 +47,7 @@ class UsersFragment : Fragment() {
 
         binding.list.apply {
             this.adapter = adapter
+            this.layoutManager = GridLayoutManager(context,3)
         }
 
         viewModel.users.observe(viewLifecycleOwner) {
