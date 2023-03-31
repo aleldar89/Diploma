@@ -1,16 +1,16 @@
 package ru.netology.diploma.ui
 
-import android.content.Intent
+import ParentFragmentPagerAdapter
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
-import android.view.MenuItem
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.yandex.mapkit.MapKitFactory
 import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.diploma.R
-import ru.netology.diploma.adapter.PostViewHolder.Companion.textArg
 import ru.netology.diploma.viewmodel.AuthViewModel
 
 @AndroidEntryPoint
@@ -23,30 +23,16 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
         MapKitFactory.setApiKey("e35ce02e-18b3-4678-9859-286826ff3245")
         MapKitFactory.initialize(this)
 
-        intent?.let {
-            if (it.action != Intent.ACTION_SEND) {
-                return@let
-            }
+        val viewPager: ViewPager2 = findViewById(R.id.view_pager)
+        val tabLayout: TabLayout = findViewById(R.id.tab_layout)
 
-            val text = it.getStringExtra(Intent.EXTRA_TEXT)
-            if (text?.isNotBlank() != true) {
-                return@let
-            }
+        val pagerAdapter = ParentFragmentPagerAdapter(this)
+        viewPager.adapter = pagerAdapter
 
-            intent.removeExtra(Intent.EXTRA_TEXT)
-            findNavController(R.id.nav_host_fragment)
-                .navigate(
-                    R.id.action_postsFeedFragment_to_newPostFragment,
-                    Bundle().apply {
-                        textArg = text
-                    }
-                )
-        }
-
-        viewModel.data.observe(this) {
-            invalidateOptionsMenu()
-        }
-
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            val tabNames = listOf("Posts", "Events")
+            tab.text = tabNames[position]
+        }.attach()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -56,34 +42,33 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
         return super.onCreateOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean =
-        when (item.itemId) {
-            R.id.sign_in -> {
-                findNavController(R.id.nav_host_fragment)
-                    .navigate(R.id.action_global_authFragment)
-                true
-            }
-            R.id.sign_up -> {
-                findNavController(R.id.nav_host_fragment)
-                    .navigate(R.id.action_global_registrationFragment)
-                true
-            }
-            R.id.my_wall -> {
-                findNavController(R.id.nav_host_fragment)
-                    .navigate(R.id.action_global_myWallFragment)
-                true
-            }
-            R.id.my_jobs -> {
-                findNavController(R.id.nav_host_fragment)
-                    .navigate(R.id.action_global_myJobFeedFragment)
-                true
-            }
-            R.id.log_out -> {
-                findNavController(R.id.nav_host_fragment)
-                    .navigate(R.id.action_global_logOutFragment)
-                true
-            }
-            else -> false
-        }
-
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean =
+//        when (item.itemId) {
+//            R.id.sign_in -> {
+//                findNavController(R.id.nav_host_fragment)
+//                    .navigate(R.id.action_global_authFragment)
+//                true
+//            }
+//            R.id.sign_up -> {
+//                findNavController(R.id.nav_host_fragment)
+//                    .navigate(R.id.action_global_registrationFragment)
+//                true
+//            }
+//            R.id.my_wall -> {
+//                findNavController(R.id.nav_host_fragment)
+//                    .navigate(R.id.action_global_myWallFragment)
+//                true
+//            }
+//            R.id.my_jobs -> {
+//                findNavController(R.id.nav_host_fragment)
+//                    .navigate(R.id.action_global_myJobFeedFragment)
+//                true
+//            }
+//            R.id.log_out -> {
+//                findNavController(R.id.nav_host_fragment)
+//                    .navigate(R.id.action_global_logOutFragment)
+//                true
+//            }
+//            else -> false
+//        }
 }

@@ -21,7 +21,6 @@ import ru.netology.diploma.R
 import ru.netology.diploma.adapter.OnInteractionListener
 import ru.netology.diploma.adapter.OnUserIdsListener
 import ru.netology.diploma.adapter.PostsAdapter
-import ru.netology.diploma.adapter.UserLocation
 import ru.netology.diploma.databinding.FragmentPostFeedBinding
 import ru.netology.diploma.dto.Post
 import ru.netology.diploma.mediplayer.MediaLifecycleObserver

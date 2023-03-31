@@ -1,7 +1,6 @@
 package ru.netology.diploma.adapter
 
 import android.content.Context
-import android.location.Geocoder
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,18 +8,9 @@ import android.view.ViewGroup
 import android.widget.MediaController
 import android.widget.PopupMenu
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.yandex.mapkit.GeoObject
-import com.yandex.mapkit.search.Address
-import com.yandex.mapkit.search.ToponymObjectMetadata
-import com.yandex.mapkit.user_location.UserLocationLayer
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import ru.netology.diploma.R
 import ru.netology.diploma.databinding.CardPostBinding
 import ru.netology.diploma.dto.AttachmentType
@@ -30,7 +20,6 @@ import ru.netology.diploma.extensions.loadAvatar
 import ru.netology.diploma.extensions.loadImage
 import ru.netology.diploma.mediplayer.MediaLifecycleObserver
 import ru.netology.diploma.util.StringArg
-import javax.inject.Inject
 
 class PostsAdapter(
     private val onInteractionListener: OnInteractionListener<Post>,
