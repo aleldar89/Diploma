@@ -56,7 +56,7 @@ class SelectedPostFragment : Fragment() {
 
                 override fun onEdit(post: Post) {
                     findNavController().navigate(
-                        R.id.action_selectedPostFragment_to_newPostFragment,
+                        R.id.action_global_newPostFragment,
                         Bundle().apply {
                             textArg = post.content
                         }

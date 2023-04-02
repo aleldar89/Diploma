@@ -64,7 +64,7 @@ class UserJobViewModel @Inject constructor(
         }
     }
 
-    fun clearJobs() {
+    private fun clearJobs() {
         viewModelScope.launch {
             try {
                 repository.clearDb()

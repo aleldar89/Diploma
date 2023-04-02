@@ -29,6 +29,24 @@ interface JobDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(jobs: List<JobEntity>)
 
+    @Query(
+        """
+        UPDATE JobEntity SET
+        position = :position,
+        link = :link,
+        start = :start,
+        finish = :finish
+        WHERE id = :id
+        """
+    )
+    suspend fun updateContentById(
+        id: Int, position: String, link: String?, start: String, finish: String?
+    )
+
+    suspend fun save(job: JobEntity) =
+        if (job.id == 0) insert(job)
+        else updateContentById(job.id, job.position, job.link, job.start, job.finish)
+
     suspend fun saveOld(job: JobEntity) = insert(job)
 
     @Query("UPDATE JobEntity SET id = :id WHERE id = 0")

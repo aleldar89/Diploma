@@ -24,7 +24,6 @@ import ru.netology.diploma.databinding.FragmentEventFeedBinding
 import ru.netology.diploma.dto.Event
 import ru.netology.diploma.mediplayer.MediaLifecycleObserver
 import ru.netology.diploma.ui.post_fragments.PostsFeedFragment
-import ru.netology.diploma.ui.post_fragments.PostsFeedFragment.Companion.textArg
 import ru.netology.diploma.util.StringArg
 import ru.netology.diploma.util.parseException
 import ru.netology.diploma.viewmodel.EventViewModel
@@ -58,7 +57,7 @@ class EventsFeedFragment : Fragment() {
 
                 override fun onEdit(event: Event) {
                     findNavController().navigate(
-                        R.id.action_postsFeedFragment_to_newPostFragment,
+                        R.id.action_global_newEventFragment,
                         Bundle().apply {
                             textArg = event.content
                         }
@@ -90,7 +89,7 @@ class EventsFeedFragment : Fragment() {
 
                 override fun onSelect(event: Event) {
                     findNavController().navigate(
-                        R.id.action_eventsFeedFragment_to_selectedEventFragment,
+                        R.id.action_global_selectedEventFragment,
                         Bundle().apply {
                             textArg = gson.toJson(event)
                         }
@@ -109,7 +108,7 @@ class EventsFeedFragment : Fragment() {
             object : OnUserIdsListener {
                 override fun onUserIds(list: List<Int>) {
                     findNavController().navigate(
-                        R.id.action_eventsFeedFragment_to_usersFragment,
+                        R.id.action_global_usersFragment,
                         Bundle().apply {
                             putIntArray(PostsFeedFragment.ID_ARRAY, list.toIntArray())
                         }
@@ -167,13 +166,9 @@ class EventsFeedFragment : Fragment() {
 
         binding.fab.setOnClickListener {
             if (viewModel.isAuthorized)
-                findNavController().navigate(R.id.action_eventsFeedFragment_to_newEventFragment)
+                findNavController().navigate(R.id.action_global_newEventFragment)
             else
                 findNavController().navigate(R.id.action_global_authFragment)
-        }
-
-        binding.postFeed.setOnClickListener {
-            findNavController().navigate(R.id.action_eventsFeedFragment_to_postsFeedFragment)
         }
 
         return binding.root

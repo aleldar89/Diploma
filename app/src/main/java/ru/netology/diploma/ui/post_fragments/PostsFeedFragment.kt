@@ -63,7 +63,7 @@ class PostsFeedFragment : Fragment() {
 
                 override fun onEdit(post: Post) {
                     findNavController().navigate(
-                        R.id.action_postsFeedFragment_to_newPostFragment,
+                        R.id.action_global_newPostFragment,
                         Bundle().apply {
                             textArg = post.content
                         }
@@ -94,7 +94,7 @@ class PostsFeedFragment : Fragment() {
 
                 override fun onSelect(post: Post) {
                     findNavController().navigate(
-                        R.id.action_postsFeedFragment_to_selectedPostFragment,
+                        R.id.action_global_selectedPostFragment,
                         Bundle().apply {
                             textArg = gson.toJson(post)
                         }
@@ -113,7 +113,7 @@ class PostsFeedFragment : Fragment() {
             object : OnUserIdsListener {
                 override fun onUserIds(list: List<Int>) {
                     findNavController().navigate(
-                        R.id.action_postsFeedFragment_to_usersFragment,
+                        R.id.action_global_usersFragment,
                         Bundle().apply {
                             putIntArray(ID_ARRAY, list.toIntArray())
                         }
@@ -171,13 +171,9 @@ class PostsFeedFragment : Fragment() {
 
         binding.fab.setOnClickListener {
             if (viewModel.isAuthorized)
-                findNavController().navigate(R.id.action_postsFeedFragment_to_newPostFragment)
+                findNavController().navigate(R.id.action_global_newPostFragment)
             else
                 findNavController().navigate(R.id.action_global_authFragment)
-        }
-
-        binding.eventFeed.setOnClickListener {
-            findNavController().navigate(R.id.action_postsFeedFragment_to_eventsFeedFragment)
         }
 
         return binding.root

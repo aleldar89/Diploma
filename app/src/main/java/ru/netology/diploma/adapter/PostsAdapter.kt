@@ -7,10 +7,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.MediaController
 import android.widget.PopupMenu
+import android.widget.SeekBar
 import androidx.core.view.isVisible
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import ru.netology.diploma.R
 import ru.netology.diploma.databinding.CardPostBinding
 import ru.netology.diploma.dto.AttachmentType
@@ -49,7 +53,7 @@ class PostViewHolder(
     private val context: Context,
 ) : RecyclerView.ViewHolder(binding.root) {
 
-//    val userLocation: UserLocation = UserLocation()
+//    private val userLocation: UserLocation = UserLocation()
 
     companion object {
         var Bundle.textArg: String? by StringArg
@@ -67,6 +71,7 @@ class PostViewHolder(
             authorJob.text = post.authorJob
             published.text = post.published.createDate()
 
+            //todo geocoder
 //            CoroutineScope(Dispatchers.Main).launch {
 //                location.text = post.coords?.let { userLocation.getAddress(it) }
 //            }
@@ -121,14 +126,26 @@ class PostViewHolder(
                         setOnCompletionListener { start() }
                     }
 
-                    AttachmentType.AUDIO -> playView.apply {
-                        isVisible = true
-                        setOnClickListener {
-                            observer.apply {
-                                mediaPlayer?.stop()
-                                mediaPlayer?.reset()
-                                mediaPlayer?.setDataSource(post.attachment.url)
-                            }.play()
+                    AttachmentType.AUDIO -> {
+                        audioView.isVisible = true
+                        observer.apply {
+                            playView.setOnClickListener {
+                                if (mediaPlayer?.isPlaying == true) {
+                                    playView.setImageResource(R.drawable.ic_baseline_play_circle_filled_24)
+                                    mediaPlayer?.pause()
+                                } else {
+                                    playView.setImageResource(R.drawable.ic_baseline_stop_circle_24)
+                                    mediaPlayer?.stop()
+                                    mediaPlayer?.reset()
+                                    mediaPlayer?.setDataSource(post.attachment.url)
+                                    this.play()
+
+                                    seekBar.max = mediaPlayer?.duration!!
+                                    seekBar.post{
+                                        seekBar.progress = mediaPlayer?.currentPosition!!
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -183,3 +200,17 @@ class PostDiffCallback : DiffUtil.ItemCallback<Post>() {
         return oldItem == newItem
     }
 }
+
+
+
+
+//AttachmentType.AUDIO -> playView.apply {
+//    binding.audioView.isVisible = true
+//    setOnClickListener {
+//        observer.apply {
+//            mediaPlayer?.stop()
+//            mediaPlayer?.reset()
+//            mediaPlayer?.setDataSource(post.attachment.url)
+//        }.play()
+//    }
+//}

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -30,7 +31,7 @@ class MyJobFeedFragment : Fragment() {
         var Bundle.textArg: String? by StringArg
     }
 
-    private val viewModel: MyJobViewModel by viewModels()
+    private val viewModel: MyJobViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

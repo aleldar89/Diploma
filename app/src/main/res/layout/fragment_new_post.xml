@@ -48,7 +48,7 @@
                 android:layout_width="match_parent"
                 android:visibility="gone"
                 android:layout_height="@dimen/media_view_height"
-                app:srcCompat="@drawable/ic_baseline_play_circle_filled_36" />
+                app:srcCompat="@drawable/ic_baseline_play_circle_filled_24" />
         </LinearLayout>
     </ScrollView>
 

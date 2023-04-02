@@ -34,8 +34,8 @@ class JobViewHolder(
         binding.apply {
 
             position.text = job.position
-            start.text = job.start.createDate()
-            finish.text = job.finish?.createDate()
+            startDate.text = job.start.createDate()
+            finishDate.text = job.finish?.createDate()
             link.text = job.link
 
             menu.setOnClickListener {

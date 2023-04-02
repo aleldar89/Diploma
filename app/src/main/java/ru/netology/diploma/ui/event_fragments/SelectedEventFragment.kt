@@ -8,10 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.paging.map
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.map
 import ru.netology.diploma.R
 import ru.netology.diploma.adapter.EventViewHolder
 import ru.netology.diploma.adapter.OnInteractionListener
@@ -57,7 +55,7 @@ class SelectedEventFragment : Fragment() {
 
                 override fun onEdit(event: Event) {
                     findNavController().navigate(
-                        R.id.action_selectedPostFragment_to_newPostFragment,
+                        R.id.action_global_newEventFragment,
                         Bundle().apply {
                             textArg = event.content
                         }

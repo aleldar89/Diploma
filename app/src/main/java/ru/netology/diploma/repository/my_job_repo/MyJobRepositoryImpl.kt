@@ -42,7 +42,7 @@ class MyJobRepositoryImpl @Inject constructor(
     override suspend fun saveMyJob(job: Job) {
         try {
             val jobEntity = JobEntity.fromDto(job)
-            jobDao.insert(jobEntity)
+            jobDao.save(jobEntity)
 
             val response = apiService.saveMyJob(job)
             if (!response.isSuccessful) {

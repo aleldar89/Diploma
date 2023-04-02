@@ -9,6 +9,7 @@ import ru.netology.diploma.api.ApiService
 import ru.netology.diploma.auth.AppAuth
 import ru.netology.diploma.dto.Job
 import ru.netology.diploma.dto.UserResponse
+import ru.netology.diploma.extensions.dateFormatter
 import ru.netology.diploma.repository.my_job_repo.MyJobRepository
 import ru.netology.diploma.util.SingleLiveEvent
 import javax.inject.Inject
@@ -61,7 +62,8 @@ class MyJobViewModel @Inject constructor(
         }
     }
 
-    private val edited = MutableLiveData(empty)
+//    private val edited = MutableLiveData(empty)
+    val edited = MutableLiveData(empty)
 
     val data = repository.data.asLiveData(Dispatchers.Default)
 
@@ -111,14 +113,19 @@ class MyJobViewModel @Inject constructor(
         }
     }
 
-    fun changeContent(name: String, position: String, start: String, finish: String?, link: String?) {
-
+    fun changeContent(
+        name: String,
+        position: String,
+        start: String,
+        finish: String?,
+        link: String?
+    ) {
         edited.value = edited.value?.copy(
             name = name,
             position = position,
-            start = start,
-            finish = finish,
-            link = link,
+            start = start.dateFormatter(),
+            finish = if (finish.isNullOrBlank()) null else finish.dateFormatter(),
+            link = if (link.isNullOrBlank()) null else link,
         )
     }
 
@@ -130,7 +137,7 @@ class MyJobViewModel @Inject constructor(
         edited.value = empty
     }
 
-    fun clearJobs() {
+    private fun clearJobs() {
         viewModelScope.launch {
             try {
                 repository.clearDb()

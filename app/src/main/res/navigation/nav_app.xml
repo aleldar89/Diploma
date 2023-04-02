@@ -3,53 +3,38 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_main"
-    app:startDestination="@id/postsFeedFragment">
+    app:startDestination="@id/viewPagerFragment">
 
-    <fragment
-        android:id="@+id/postsFeedFragment"
-        android:name="ru.netology.diploma.ui.post_fragments.PostsFeedFragment"
-        android:label="PostsFeedFragment" >
-        <action
-            android:id="@+id/action_postsFeedFragment_to_newPostFragment"
-            app:destination="@id/newPostFragment" />
-        <action
-            android:id="@+id/action_postsFeedFragment_to_selectedPostFragment"
-            app:destination="@id/selectedPostFragment" />
-        <action
-            android:id="@+id/action_postsFeedFragment_to_usersFragment"
-            app:destination="@id/usersFragment" />
-        <action
-            android:id="@+id/action_postsFeedFragment_to_eventsFeedFragment"
-            app:destination="@id/eventsFeedFragment" />
-    </fragment>
     <fragment
         android:id="@+id/authFragment"
         android:name="ru.netology.diploma.ui.AuthFragment"
         android:label="AuthFragment" />
+
     <fragment
         android:id="@+id/registrationFragment"
         android:name="ru.netology.diploma.ui.RegistrationFragment"
         android:label="RegistrationFragment" />
+
     <fragment
         android:id="@+id/newPostFragment"
         android:name="ru.netology.diploma.ui.post_fragments.NewPostFragment"
         android:label="NewPostFragment" />
+
     <dialog
         android:id="@+id/logOutFragment"
         android:name="ru.netology.diploma.ui.LogOutFragment"
         android:label="LogOutFragment" />
+
     <fragment
         android:id="@+id/selectedPostFragment"
         android:name="ru.netology.diploma.ui.post_fragments.SelectedPostFragment"
-        android:label="SelectedPostFragment" >
-        <action
-            android:id="@+id/action_selectedPostFragment_to_newPostFragment"
-            app:destination="@id/newPostFragment" />
-    </fragment>
+        android:label="SelectedPostFragment" />
+
     <fragment
         android:id="@+id/myWallFragment"
         android:name="ru.netology.diploma.ui.MyWallFragment"
         android:label="MyWallFragment" />
+
     <fragment
         android:id="@+id/authorWallFragment"
         android:name="ru.netology.diploma.ui.AuthorWallFragment"
@@ -58,40 +43,21 @@
             android:id="@+id/action_authorWallFragment_to_userJobFeedFragment"
             app:destination="@id/userJobFeedFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/usersFragment"
         android:name="ru.netology.diploma.ui.UsersFragment"
         android:label="UsersFragment" />
-    <fragment
-        android:id="@+id/eventsFeedFragment"
-        android:name="ru.netology.diploma.ui.event_fragments.EventsFeedFragment"
-        android:label="EventsFeedFragment" >
-        <action
-            android:id="@+id/action_eventsFeedFragment_to_postsFeedFragment"
-            app:destination="@id/postsFeedFragment" />
-        <action
-            android:id="@+id/action_eventsFeedFragment_to_usersFragment"
-            app:destination="@id/usersFragment" />
-        <action
-            android:id="@+id/action_eventsFeedFragment_to_selectedEventFragment"
-            app:destination="@id/selectedEventFragment" />
-        <action
-            android:id="@+id/action_eventsFeedFragment_to_newEventFragment"
-            app:destination="@id/newEventFragment" />
-    </fragment>
+
     <fragment
         android:id="@+id/selectedEventFragment"
         android:name="ru.netology.diploma.ui.event_fragments.SelectedEventFragment"
-        android:label="SelectedEventFragment" >
-        <action
-            android:id="@+id/action_selectedEventFragment_to_newEventFragment"
-            app:destination="@id/newEventFragment" />
-    </fragment>
+        android:label="SelectedEventFragment" />
+
     <fragment
         android:id="@+id/newEventFragment"
         android:name="ru.netology.diploma.ui.event_fragments.NewEventFragment"
-        android:label="fragment_new_event"
-        tools:layout="@layout/fragment_new_event" />
+        android:label="fragment_new_event" />
 
     <action android:id="@+id/action_global_authFragment"
         app:destination="@id/authFragment" />
@@ -107,6 +73,7 @@
 
     <action android:id="@+id/action_global_authorWallFragment"
         app:destination="@id/authorWallFragment"/>
+
     <fragment
         android:id="@+id/newJobFragment"
         android:name="ru.netology.diploma.ui.job_fragments.NewJobFragment"
@@ -115,6 +82,7 @@
             android:id="@+id/action_newJobFragment_to_datePickFragment"
             app:destination="@id/datePickFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/myJobFeedFragment"
         android:name="ru.netology.diploma.ui.job_fragments.MyJobFeedFragment"
@@ -126,13 +94,35 @@
 
     <action android:id="@+id/action_global_myJobFeedFragment"
         app:destination="@id/myJobFeedFragment" />
+
     <fragment
         android:id="@+id/userJobFeedFragment"
         android:name="ru.netology.diploma.ui.job_fragments.UserJobFeedFragment"
         android:label="UserJobFeedFragment" />
+
     <dialog
         android:id="@+id/datePickFragment"
         android:name="ru.netology.diploma.ui.DatePickFragment"
         android:label="DatePickFragment" />
+
+    <fragment
+        android:id="@+id/viewPagerFragment"
+        android:name="ru.netology.diploma.ui.ViewPagerFragment"
+        android:label="ViewPagerFragment" />
+
+    <action android:id="@+id/action_global_usersFragment"
+        app:destination="@id/usersFragment" />
+
+    <action android:id="@+id/action_global_selectedEventFragment"
+        app:destination="@id/selectedEventFragment" />
+
+    <action android:id="@+id/action_global_selectedPostFragment"
+        app:destination="@id/selectedPostFragment" />
+
+    <action android:id="@+id/action_global_newEventFragment"
+        app:destination="@id/newEventFragment" />
+
+    <action android:id="@+id/action_global_newPostFragment"
+        app:destination="@id/newPostFragment" />
 
 </navigation>

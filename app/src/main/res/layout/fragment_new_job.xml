@@ -16,7 +16,6 @@
         android:id="@+id/position"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/common_spacing"
         android:hint="@string/position"
         android:inputType="textMultiLine"
         app:layout_constraintBottom_toTopOf="@id/guideline"
@@ -33,17 +32,42 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/guideline" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.2" />
+
     <TextView
         android:id="@+id/start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/common_spacing"
         android:hint="@string/start"
+        android:paddingTop="@dimen/common_spacing"
         android:textSize="@dimen/common_text_size"
-        android:padding="@dimen/common_spacing"
-        app:layout_constraintEnd_toStartOf="@id/finish"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/link" />
+
+    <TextView
+        android:id="@+id/startDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/common_spacing"
+        android:paddingTop="@dimen/common_spacing"
+        android:textSize="@dimen/common_text_size"
+        app:layout_constraintStart_toEndOf="@id/guideline2"
+        app:layout_constraintTop_toBottomOf="@id/link" />
+
+    <ImageView
+        android:id="@+id/startDateButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/start"
+        android:paddingTop="@dimen/common_spacing"
+        android:src="@drawable/ic_baseline_calendar_month_24"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
         android:id="@+id/finish"
@@ -51,10 +75,28 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/common_spacing"
         android:hint="@string/finish"
+        android:paddingTop="@dimen/common_spacing"
         android:textSize="@dimen/common_text_size"
-        android:padding="@dimen/common_spacing"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/start"
-        app:layout_constraintTop_toBottomOf="@id/link" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/start" />
+
+    <TextView
+        android:id="@+id/finishDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/common_spacing"
+        android:paddingTop="@dimen/common_spacing"
+        android:textSize="@dimen/common_text_size"
+        app:layout_constraintStart_toEndOf="@id/guideline2"
+        app:layout_constraintTop_toBottomOf="@id/start" />
+
+    <ImageView
+        android:id="@+id/finishDateButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/finish"
+        android:paddingTop="@dimen/common_spacing"
+        android:src="@drawable/ic_baseline_calendar_month_24"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

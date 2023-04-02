@@ -9,9 +9,11 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.diploma.R
 import ru.netology.diploma.databinding.FragmentNewJobBinding
+import ru.netology.diploma.extensions.createDate
 import ru.netology.diploma.extensions.dateFormatter
 import ru.netology.diploma.extensions.toEditable
 import ru.netology.diploma.extensions.toJob
+import ru.netology.diploma.ui.post_fragments.NewPostFragment.Companion.textArg
 import ru.netology.diploma.ui.post_fragments.PostsFeedFragment.Companion.textArg
 import ru.netology.diploma.util.AndroidUtils
 import ru.netology.diploma.util.StringArg
@@ -50,10 +52,10 @@ class NewJobFragment : Fragment() {
             R.id.save -> {
                 viewModel.changeContent(
                     name = viewModel.userResponse.value?.name ?: "",
-                    binding?.position?.text.toString().trim(),
-                    binding?.start?.text.toString().trim().dateFormatter(),
-                    binding?.finish?.text.toString().trim().dateFormatter(),
-                    binding?.link?.text.toString().trim(),
+                    position = binding?.position?.text.toString().trim(),
+                    start = binding?.startDate?.text.toString().trim(),
+                    finish = binding?.finishDate?.text.toString().trim(),
+                    link = binding?.link?.text.toString().trim()
                 )
                 viewModel.save()
                 AndroidUtils.hideKeyboard(requireView())
@@ -84,54 +86,52 @@ class NewJobFragment : Fragment() {
         }
 
         val cal = Calendar.getInstance()
+        val sdf = SimpleDateFormat(datePattern, Locale.US)
 
-        val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
-            cal.set(Calendar.YEAR, year)
-            cal.set(Calendar.MONTH, monthOfYear)
-            cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+        val startDateListener =
+            DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
+                cal.set(Calendar.YEAR, year)
+                cal.set(Calendar.MONTH, monthOfYear)
+                cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                binding.startDate.text = sdf.format(cal.time)
+            }
 
-            val sdf = SimpleDateFormat(datePattern, Locale.US)
-            binding.start.text = sdf.format(cal.time)
-            binding.finish.text = sdf.format(cal.time)
+        val finishDateListener =
+            DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
+                cal.set(Calendar.YEAR, year)
+                cal.set(Calendar.MONTH, monthOfYear)
+                cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                binding.finishDate.text = sdf.format(cal.time)
+            }
+
+        arguments?.textArg?.toJob().let {
+            binding.apply {
+                position.text = it?.position?.toEditable()
+                link.text = it?.link?.toEditable()
+                startDate.text = it?.start?.createDate()
+                finishDate.text = it?.finish?.createDate()
+            }
         }
 
-        val job = arguments?.textArg?.toJob()
-
-        binding.apply {
-            position.text = job?.position?.toEditable()
-            start.text = job?.start
-            finish.text = job?.finish
-            link.text = job?.link?.toEditable()
-        }
-
-        binding.start.text = SimpleDateFormat(datePattern).format(System.currentTimeMillis())
-        binding.finish.text = SimpleDateFormat(datePattern).format(System.currentTimeMillis())
-
-        binding.start.setOnClickListener {
-            DatePickerDialog(requireContext(), dateSetListener,
+        binding.startDateButton.setOnClickListener {
+            DatePickerDialog(
+                requireContext(), startDateListener,
                 cal.get(Calendar.YEAR),
                 cal.get(Calendar.MONTH),
-                cal.get(Calendar.DAY_OF_MONTH)).show()
+                cal.get(Calendar.DAY_OF_MONTH)
+            ).show()
         }
 
-        binding.finish.setOnClickListener {
-            DatePickerDialog(requireContext(), dateSetListener,
+        binding.finishDateButton.setOnClickListener {
+            DatePickerDialog(
+                requireContext(), finishDateListener,
                 cal.get(Calendar.YEAR),
                 cal.get(Calendar.MONTH),
-                cal.get(Calendar.DAY_OF_MONTH)).show()
+                cal.get(Calendar.DAY_OF_MONTH)
+            ).show()
         }
-
-//        binding.finish.setOnClickListener {
-//            findNavController().navigate(
-//                R.id.action_newJobFragment_to_datePickFragment,
-////                Bundle().apply {
-////                    textArg = gson.toJson(post)
-////                }
-////            )
-//        }
 
         viewModel.jobCreated.observe(viewLifecycleOwner) {
-            viewModel.loadJobs()
             findNavController().navigateUp()
         }
 

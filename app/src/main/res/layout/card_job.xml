@@ -30,30 +30,46 @@
             tools:text="@sample/post.json/data/position"/>
 
         <TextView
-            android:id="@+id/start"
+            android:id="@+id/link"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/position"
-            tools:text="@sample/post.json/data/start"/>
+            tools:text="@sample/post.json/data/link"/>
+
+        <TextView
+            android:id="@+id/start"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingEnd="@dimen/little_spacing"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/link"
+            android:hint="@string/start"/>
+
+        <TextView
+            android:id="@+id/startDate"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:layout_constraintStart_toEndOf="@id/start"
+            app:layout_constraintTop_toBottomOf="@id/link"
+            tools:text="@sample/post.json/data/date"/>
 
         <TextView
             android:id="@+id/finish"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:paddingEnd="@dimen/little_spacing"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/start"
-            tools:text="@sample/post.json/data/finish"/>
+            android:hint="@string/finish"/>
 
         <TextView
-            android:id="@+id/link"
+            android:id="@+id/finishDate"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/finish"
-            tools:text="@sample/post.json/data/link"/>
-
-
+            app:layout_constraintStart_toEndOf="@id/finish"
+            app:layout_constraintTop_toBottomOf="@id/startDate"
+            tools:text="@sample/post.json/data/date"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

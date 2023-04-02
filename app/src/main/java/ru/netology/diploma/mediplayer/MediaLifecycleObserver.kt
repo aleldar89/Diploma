@@ -1,12 +1,21 @@
 package ru.netology.diploma.mediplayer
 
 import android.media.MediaPlayer
+import android.widget.SeekBar
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 
 class MediaLifecycleObserver : LifecycleEventObserver {
     var mediaPlayer: MediaPlayer? = MediaPlayer()
+
+    val seekBarListener = object : SeekBar.OnSeekBarChangeListener {
+        override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {}
+
+        override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+
+        override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+    }
 
     fun play() {
         mediaPlayer?.setOnPreparedListener {

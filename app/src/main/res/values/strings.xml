@@ -10,8 +10,6 @@
     <string name="enter">Enter</string>
     <string name="your_password">Your password</string>
     <string name="your_login">Your login</string>
-    <string name="start">Start</string>
-    <string name="finish">Finish</string>
     <string name="link">Link</string>
     <string name="choose_avatar">Choose avatar</string>
     <string name="your_name">Your name</string>
@@ -44,4 +42,6 @@
     <string name="speakers">Speakers: %d</string>
     <string name="participants">Participants: %d</string>
     <string name="likes">Likes: %d</string>
+    <string name="start">Start</string>
+    <string name="finish">Finish</string>
 </resources>
