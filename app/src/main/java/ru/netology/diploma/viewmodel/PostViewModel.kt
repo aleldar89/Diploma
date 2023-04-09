@@ -205,7 +205,7 @@ class PostViewModel @Inject constructor(
         )
     }
 
-    fun getAddress(coords: Coordinates) {
+    fun getAddress() {
         viewModelScope.launch {
             try {
                 data.map {
@@ -218,7 +218,6 @@ class PostViewModel @Inject constructor(
                         }
                     }
                 }
-                repository.getAddress(coords).toString()
             } catch (e: Exception) {
                 _error.value = e
             }
