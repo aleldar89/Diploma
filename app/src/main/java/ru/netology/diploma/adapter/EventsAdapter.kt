@@ -4,9 +4,9 @@ import android.content.Context
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.MediaController
 import android.widget.PopupMenu
 import androidx.core.view.isVisible
+import androidx.media3.common.MediaItem
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -17,18 +17,27 @@ import ru.netology.diploma.dto.Event
 import ru.netology.diploma.extensions.createDate
 import ru.netology.diploma.extensions.loadAvatar
 import ru.netology.diploma.extensions.loadImage
+import ru.netology.diploma.mediplayer.ExoPlayerLifecycleObserver
 import ru.netology.diploma.mediplayer.MediaLifecycleObserver
 
 class EventsAdapter(
     private val onInteractionListener: OnInteractionListener<Event>,
     private val onUserIdsListener: OnUserIdsListener,
-    private val observer: MediaLifecycleObserver,
+    private val mediaObserver: MediaLifecycleObserver,
+    private val exoObserver: ExoPlayerLifecycleObserver,
 ) : PagingDataAdapter<Event, EventViewHolder>(EventDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
         val binding = CardEventBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         val context = binding.root.context
-        return EventViewHolder(binding, onInteractionListener, onUserIdsListener, observer, context)
+        return EventViewHolder(
+            binding,
+            onInteractionListener,
+            onUserIdsListener,
+            mediaObserver,
+            exoObserver,
+            context
+        )
     }
 
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
@@ -43,7 +52,8 @@ class EventViewHolder(
     private val binding: CardEventBinding,
     private val onInteractionListener: OnInteractionListener<Event>,
     private val onUserIdsListener: OnUserIdsListener,
-    private val observer: MediaLifecycleObserver,
+    private val mediaObserver: MediaLifecycleObserver,
+    private val exoObserver: ExoPlayerLifecycleObserver,
     private val context: Context,
 ) : RecyclerView.ViewHolder(binding.root) {
 
@@ -87,30 +97,40 @@ class EventViewHolder(
                 link.isVisible = false
             }
 
-            event.attachment?.let {
-                when (it.type) {
+            if (event.attachment == null) {
+                imageView.isVisible = false
+                videoView.isVisible = false
+                audioView.isVisible = false
+            } else {
+                when (event.attachment.type) {
                     AttachmentType.IMAGE -> imageView.apply {
                         isVisible = true
-                        loadImage(it.url)
+                        loadImage(event.attachment.url)
                     }
 
-                    AttachmentType.VIDEO -> videoView.apply {
-                        isVisible = true
-                        setMediaController(MediaController(context))
-                        setVideoURI(Uri.parse(event.attachment.url))
-                        seekTo(1)
-                        setOnPreparedListener { pause() }
-                        setOnCompletionListener { start() }
+                    AttachmentType.VIDEO -> {
+                        videoView.isVisible = true
+                        exoObserver.apply {
+                            val mediaItem = MediaItem.fromUri(Uri.parse(event.attachment.url))
+                            play(videoView, mediaItem)
+                        }
                     }
 
-                    AttachmentType.AUDIO -> playView.apply {
-                        isVisible = true
-                        setOnClickListener {
-                            observer.apply {
-                                mediaPlayer?.stop()
-                                mediaPlayer?.reset()
-                                mediaPlayer?.setDataSource(event.attachment.url)
-                            }.play()
+                    AttachmentType.AUDIO -> {
+                        audioView.isVisible = true
+                        mediaObserver.apply {
+                            playView.setOnClickListener {
+                                if (mediaPlayer?.isPlaying == true) {
+                                    playView.setImageResource(R.drawable.ic_baseline_play_circle_filled_24)
+                                    mediaPlayer?.pause()
+                                } else {
+                                    playView.setImageResource(R.drawable.ic_baseline_stop_circle_24)
+                                    mediaPlayer?.stop()
+                                    mediaPlayer?.reset()
+                                    mediaPlayer?.setDataSource(event.attachment.url)
+                                    this.play()
+                                }
+                            }
                         }
                     }
                 }
@@ -119,6 +139,11 @@ class EventViewHolder(
             like.isChecked = event.likedByMe
             like.setOnClickListener {
                 onInteractionListener.onLike(event)
+            }
+
+            participate.isChecked = event.participatedByMe
+            participate.setOnClickListener {
+                onInteractionListener.onParticipate(event)
             }
 
             share.setOnClickListener {

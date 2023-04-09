@@ -23,6 +23,7 @@ import ru.netology.diploma.adapter.OnUserIdsListener
 import ru.netology.diploma.adapter.PostsAdapter
 import ru.netology.diploma.databinding.FragmentPostFeedBinding
 import ru.netology.diploma.dto.Post
+import ru.netology.diploma.mediplayer.ExoPlayerLifecycleObserver
 import ru.netology.diploma.mediplayer.MediaLifecycleObserver
 import ru.netology.diploma.util.StringArg
 import ru.netology.diploma.util.parseException
@@ -121,6 +122,7 @@ class PostsFeedFragment : Fragment() {
                 }
             },
             MediaLifecycleObserver(),
+            ExoPlayerLifecycleObserver(requireContext())
         )
 
         binding.list.apply {

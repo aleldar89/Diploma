@@ -1,27 +1,32 @@
 package ru.netology.diploma.repository.post_repo
 
 import android.content.Context
+import android.database.SQLException
 import android.net.Uri
 import androidx.paging.*
+import com.google.gson.Gson
+import com.yandex.mapkit.GeoObjectCollection
+import com.yandex.mapkit.search.Address
+import com.yandex.mapkit.search.ToponymObjectMetadata
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import ru.netology.diploma.api.ApiService
 import ru.netology.diploma.dao.PostDao
 import ru.netology.diploma.dao.PostRemoteKeyDao
 import ru.netology.diploma.db.PostsDb
-import ru.netology.diploma.dto.Attachment
-import ru.netology.diploma.dto.AttachmentType
-import ru.netology.diploma.dto.Media
-import ru.netology.diploma.dto.Post
+import ru.netology.diploma.dto.*
 import ru.netology.diploma.entity.PostEntity
 import ru.netology.diploma.error.*
 import java.io.File
 import java.io.IOException
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class PostRepositoryImpl @Inject constructor(
@@ -31,6 +36,14 @@ class PostRepositoryImpl @Inject constructor(
     postsDb: PostsDb,
     private val context: Context,
 ) : PostRepository {
+
+    private val apiKey = "1e4c7c64-4488-4233-a8f1-16488295ec90"
+    private val baseUrl =
+        "https://geocode-maps.yandex.ru/1.x/?apikey=$apiKey&geocode="
+    private val gson = Gson()
+    private val client = OkHttpClient.Builder()
+        .connectTimeout(30, TimeUnit.SECONDS)
+        .build()
 
     @OptIn(ExperimentalPagingApi::class)
     override val data: Flow<PagingData<Post>> = Pager(
@@ -57,6 +70,8 @@ class PostRepositoryImpl @Inject constructor(
             postDao.insert(posts.map(PostEntity.Companion::fromDto))
         } catch (e: IOException) {
             throw NetworkError
+        } catch (e: SQLException) {
+            throw DbError
         } catch (e: Exception) {
             throw UnknownError
         }
@@ -79,6 +94,8 @@ class PostRepositoryImpl @Inject constructor(
 
         } catch (e: IOException) {
             throw NetworkError
+        } catch (e: SQLException) {
+            throw DbError
         } catch (e: Exception) {
             throw UnknownError
         }
@@ -110,6 +127,8 @@ class PostRepositoryImpl @Inject constructor(
 
         } catch (e: IOException) {
             throw NetworkError
+        } catch (e: SQLException) {
+            throw DbError
         } catch (e: Exception) {
             throw UnknownError
         }
@@ -141,6 +160,8 @@ class PostRepositoryImpl @Inject constructor(
 
         } catch (e: IOException) {
             throw NetworkError
+        } catch (e: SQLException) {
+            throw DbError
         } catch (e: Exception) {
             throw UnknownError
         }
@@ -172,6 +193,8 @@ class PostRepositoryImpl @Inject constructor(
 
         } catch (e: IOException) {
             throw NetworkError
+        } catch (e: SQLException) {
+            throw DbError
         } catch (e: Exception) {
             throw UnknownError
         }
@@ -180,9 +203,10 @@ class PostRepositoryImpl @Inject constructor(
     override suspend fun getById(id: Int): Post {
         try {
             return postDao.getById(id).toDto()
+        } catch (e: SQLException) {
+            throw DbError
         } catch (e: Exception) {
-            println(e.message)
-            throw e
+            throw UnknownError
         }
     }
 
@@ -196,14 +220,16 @@ class PostRepositoryImpl @Inject constructor(
             }
         } catch (e: IOException) {
             throw NetworkError
+        } catch (e: SQLException) {
+            throw DbError
         } catch (e: Exception) {
             throw UnknownError
         }
     }
 
-    override suspend fun likeById(post: Post) {
+    override suspend fun likeById(post: Post, likeOwnerIds: List<Int>) {
         try {
-            postDao.likeById(post.id)
+            postDao.likeById(post.id, likeOwnerIds)
 
             val response = apiService.likeByIdPost(post.id)
             if (!response.isSuccessful) {
@@ -211,18 +237,56 @@ class PostRepositoryImpl @Inject constructor(
             }
         } catch (e: IOException) {
             throw NetworkError
+        } catch (e: SQLException) {
+            throw DbError
         } catch (e: Exception) {
             throw UnknownError
         }
     }
 
-    override suspend fun dislikeById(post: Post) {
+    override suspend fun dislikeById(post: Post, likeOwnerIds: List<Int>) {
         try {
-            postDao.likeById(post.id)
+            postDao.likeById(post.id, likeOwnerIds)
 
             val response = apiService.dislikeByIdPost(post.id)
             if (!response.isSuccessful) {
                 throw RuntimeException(response.message())
+            }
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: SQLException) {
+            throw DbError
+        } catch (e: Exception) {
+            throw UnknownError
+        }
+    }
+
+    override suspend fun getAddress(coords: Coordinates): String? {
+        try {
+            val request: Request = Request.Builder()
+                .url("$baseUrl${coords.longitude},${coords.lat}&kind=locality&format=json&results=1")
+                .build()
+
+            return withContext(Dispatchers.IO) {
+                client.newCall(request)
+                    .execute()
+                    .let {
+                        it.body?.string() ?: throw RuntimeException("body is null")
+                    }
+                    .let {
+                        gson.fromJson(it, GeoObjectCollection::class.java)
+                    }
+                    .let {
+                        it?.children?.firstOrNull()?.obj
+                            ?.metadataContainer
+                            ?.getItem(ToponymObjectMetadata::class.java)
+                            ?.address
+                            ?.components
+                            ?.firstOrNull {
+                                it.kinds.contains(Address.Component.Kind.LOCALITY)
+                            }
+                            ?.name
+                    }
             }
         } catch (e: IOException) {
             throw NetworkError
@@ -235,8 +299,8 @@ class PostRepositoryImpl @Inject constructor(
         try {
             val postEntity = PostEntity.fromDto(post)
             postDao.saveOld(postEntity)
-        } catch (e: IOException) {
-            throw NetworkError
+        } catch (e: SQLException) {
+            throw DbError
         } catch (e: Exception) {
             throw UnknownError
         }
@@ -245,8 +309,8 @@ class PostRepositoryImpl @Inject constructor(
     override suspend fun localRemoveById(id: Int) {
         try {
             postDao.removeById(id)
-        } catch (e: IOException) {
-            throw NetworkError
+        } catch (e: SQLException) {
+            throw DbError
         } catch (e: Exception) {
             throw UnknownError
         }
@@ -255,8 +319,8 @@ class PostRepositoryImpl @Inject constructor(
     override suspend fun selectLast(): Post {
         try {
             return postDao.selectLast().toDto()
-        } catch (e: IOException) {
-            throw NetworkError
+        } catch (e: SQLException) {
+            throw DbError
         } catch (e: Exception) {
             throw UnknownError
         }
@@ -281,23 +345,27 @@ class PostRepositoryImpl @Inject constructor(
     }
 
     private suspend fun upload(uri: Uri): Media {
-        context.contentResolver.openInputStream(uri).use { inputStream ->
-            val media = MultipartBody.Part.createFormData(
-                "file",
-                "file",
-                withContext(Dispatchers.Default) {
-                    requireNotNull(
-                        inputStream
-                    )
-                        .readBytes()
-                        .toRequestBody()
+        try {
+            context.contentResolver.openInputStream(uri).use { inputStream ->
+                val media = MultipartBody.Part.createFormData(
+                    "file",
+                    "file",
+                    withContext(Dispatchers.Default) {
+                        requireNotNull(inputStream)
+                            .readBytes()
+                            .toRequestBody()
+                    }
+                )
+                val response = apiService.upload(media)
+                if (!response.isSuccessful) {
+                    throw ApiError(response.code(), response.message())
                 }
-            )
-            val response = apiService.upload(media)
-            if (!response.isSuccessful) {
-                throw ApiError(response.code(), response.message())
+                return response.body() ?: throw ApiError(response.code(), response.message())
             }
-            return response.body() ?: throw ApiError(response.code(), response.message())
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw UnknownError
         }
     }
 

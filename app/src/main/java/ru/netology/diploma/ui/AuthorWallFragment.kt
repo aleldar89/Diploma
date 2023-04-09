@@ -13,7 +13,6 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import ru.netology.diploma.R
@@ -23,6 +22,7 @@ import ru.netology.diploma.adapter.PostsAdapter
 import ru.netology.diploma.databinding.FragmentWallBinding
 import ru.netology.diploma.dto.Post
 import ru.netology.diploma.extensions.loadAvatar
+import ru.netology.diploma.mediplayer.ExoPlayerLifecycleObserver
 import ru.netology.diploma.mediplayer.MediaLifecycleObserver
 import ru.netology.diploma.util.StringArg
 import ru.netology.diploma.util.parseException
@@ -49,6 +49,7 @@ class AuthorWallFragment : Fragment() {
             object : OnInteractionListener<Post> {},
             object : OnUserIdsListener {},
             MediaLifecycleObserver(),
+            ExoPlayerLifecycleObserver(requireContext())
         )
 
         viewModel.userResponse.observe(viewLifecycleOwner) {

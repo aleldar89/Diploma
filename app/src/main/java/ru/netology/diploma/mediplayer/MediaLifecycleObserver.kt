@@ -10,10 +10,14 @@ class MediaLifecycleObserver : LifecycleEventObserver {
     var mediaPlayer: MediaPlayer? = MediaPlayer()
 
     val seekBarListener = object : SeekBar.OnSeekBarChangeListener {
-        override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {}
-
+        override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+            val currentPosition = mediaPlayer?.currentPosition ?: 0
+            val duration = mediaPlayer?.duration ?: 0
+            if (mediaPlayer?.isPlaying == true) {
+                seekBar?.progress = (currentPosition.toFloat() / duration.toFloat() * 100).toInt()
+            }
+        }
         override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-
         override fun onStopTrackingTouch(seekBar: SeekBar?) {}
     }
 

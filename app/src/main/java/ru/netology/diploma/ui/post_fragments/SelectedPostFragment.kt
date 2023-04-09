@@ -14,9 +14,9 @@ import ru.netology.diploma.R
 import ru.netology.diploma.adapter.OnInteractionListener
 import ru.netology.diploma.adapter.OnUserIdsListener
 import ru.netology.diploma.adapter.PostViewHolder
-import ru.netology.diploma.adapter.UserLocation
 import ru.netology.diploma.databinding.CardPostBinding
 import ru.netology.diploma.dto.Post
+import ru.netology.diploma.mediplayer.ExoPlayerLifecycleObserver
 import ru.netology.diploma.mediplayer.MediaLifecycleObserver
 import ru.netology.diploma.util.StringArg
 import ru.netology.diploma.viewmodel.PostViewModel
@@ -83,6 +83,7 @@ class SelectedPostFragment : Fragment() {
             },
             object : OnUserIdsListener {},
             MediaLifecycleObserver(),
+            ExoPlayerLifecycleObserver(requireContext()),
             binding.root.context,
         )
 

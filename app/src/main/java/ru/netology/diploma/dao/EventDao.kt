@@ -39,31 +39,29 @@ interface EventDao {
 
     suspend fun saveOld(event: EventEntity) = insert(event)
 
-    //TODO вставка/удаление id лайкнувшего пользователя в likeOwnerIds
+    @Query(
+        """
+            UPDATE EventEntity SET
+            likedByMe = CASE WHEN likedByMe THEN 0 ELSE 1 END,
+            likeOwnerIds = :likeOwnerIds
+            WHERE id = :id
+        """
+    )
+    suspend fun likeById(id: Int, likeOwnerIds: List<Int>)
 
     @Query(
         """
             UPDATE EventEntity SET
-            likedByMe = CASE WHEN likedByMe THEN 0 ELSE 1 END
+            participatedByMe = CASE WHEN participatedByMe THEN 0 ELSE 1 END,
+            participantsIds = :participantsIds
             WHERE id = :id
         """
     )
-    suspend fun likeById(id: Int)
+    suspend fun participateById(id: Int, participantsIds: List<Int>)
 
     @Query("UPDATE EventEntity SET id = :id WHERE id = 0")
     suspend fun updateId(id: Int)
 
     @Query("SELECT * FROM EventEntity ORDER BY ID DESC LIMIT 1")
     suspend fun selectLast(): EventEntity
-
-    //TODO вставка/удаление id пользователя-участник в participantsIds
-
-    @Query(
-        """
-            UPDATE EventEntity SET
-            participatedByMe = CASE WHEN participatedByMe THEN 0 ELSE 1 END
-            WHERE id = :id
-        """
-    )
-    suspend fun participateById(id: Int)
 }

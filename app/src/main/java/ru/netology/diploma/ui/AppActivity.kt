@@ -18,7 +18,7 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        MapKitFactory.setApiKey("e35ce02e-18b3-4678-9859-286826ff3245")
+        MapKitFactory.setApiKey("1e4c7c64-4488-4233-a8f1-16488295ec90")
         MapKitFactory.initialize(this)
 
         viewModel.data.observe(this) {

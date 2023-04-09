@@ -22,6 +22,7 @@ import ru.netology.diploma.adapter.OnInteractionListener
 import ru.netology.diploma.adapter.OnUserIdsListener
 import ru.netology.diploma.databinding.FragmentEventFeedBinding
 import ru.netology.diploma.dto.Event
+import ru.netology.diploma.mediplayer.ExoPlayerLifecycleObserver
 import ru.netology.diploma.mediplayer.MediaLifecycleObserver
 import ru.netology.diploma.ui.post_fragments.PostsFeedFragment
 import ru.netology.diploma.util.StringArg
@@ -53,6 +54,13 @@ class EventsFeedFragment : Fragment() {
                         viewModel.dislikeById(event)
                     else
                         viewModel.likeById(event)
+                }
+
+                override fun onParticipate(event: Event) {
+                    if (event.participatedByMe)
+                        viewModel.unParticipateById(event)
+                    else
+                        viewModel.participateById(event)
                 }
 
                 override fun onEdit(event: Event) {
@@ -115,7 +123,8 @@ class EventsFeedFragment : Fragment() {
                     )
                 }
             },
-            MediaLifecycleObserver()
+            MediaLifecycleObserver(),
+            ExoPlayerLifecycleObserver(requireContext())
         )
 
         binding.list.apply {

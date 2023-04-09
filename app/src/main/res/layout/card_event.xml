@@ -121,7 +121,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:barrierDirection="bottom"
-            app:constraint_referenced_ids="link" />
+            app:constraint_referenced_ids="link, location" />
 
         <ImageView
             android:id="@+id/image_view"
@@ -134,10 +134,10 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/footer" />
 
-        <VideoView
+        <androidx.media3.ui.PlayerView
             android:id="@+id/video_view"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/media_view_height"
             android:adjustViewBounds="true"
             android:paddingTop="@dimen/common_spacing"
             android:visibility="gone"
@@ -145,16 +145,31 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/footer" />
 
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/audio_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:constraint_referenced_ids="play_view, seek_bar"/>
+
         <ImageView
             android:id="@+id/play_view"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:adjustViewBounds="true"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/seek_bar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/footer"
             app:srcCompat="@drawable/ic_baseline_play_circle_filled_24" />
+
+        <SeekBar
+            android:id="@+id/seek_bar"
+            android:layout_width="0dp"
+            android:layout_height="10dp"
+            app:layout_constraintStart_toEndOf="@id/play_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/play_view"
+            app:layout_constraintBottom_toBottomOf="@id/play_view"/>
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/footer2"
@@ -175,6 +190,22 @@
             android:textColor="@color/gray"
             app:icon="@drawable/ic_baseline_thumb_up_alt_24"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/footer2"
+            tools:checked="@sample/post.json/data/likedByMe" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/participate"
+            style="@style/Widget.AppTheme.LikeCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/little_spacing"
+            android:checkable="true"
+            android:contentDescription="@string/description_post_like"
+            android:text="@string/participate"
+            android:textColor="@color/gray"
+            app:icon="@drawable/ic_baseline_bookmark_24"
+            app:layout_constraintStart_toEndOf="@id/like"
+            app:layout_constraintEnd_toStartOf="@id/share"
             app:layout_constraintTop_toBottomOf="@id/footer2"
             tools:checked="@sample/post.json/data/likedByMe" />
 

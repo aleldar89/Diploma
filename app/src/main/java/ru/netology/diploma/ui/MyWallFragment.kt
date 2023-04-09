@@ -21,6 +21,7 @@ import ru.netology.diploma.adapter.PostsAdapter
 import ru.netology.diploma.databinding.FragmentWallBinding
 import ru.netology.diploma.dto.Post
 import ru.netology.diploma.extensions.loadAvatar
+import ru.netology.diploma.mediplayer.ExoPlayerLifecycleObserver
 import ru.netology.diploma.mediplayer.MediaLifecycleObserver
 import ru.netology.diploma.util.parseException
 import ru.netology.diploma.viewmodel.MyWallViewModel
@@ -39,6 +40,7 @@ class MyWallFragment : Fragment() {
         val adapter = PostsAdapter(object : OnInteractionListener<Post>{},
             object : OnUserIdsListener {},
             MediaLifecycleObserver(),
+            ExoPlayerLifecycleObserver(requireContext())
         )
 
         viewModel.userResponse.observe(viewLifecycleOwner) {

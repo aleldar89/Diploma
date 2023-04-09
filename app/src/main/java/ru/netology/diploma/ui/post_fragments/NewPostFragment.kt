@@ -42,6 +42,7 @@ class NewPostFragment : Fragment() {
 
     private val viewModel: PostViewModel by activityViewModels()
     private val observer = MediaLifecycleObserver()
+
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {}

@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.diploma.R
-import ru.netology.diploma.adapter.JobAdapter
 import ru.netology.diploma.adapter.OnInteractionListener
+import ru.netology.diploma.adapter.UserJobAdapter
 import ru.netology.diploma.databinding.FragmentJobFeedBinding
 import ru.netology.diploma.dto.Job
 import ru.netology.diploma.extensions.loadAvatar
@@ -37,7 +37,7 @@ class UserJobFeedFragment : Fragment() {
     ): View {
         val binding = FragmentJobFeedBinding.inflate(inflater, container, false)
 
-        val adapter = JobAdapter(object : OnInteractionListener<Job>{})
+        val adapter = UserJobAdapter(object : OnInteractionListener<Job> {})
 
         viewModel.userResponse.observe(viewLifecycleOwner) {
             binding.author.text = it?.name

@@ -51,6 +51,12 @@ class PostViewModel @Inject constructor(
             .value
             ?.token != null
 
+    private val myId: Int?
+        get() = appAuth
+            .data
+            .value
+            ?.id
+
     private val _authorization = MutableLiveData(isAuthorized)
     val authorization: LiveData<Boolean>
         get() = _authorization
@@ -68,6 +74,10 @@ class PostViewModel @Inject constructor(
     private val _postCreated = SingleLiveEvent<Unit>()
     val postCreated: LiveData<Unit>
         get() = _postCreated
+
+    private val _addresses = MutableLiveData<MutableMap<Int, String>>()
+    val addresses: LiveData<MutableMap<Int, String>>
+        get() = _addresses
 
     val data: Flow<PagingData<Post>> = appAuth.data
         .flatMapLatest { auth ->
@@ -98,7 +108,8 @@ class PostViewModel @Inject constructor(
             viewModelScope.launch {
                 try {
                     when (media.value) {
-                        is ImageAttachment -> media.value?.let { it as ImageAttachment
+                        is ImageAttachment -> media.value?.let {
+                            it as ImageAttachment
                             repository.saveWithImage(post, it.file!!)
                         }
                         is AudioAttachment -> media.value?.uri?.let { uri ->
@@ -144,8 +155,10 @@ class PostViewModel @Inject constructor(
     fun likeById(post: Post) {
         viewModelScope.launch {
             val old = repository.getById(post.id)
+            val newLikeOwnerIds = post.likeOwnerIds?.plus(myId!!)
             try {
-                repository.likeById(post)
+                if (newLikeOwnerIds != null)
+                    repository.likeById(post, newLikeOwnerIds)
             } catch (e: Exception) {
                 try {
                     repository.save(old)
@@ -157,11 +170,14 @@ class PostViewModel @Inject constructor(
         }
     }
 
+
     fun dislikeById(post: Post) {
         viewModelScope.launch {
             val old = repository.getById(post.id)
+            val newLikeOwnerIds = post.likeOwnerIds?.filter { it != myId }
             try {
-                repository.dislikeById(post)
+                if (newLikeOwnerIds != null)
+                    repository.dislikeById(post, newLikeOwnerIds)
             } catch (e: Exception) {
                 try {
                     repository.save(old)
@@ -187,6 +203,26 @@ class PostViewModel @Inject constructor(
             link = link,
             coords = coords,
         )
+    }
+
+    fun getAddress(coords: Coordinates) {
+        viewModelScope.launch {
+            try {
+                data.map {
+                    it.map { post ->
+                        if (post.coords != null) {
+                            _addresses.value?.put(
+                                post.id,
+                                repository.getAddress(post.coords).toString()
+                            )
+                        }
+                    }
+                }
+                repository.getAddress(coords).toString()
+            } catch (e: Exception) {
+                _error.value = e
+            }
+        }
     }
 
     fun clearEditedData() {

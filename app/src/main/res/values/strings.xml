@@ -1,11 +1,13 @@
 <resources>
     <string name="app_name">Diploma</string>
     <string name="description_def_author_avatar">Default author avatar</string>
-    <string name="description_post_menu">Event menu</string>
-    <string name="description_post_like">Like event</string>
-    <string name="description_post_share">Share event</string>
+    <string name="description_post_menu">Menu</string>
+    <string name="description_post_like">Like</string>
+    <string name="description_post_participate">Participate</string>
+    <string name="description_post_share">Share</string>
     <string name="description_job_delete">Delete</string>
     <string name="like">Like</string>
+    <string name="participate">Participate</string>
     <string name="share">Share</string>
     <string name="enter">Enter</string>
     <string name="your_password">Your password</string>

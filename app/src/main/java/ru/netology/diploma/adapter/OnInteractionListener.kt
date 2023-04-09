@@ -2,6 +2,7 @@ package ru.netology.diploma.adapter
 
 interface OnInteractionListener<T> {
     fun onLike(item: T) {}
+    fun onParticipate(item: T) {}
     fun onEdit(item: T) {}
     fun onRemove(item: T) {}
     fun onShare(item: T) {}

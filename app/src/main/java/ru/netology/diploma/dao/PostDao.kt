@@ -42,16 +42,15 @@ interface PostDao {
 
     suspend fun saveOld(post: PostEntity) = insert(post)
 
-    //TODO вставка id лайкнувшего пользователя в likeOwnerIds
-
     @Query(
         """
             UPDATE PostEntity SET
-            likedByMe = CASE WHEN likedByMe THEN 0 ELSE 1 END
+            likedByMe = CASE WHEN likedByMe THEN 0 ELSE 1 END,
+            likeOwnerIds = :likeOwnerIds
             WHERE id = :id
         """
     )
-    suspend fun likeById(id: Int)
+    suspend fun likeById(id: Int, likeOwnerIds: List<Int>)
 
     @Query("UPDATE PostEntity SET id = :id WHERE id = 0")
     suspend fun updateId(id: Int)

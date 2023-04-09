@@ -3,6 +3,7 @@ package ru.netology.diploma.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -57,6 +58,37 @@ class JobViewHolder(
                 }.show()
             }
 
+        }
+    }
+}
+
+class UserJobAdapter(
+    private val onInteractionListener: OnInteractionListener<Job>
+) : ListAdapter<Job, UserJobViewHolder>(JobDiffCallback()) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserJobViewHolder {
+        val binding = CardJobBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return UserJobViewHolder(binding, onInteractionListener)
+    }
+
+    override fun onBindViewHolder(holder: UserJobViewHolder, position: Int) {
+        val job = getItem(position)
+        holder.bind(job)
+    }
+}
+
+class UserJobViewHolder(
+    private val binding: CardJobBinding,
+    private val onInteractionListener: OnInteractionListener<Job>
+) : RecyclerView.ViewHolder(binding.root) {
+
+    fun bind(job: Job) {
+        binding.apply {
+
+            position.text = job.position
+            startDate.text = job.start.createDate()
+            finishDate.text = job.finish?.createDate()
+            link.text = job.link
+            menu.isVisible = false
         }
     }
 }

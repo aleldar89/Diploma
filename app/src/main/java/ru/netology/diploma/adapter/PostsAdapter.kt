@@ -5,16 +5,12 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.MediaController
 import android.widget.PopupMenu
-import android.widget.SeekBar
 import androidx.core.view.isVisible
+import androidx.media3.common.MediaItem
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import ru.netology.diploma.R
 import ru.netology.diploma.databinding.CardPostBinding
 import ru.netology.diploma.dto.AttachmentType
@@ -22,19 +18,28 @@ import ru.netology.diploma.dto.Post
 import ru.netology.diploma.extensions.createDate
 import ru.netology.diploma.extensions.loadAvatar
 import ru.netology.diploma.extensions.loadImage
+import ru.netology.diploma.mediplayer.ExoPlayerLifecycleObserver
 import ru.netology.diploma.mediplayer.MediaLifecycleObserver
 import ru.netology.diploma.util.StringArg
 
 class PostsAdapter(
     private val onInteractionListener: OnInteractionListener<Post>,
     private val onUserIdsListener: OnUserIdsListener,
-    private val observer: MediaLifecycleObserver,
+    private val mediaObserver: MediaLifecycleObserver,
+    private val exoObserver: ExoPlayerLifecycleObserver,
 ) : PagingDataAdapter<Post, PostViewHolder>(PostDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val binding = CardPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         val context = binding.root.context
-        return PostViewHolder(binding, onInteractionListener, onUserIdsListener, observer, context)
+        return PostViewHolder(
+            binding,
+            onInteractionListener,
+            onUserIdsListener,
+            mediaObserver,
+            exoObserver,
+            context
+        )
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
@@ -49,11 +54,10 @@ class PostViewHolder(
     private val binding: CardPostBinding,
     private val onInteractionListener: OnInteractionListener<Post>,
     private val onUserIdsListener: OnUserIdsListener,
-    private val observer: MediaLifecycleObserver,
+    private val mediaObserver: MediaLifecycleObserver,
+    private val exoObserver: ExoPlayerLifecycleObserver,
     private val context: Context,
 ) : RecyclerView.ViewHolder(binding.root) {
-
-//    private val userLocation: UserLocation = UserLocation()
 
     companion object {
         var Bundle.textArg: String? by StringArg
@@ -70,12 +74,7 @@ class PostViewHolder(
             author.text = post.author
             authorJob.text = post.authorJob
             published.text = post.published.createDate()
-
-            //todo geocoder
-//            CoroutineScope(Dispatchers.Main).launch {
-//                location.text = post.coords?.let { userLocation.getAddress(it) }
-//            }
-
+            
             menu.isVisible = post.ownedByMe
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
@@ -108,27 +107,28 @@ class PostViewHolder(
                 link.isVisible = false
             }
 
-            post.attachment?.let {
-                when (it.type) {
+            if (post.attachment == null) {
+                imageView.isVisible = false
+                videoView.isVisible = false
+                audioView.isVisible = false
+            } else {
+                when (post.attachment.type) {
                     AttachmentType.IMAGE -> imageView.apply {
                         isVisible = true
-                        loadImage(it.url)
+                        loadImage(post.attachment.url)
                     }
 
-                    AttachmentType.VIDEO -> videoView.apply {
-                        isVisible = true
-                        val mediaController = MediaController(context)
-                        setMediaController(mediaController)
-                        mediaController.setAnchorView(this)
-                        setVideoURI(Uri.parse(post.attachment.url))
-                        seekTo(1)
-                        setOnPreparedListener { pause() }
-                        setOnCompletionListener { start() }
+                    AttachmentType.VIDEO -> {
+                        videoView.isVisible = true
+                        exoObserver.apply {
+                            val mediaItem = MediaItem.fromUri(Uri.parse(post.attachment.url))
+                            play(videoView, mediaItem)
+                        }
                     }
 
                     AttachmentType.AUDIO -> {
                         audioView.isVisible = true
-                        observer.apply {
+                        mediaObserver.apply {
                             playView.setOnClickListener {
                                 if (mediaPlayer?.isPlaying == true) {
                                     playView.setImageResource(R.drawable.ic_baseline_play_circle_filled_24)
@@ -140,10 +140,28 @@ class PostViewHolder(
                                     mediaPlayer?.setDataSource(post.attachment.url)
                                     this.play()
 
-                                    seekBar.max = mediaPlayer?.duration!!
-                                    seekBar.post{
-                                        seekBar.progress = mediaPlayer?.currentPosition!!
-                                    }
+//                                    seekBar.max = 100
+
+//                                    seekBar.setOnSeekBarChangeListener(seekBarListener)
+
+//                                    seekBar.post {
+//                                        while (mediaPlayer?.isPlaying == true) {
+//                                            val duration = mediaPlayer?.duration ?: 0
+//                                            val currentPosition = mediaPlayer?.currentPosition ?: 0
+//                                            seekBar.progress =
+//                                                (currentPosition.toFloat() / duration.toFloat() * 100).toInt()
+//                                        }
+//                                    }
+
+//                                    seekBar.post {
+//                                        if (mediaPlayer?.isPlaying == true) {
+//                                            val duration = mediaPlayer?.duration ?: 0
+//                                            val currentPosition = mediaPlayer?.currentPosition ?: 0
+//                                            seekBar.progress =
+//                                                (currentPosition.toFloat() / duration.toFloat() * 100).toInt()
+//                                        }
+//                                    }
+
                                 }
                             }
                         }
@@ -200,17 +218,3 @@ class PostDiffCallback : DiffUtil.ItemCallback<Post>() {
         return oldItem == newItem
     }
 }
-
-
-
-
-//AttachmentType.AUDIO -> playView.apply {
-//    binding.audioView.isVisible = true
-//    setOnClickListener {
-//        observer.apply {
-//            mediaPlayer?.stop()
-//            mediaPlayer?.reset()
-//            mediaPlayer?.setDataSource(post.attachment.url)
-//        }.play()
-//    }
-//}

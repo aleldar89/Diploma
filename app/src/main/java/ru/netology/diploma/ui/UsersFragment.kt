@@ -47,7 +47,7 @@ class UsersFragment : Fragment() {
 
         binding.list.apply {
             this.adapter = adapter
-            this.layoutManager = GridLayoutManager(context,3)
+            this.layoutManager = GridLayoutManager(context,2)
         }
 
         viewModel.users.observe(viewLifecycleOwner) {

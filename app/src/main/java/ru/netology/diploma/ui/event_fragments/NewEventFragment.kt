@@ -10,6 +10,8 @@ import android.view.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.net.toFile
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.coroutineScope
@@ -20,10 +22,13 @@ import com.google.android.gms.location.LocationServices
 import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.diploma.R
 import ru.netology.diploma.databinding.FragmentNewEventBinding
+import ru.netology.diploma.dto.AudioAttachment
 import ru.netology.diploma.dto.Coordinates
+import ru.netology.diploma.dto.ImageAttachment
+import ru.netology.diploma.dto.VideoAttachment
 import ru.netology.diploma.extensions.createToast
 import ru.netology.diploma.extensions.dateFormatter
-import ru.netology.diploma.ui.job_fragments.NewJobFragment
+import ru.netology.diploma.mediplayer.MediaLifecycleObserver
 import ru.netology.diploma.util.AndroidUtils
 import ru.netology.diploma.util.StringArg
 import ru.netology.diploma.viewmodel.EventViewModel
@@ -41,38 +46,53 @@ class NewEventFragment : Fragment() {
         var currentLocation: Coordinates? = null
     }
 
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private val viewModel: EventViewModel by activityViewModels()
+    private val observer = MediaLifecycleObserver()
 
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {}
 
-    private val viewModel: EventViewModel by activityViewModels()
-
-    private val imageContract =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            when (result.resultCode) {
-                ImagePicker.RESULT_ERROR -> {
+    private val imageContract = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        when (result.resultCode) {
+            ImagePicker.RESULT_ERROR -> {
+                view?.createToast(R.string.media_error)
+            }
+            else -> {
+                val uri = result.data?.data ?: run {
                     view?.createToast(R.string.media_error)
+                    return@registerForActivityResult
                 }
-                else -> {
-                    val data = result.data?.data ?: run {
-                        view?.createToast(R.string.media_error)
-                        return@registerForActivityResult
-                    }
-                    viewModel.changeMedia(data, data.toFile())
-                }
+                viewModel.attachImage(uri, uri.toFile())
             }
         }
+    }
 
-    private val mvContract = registerForActivityResult(
+    private val videoContract = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            val data = result.data?.data ?: run {
+            val uri = result.data?.data ?: run {
                 view?.createToast(R.string.media_error)
                 return@registerForActivityResult
             }
-            viewModel.changeMedia(data, File(data.path))
+            viewModel.attachVideo(uri)
+        } else {
+            view?.createToast(R.string.media_error)
+        }
+    }
+
+    private val audioContract = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val uri = result.data?.data ?: run {
+                view?.createToast(R.string.media_error)
+                return@registerForActivityResult
+            }
+            viewModel.attachAudio(uri)
         } else {
             view?.createToast(R.string.media_error)
         }
@@ -111,6 +131,7 @@ class NewEventFragment : Fragment() {
             }
             R.id.cancel -> {
                 viewModel.clearEditedData()
+                viewModel.clearMedia()
                 AndroidUtils.hideKeyboard(requireView())
                 findNavController().navigateUp()
                 true
@@ -147,6 +168,40 @@ class NewEventFragment : Fragment() {
 
         arguments?.textArg?.let(binding.edit::setText)
 
+        viewModel.media.observe(viewLifecycleOwner) { media ->
+            when (media) {
+                is ImageAttachment -> {
+                    binding.previewImage.isVisible = true
+                    binding.previewImage.setImageURI(media.uri)
+                }
+                is VideoAttachment -> {
+                    binding.previewVideo.isVisible = true
+                    binding.previewVideo.apply {
+                        setVideoURI(media.uri)
+                        seekTo(1)
+                    }
+                }
+                is AudioAttachment -> {
+                    binding.previewAudio.isVisible = true
+                    binding.previewAudio.apply {
+                        setOnClickListener {
+                            observer.apply {
+                                mediaPlayer?.stop()
+                                mediaPlayer?.reset()
+                                mediaPlayer?.setDataSource(context, media.uri!!)
+                            }.play()
+                        }
+                    }
+                }
+                null -> {
+                    binding.previewImage.isGone = true
+                    binding.previewVideo.isGone = true
+                    binding.previewAudio.isGone = true
+                    return@observe
+                }
+            }
+        }
+
         binding.dateTime.text = SimpleDateFormat(datePattern).format(System.currentTimeMillis())
         binding.dateTime.setOnClickListener {
             DatePickerDialog(
@@ -173,18 +228,26 @@ class NewEventFragment : Fragment() {
                 .createIntent(imageContract::launch)
         }
 
+        binding.galleryImage.setOnClickListener {
+            ImagePicker.Builder(this)
+                .crop()
+                .galleryOnly()
+                .maxResultSize(MAX_IMAGE_SIZE, MAX_IMAGE_SIZE)
+                .createIntent(imageContract::launch)
+        }
+
         binding.galleryVideo.setOnClickListener {
             val intent = Intent()
                 .setType("video/*")
                 .setAction(Intent.ACTION_GET_CONTENT)
-            mvContract.launch(intent)
+            videoContract.launch(intent)
         }
 
         binding.galleryAudio.setOnClickListener {
             val intent = Intent()
                 .setType("audio/*")
                 .setAction(Intent.ACTION_GET_CONTENT)
-            mvContract.launch(intent)
+            audioContract.launch(intent)
         }
 
         binding.clearMedia.setOnClickListener {

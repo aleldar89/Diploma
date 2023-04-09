@@ -9,4 +9,6 @@
     <dimen name="double_spacing">32dp</dimen>
     <dimen name="central_button_spacing">64dp</dimen>
     <dimen name="media_view_height">200dp</dimen>
+    <dimen name="card_user_height">150dp</dimen>
+    <dimen name="card_user_width">150dp</dimen>
 </resources>

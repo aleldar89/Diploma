@@ -62,8 +62,7 @@ class MyJobViewModel @Inject constructor(
         }
     }
 
-//    private val edited = MutableLiveData(empty)
-    val edited = MutableLiveData(empty)
+    private val edited = MutableLiveData(empty)
 
     val data = repository.data.asLiveData(Dispatchers.Default)
 

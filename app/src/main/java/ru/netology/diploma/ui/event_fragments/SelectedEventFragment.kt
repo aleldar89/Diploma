@@ -16,6 +16,7 @@ import ru.netology.diploma.adapter.OnInteractionListener
 import ru.netology.diploma.adapter.OnUserIdsListener
 import ru.netology.diploma.databinding.CardEventBinding
 import ru.netology.diploma.dto.Event
+import ru.netology.diploma.mediplayer.ExoPlayerLifecycleObserver
 import ru.netology.diploma.mediplayer.MediaLifecycleObserver
 import ru.netology.diploma.util.StringArg
 import ru.netology.diploma.viewmodel.EventViewModel
@@ -82,6 +83,7 @@ class SelectedEventFragment : Fragment() {
             },
             object : OnUserIdsListener {},
             MediaLifecycleObserver(),
+            ExoPlayerLifecycleObserver(requireContext()),
             binding.root.context
         )
 
