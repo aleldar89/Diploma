@@ -123,8 +123,6 @@ class EventsFeedFragment : Fragment() {
                     )
                 }
             },
-            MediaLifecycleObserver(),
-            ExoPlayerLifecycleObserver(requireContext())
         )
 
         binding.list.apply {

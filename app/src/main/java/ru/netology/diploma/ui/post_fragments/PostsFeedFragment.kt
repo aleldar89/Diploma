@@ -121,8 +121,6 @@ class PostsFeedFragment : Fragment() {
                     )
                 }
             },
-            MediaLifecycleObserver(),
-            ExoPlayerLifecycleObserver(requireContext())
         )
 
         binding.list.apply {

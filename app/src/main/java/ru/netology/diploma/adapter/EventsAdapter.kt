@@ -5,6 +5,7 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.media3.common.MediaItem
 import androidx.paging.PagingDataAdapter
@@ -23,8 +24,6 @@ import ru.netology.diploma.mediplayer.MediaLifecycleObserver
 class EventsAdapter(
     private val onInteractionListener: OnInteractionListener<Event>,
     private val onUserIdsListener: OnUserIdsListener,
-    private val mediaObserver: MediaLifecycleObserver,
-    private val exoObserver: ExoPlayerLifecycleObserver,
 ) : PagingDataAdapter<Event, EventViewHolder>(EventDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
@@ -34,8 +33,6 @@ class EventsAdapter(
             binding,
             onInteractionListener,
             onUserIdsListener,
-            mediaObserver,
-            exoObserver,
             context
         )
     }
@@ -46,21 +43,28 @@ class EventsAdapter(
             holder.bind(it)
         }
     }
+
+    override fun onViewRecycled(holder: EventViewHolder) {
+        super.onViewRecycled(holder)
+        holder.cleanUp()
+    }
 }
 
 class EventViewHolder(
     private val binding: CardEventBinding,
     private val onInteractionListener: OnInteractionListener<Event>,
     private val onUserIdsListener: OnUserIdsListener,
-    private val mediaObserver: MediaLifecycleObserver,
-    private val exoObserver: ExoPlayerLifecycleObserver,
     private val context: Context,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(event: Event) {
         binding.apply {
 
-            event.authorAvatar?.let { authorAvatar.loadAvatar(it) }
+            if (event.authorAvatar != null)
+                authorAvatar.loadAvatar(event.authorAvatar)
+            else
+                authorAvatar.loadAvatar()
+
             author.text = event.author
             authorJob.text = event.authorJob
             published.text = event.published.createDate()
@@ -97,44 +101,40 @@ class EventViewHolder(
                 link.isVisible = false
             }
 
-            if (event.attachment == null) {
-                imageView.isVisible = false
-                videoView.isVisible = false
-                audioView.isVisible = false
-            } else {
-                when (event.attachment.type) {
-                    AttachmentType.IMAGE -> imageView.apply {
-                        isVisible = true
-                        loadImage(event.attachment.url)
-                    }
+            when (event.attachment?.type) {
+                AttachmentType.IMAGE -> imageView.apply {
+                    isVisible = true
+                    loadImage(event.attachment.url)
+                }
 
-                    AttachmentType.VIDEO -> {
-                        videoView.isVisible = true
-                        exoObserver.apply {
-                            val mediaItem = MediaItem.fromUri(Uri.parse(event.attachment.url))
-                            play(videoView, mediaItem)
-                        }
+                AttachmentType.VIDEO -> {
+                    videoView.isVisible = true
+                    ExoPlayerLifecycleObserver(context).apply {
+                        val mediaItem = MediaItem.fromUri(Uri.parse(event.attachment.url))
+                        play(videoView, mediaItem)
                     }
+                }
 
-                    AttachmentType.AUDIO -> {
-                        audioView.isVisible = true
-                        mediaObserver.apply {
-                            playView.setOnClickListener {
-                                if (mediaPlayer?.isPlaying == true) {
-                                    playView.setImageResource(R.drawable.ic_baseline_play_circle_filled_24)
-                                    mediaPlayer?.pause()
-                                } else {
-                                    playView.setImageResource(R.drawable.ic_baseline_stop_circle_24)
-                                    mediaPlayer?.stop()
-                                    mediaPlayer?.reset()
-                                    mediaPlayer?.setDataSource(event.attachment.url)
-                                    this.play()
-                                }
+                AttachmentType.AUDIO -> {
+                    audioView.isVisible = true
+                    MediaLifecycleObserver().apply {
+                        playView.setOnClickListener {
+                            if (mediaPlayer?.isPlaying == true) {
+                                playView.setImageResource(R.drawable.ic_baseline_play_circle_filled_24)
+                                mediaPlayer?.pause()
+                            } else {
+                                playView.setImageResource(R.drawable.ic_baseline_stop_circle_24)
+                                mediaPlayer?.stop()
+                                mediaPlayer?.reset()
+                                mediaPlayer?.setDataSource(event.attachment.url)
+                                this.play()
                             }
                         }
                     }
                 }
+                else -> Unit
             }
+
 
             like.isChecked = event.likedByMe
             like.setOnClickListener {
@@ -186,6 +186,14 @@ class EventViewHolder(
                 participantsIds.isVisible = false
             }
 
+        }
+    }
+
+    fun cleanUp() {
+        binding.apply {
+            audioView.isGone = true
+            videoView.isGone = true
+            imageView.isGone = true
         }
     }
 }

@@ -102,7 +102,7 @@
 
     <dialog
         android:id="@+id/datePickFragment"
-        android:name="ru.netology.diploma.ui.DatePickFragment"
+        android:name="ru.netology.diploma.ui.StartDatePickFragment"
         android:label="DatePickFragment" />
 
     <fragment

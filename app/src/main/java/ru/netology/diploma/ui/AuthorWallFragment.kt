@@ -48,13 +48,15 @@ class AuthorWallFragment : Fragment() {
         val adapter = PostsAdapter(
             object : OnInteractionListener<Post> {},
             object : OnUserIdsListener {},
-            MediaLifecycleObserver(),
-            ExoPlayerLifecycleObserver(requireContext())
         )
 
         viewModel.userResponse.observe(viewLifecycleOwner) {
             binding.author.text = it?.name
-            binding.authorAvatar.loadAvatar(it?.avatar.orEmpty())
+
+            if (it?.avatar != null)
+                binding.authorAvatar.loadAvatar(it.avatar)
+            else
+                binding.authorAvatar.loadAvatar()
         }
 
         binding.list.apply {

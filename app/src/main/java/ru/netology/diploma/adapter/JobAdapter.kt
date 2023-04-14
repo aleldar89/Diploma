@@ -62,12 +62,10 @@ class JobViewHolder(
     }
 }
 
-class UserJobAdapter(
-    private val onInteractionListener: OnInteractionListener<Job>
-) : ListAdapter<Job, UserJobViewHolder>(JobDiffCallback()) {
+class UserJobAdapter : ListAdapter<Job, UserJobViewHolder>(JobDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserJobViewHolder {
         val binding = CardJobBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return UserJobViewHolder(binding, onInteractionListener)
+        return UserJobViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: UserJobViewHolder, position: Int) {
@@ -78,7 +76,6 @@ class UserJobAdapter(
 
 class UserJobViewHolder(
     private val binding: CardJobBinding,
-    private val onInteractionListener: OnInteractionListener<Job>
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(job: Job) {

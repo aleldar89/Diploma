@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.netology.diploma.auth.AppAuth
 import ru.netology.diploma.dto.*
+import ru.netology.diploma.extensions.dateFormatter
 import ru.netology.diploma.repository.event_repo.EventRepository
 import ru.netology.diploma.util.SingleLiveEvent
 import java.io.File
@@ -231,14 +232,18 @@ class EventViewModel @Inject constructor(
         edited.value = event
     }
 
-    fun changeContent(content: String, datetime: String, link: String?, coords: Coordinates?) {
-        val text = content.trim()
-        if (edited.value?.content == text) {
+    fun changeContent(
+        content: String,
+        datetime: String,
+        link: String?,
+        coords: Coordinates?
+    ) {
+        if (edited.value?.content == content) {
             return
         }
         edited.value = edited.value?.copy(
-            content = text,
-            datetime = datetime,
+            content = content,
+            datetime = datetime.dateFormatter(),
             link = link,
             coords = coords,
         )

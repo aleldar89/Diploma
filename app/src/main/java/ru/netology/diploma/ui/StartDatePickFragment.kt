@@ -11,10 +11,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
 @AndroidEntryPoint
-class DatePickFragment : DialogFragment() {
+class StartDatePickFragment : DialogFragment() {
 
     companion object {
-        const val TAG = "DatePickFragment"
+        const val TAG = "StartDatePickFragment"
     }
     private val gson = Gson()
     private val calendar = Calendar.getInstance()
@@ -25,8 +25,8 @@ class DatePickFragment : DialogFragment() {
             val resultDate = GregorianCalendar(year, month, day).time
 
             parentFragmentManager.setFragmentResult(
-                "requestKey",
-                bundleOf("bundleKey" to gson.toJson(resultDate))
+                "requestStartKey",
+                bundleOf("bundleStartKey" to gson.toJson(resultDate))
             )
         }
 

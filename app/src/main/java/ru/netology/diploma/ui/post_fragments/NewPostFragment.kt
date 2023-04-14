@@ -41,7 +41,6 @@ class NewPostFragment : Fragment() {
     }
 
     private val viewModel: PostViewModel by activityViewModels()
-    private val observer = MediaLifecycleObserver()
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val requestPermissionLauncher =
@@ -166,7 +165,7 @@ class NewPostFragment : Fragment() {
                     binding.previewAudio.isVisible = true
                     binding.previewAudio.apply {
                         setOnClickListener {
-                            observer.apply {
+                            MediaLifecycleObserver().apply {
                                 mediaPlayer?.stop()
                                 mediaPlayer?.reset()
                                 mediaPlayer?.setDataSource(context, media.uri!!)

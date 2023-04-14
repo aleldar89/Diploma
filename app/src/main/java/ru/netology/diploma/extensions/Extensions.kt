@@ -1,20 +1,15 @@
 package ru.netology.diploma.extensions
 
-import android.location.Geocoder
-import android.os.Build
 import android.text.Editable
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.google.gson.Gson
 import ru.netology.diploma.R
-import ru.netology.diploma.dto.Coordinates
 import ru.netology.diploma.dto.Job
 
 fun ImageView.loadImage(url: String, vararg transforms: BitmapTransformation = emptyArray()) =
@@ -23,14 +18,23 @@ fun ImageView.loadImage(url: String, vararg transforms: BitmapTransformation = e
         .fitCenter()
         .placeholder(R.drawable.ic_loading_100dp)
         .error(R.drawable.ic_error_100dp)
-//        .skipMemoryCache(true)
-//        .diskCacheStrategy(DiskCacheStrategy.NONE)
         .transform(*transforms)
         .timeout(30_000)
         .into(this)
 
 fun ImageView.loadAvatar(url: String, vararg transforms: BitmapTransformation = emptyArray()) =
     loadImage(url, CircleCrop(), *transforms)
+
+fun ImageView.loadAvatar(vararg transforms: BitmapTransformation = emptyArray()) =
+    Glide.with(this)
+        .load(R.drawable.ic_baseline_person_24)
+        .fitCenter()
+        .placeholder(R.drawable.ic_loading_100dp)
+        .error(R.drawable.ic_error_100dp)
+        .transform(*transforms)
+        .timeout(30_000)
+        .circleCrop()
+        .into(this)
 
 fun View.createToast(@StringRes textId: Int) =
     Toast.makeText(
@@ -60,20 +64,5 @@ fun String.dateFormatter(): String = this + "T00:00:00.000Z"
 //    if (addresses != null) {
 //        cityName = addresses[0].locality
 //    }
-//    return cityName
-//}
-
-//@RequiresApi(Build.VERSION_CODES.TIRAMISU)
-//fun Geocoder.getCityName(coords: Coordinates): String {
-//    var cityName = ""
-//    val addresses = this.getFromLocation(
-//        coords.lat?.toDouble()!!,
-//        coords.longitude?.toDouble()!!,
-//        1,
-//        Geocoder.GeocodeListener {
-//            cityName = it[0].locality
-//        }
-//    )
-//
 //    return cityName
 //}

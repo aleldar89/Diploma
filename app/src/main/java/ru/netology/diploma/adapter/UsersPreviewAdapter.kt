@@ -29,8 +29,12 @@ class UserViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(user: UserResponse) {
         binding.apply {
+            if (user.avatar != null)
+                avatar.loadAvatar(user.avatar)
+            else
+                avatar.loadAvatar()
+
             name.text = user.name
-            user.avatar?.let { avatar.loadAvatar(it) }
 
             userGroup.setOnClickListener {
                 onInteractionListener.onAuthor(user)

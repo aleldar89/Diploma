@@ -82,8 +82,6 @@ class SelectedPostFragment : Fragment() {
                 }
             },
             object : OnUserIdsListener {},
-            MediaLifecycleObserver(),
-            ExoPlayerLifecycleObserver(requireContext()),
             binding.root.context,
         )
 

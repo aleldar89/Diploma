@@ -2,7 +2,6 @@ package ru.netology.diploma.ui.event_fragments
 
 import android.Manifest
 import android.app.Activity
-import android.app.DatePickerDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -14,11 +13,13 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.coroutineScope
 import androidx.navigation.fragment.findNavController
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.diploma.R
 import ru.netology.diploma.databinding.FragmentNewEventBinding
@@ -27,12 +28,11 @@ import ru.netology.diploma.dto.Coordinates
 import ru.netology.diploma.dto.ImageAttachment
 import ru.netology.diploma.dto.VideoAttachment
 import ru.netology.diploma.extensions.createToast
-import ru.netology.diploma.extensions.dateFormatter
 import ru.netology.diploma.mediplayer.MediaLifecycleObserver
+import ru.netology.diploma.ui.StartDatePickFragment
 import ru.netology.diploma.util.AndroidUtils
 import ru.netology.diploma.util.StringArg
 import ru.netology.diploma.viewmodel.EventViewModel
-import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -42,12 +42,14 @@ class NewEventFragment : Fragment() {
     companion object {
         var Bundle.textArg: String? by StringArg
         private const val MAX_IMAGE_SIZE = 2048
-        private const val datePattern = "yyyy-MM-dd"
+        private const val DATE_PATTERN = "yyyy-MM-dd"
         var currentLocation: Coordinates? = null
     }
+    private lateinit var dateTime: Date
+    private val gson = Gson()
+    private val sdf = SimpleDateFormat(DATE_PATTERN, Locale.US)
 
     private val viewModel: EventViewModel by activityViewModels()
-    private val observer = MediaLifecycleObserver()
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val requestPermissionLauncher =
@@ -102,9 +104,14 @@ class NewEventFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         getCurrentLocation()
-        setHasOptionsMenu(true)
+
+        setFragmentResultListener("requestStartKey") { _, bundle ->
+            dateTime = gson.fromJson(bundle.getString("bundleStartKey"), Date::class.java)
+            binding?.datetime?.text = sdf.format(dateTime)
+        }
     }
 
     override fun onDestroyView() {
@@ -120,8 +127,8 @@ class NewEventFragment : Fragment() {
         when (item.itemId) {
             R.id.save -> {
                 viewModel.changeContent(
-                    content = binding?.edit?.text?.toString() ?: "",
-                    datetime = binding?.dateTime?.text.toString().trim().dateFormatter(),
+                    content = binding?.edit?.text?.toString()?.trim() ?: "",
+                    datetime = binding?.datetime?.text.toString().trim(),
                     link = binding?.link?.text?.toString()?.trim(),
                     coords = currentLocation
                 )
@@ -156,15 +163,15 @@ class NewEventFragment : Fragment() {
 
         val cal = Calendar.getInstance()
 
-        val dateSetListener =
-            DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
-                cal.set(Calendar.YEAR, year)
-                cal.set(Calendar.MONTH, monthOfYear)
-                cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-
-                val sdf = SimpleDateFormat(datePattern, Locale.US)
-                binding.dateTime.text = sdf.format(cal.time)
-            }
+//        val dateSetListener =
+//            DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
+//                cal.set(Calendar.YEAR, year)
+//                cal.set(Calendar.MONTH, monthOfYear)
+//                cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+//
+//                val sdf = SimpleDateFormat(datePattern, Locale.US)
+//                binding.datetime.text = sdf.format(cal.time)
+//            }
 
         arguments?.textArg?.let(binding.edit::setText)
 
@@ -185,7 +192,7 @@ class NewEventFragment : Fragment() {
                     binding.previewAudio.isVisible = true
                     binding.previewAudio.apply {
                         setOnClickListener {
-                            observer.apply {
+                            MediaLifecycleObserver().apply {
                                 mediaPlayer?.stop()
                                 mediaPlayer?.reset()
                                 mediaPlayer?.setDataSource(context, media.uri!!)
@@ -202,14 +209,10 @@ class NewEventFragment : Fragment() {
             }
         }
 
-        binding.dateTime.text = SimpleDateFormat(datePattern).format(System.currentTimeMillis())
-        binding.dateTime.setOnClickListener {
-            DatePickerDialog(
-                requireContext(), dateSetListener,
-                cal.get(Calendar.YEAR),
-                cal.get(Calendar.MONTH),
-                cal.get(Calendar.DAY_OF_MONTH)
-            ).show()
+        binding.dateButton.setOnClickListener {
+            StartDatePickFragment().show(
+                parentFragmentManager, StartDatePickFragment.TAG
+            )
         }
 
         binding.takePhoto.setOnClickListener {
@@ -264,11 +267,11 @@ class NewEventFragment : Fragment() {
 
     private fun getCurrentLocation() {
         lifecycle.coroutineScope.launchWhenCreated {
-            when {
+            when (PackageManager.PERMISSION_GRANTED) {
                 ContextCompat.checkSelfPermission(
                     requireContext(),
                     Manifest.permission.ACCESS_FINE_LOCATION
-                ) == PackageManager.PERMISSION_GRANTED -> {
+                ) -> {
                     fusedLocationClient.lastLocation.addOnSuccessListener { location ->
                         if (location != null) {
                             currentLocation = Coordinates(
