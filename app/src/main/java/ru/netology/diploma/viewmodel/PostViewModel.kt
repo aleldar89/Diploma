@@ -7,10 +7,8 @@ import androidx.paging.map
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import ru.netology.diploma.auth.AppAuth
 import ru.netology.diploma.dto.*
@@ -169,7 +167,6 @@ class PostViewModel @Inject constructor(
             }
         }
     }
-
 
     fun dislikeById(post: Post) {
         viewModelScope.launch {

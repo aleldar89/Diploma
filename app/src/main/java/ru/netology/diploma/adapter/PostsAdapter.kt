@@ -8,10 +8,18 @@ import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.last
 import ru.netology.diploma.R
 import ru.netology.diploma.databinding.CardPostBinding
 import ru.netology.diploma.dto.AttachmentType
@@ -128,6 +136,20 @@ class PostViewHolder(
                 AttachmentType.AUDIO -> {
                     audioView.isVisible = true
                     MediaLifecycleObserver().apply {
+                        seekBar.max = 100
+                        if (mediaPlayer?.isPlaying == true) {
+                            CoroutineScope(Dispatchers.Default).launch {
+                                while (true) {
+                                    seekBar.progress = flow {
+                                        delay(1000)
+                                        val currentPosition = mediaPlayer?.currentPosition ?: 0
+                                        val duration = mediaPlayer?.duration ?: 0
+                                        emit((currentPosition.toFloat() / duration.toFloat() * 100).toInt())
+                                    }.last()
+                                }
+                            }
+                        }
+
                         playView.setOnClickListener {
                             if (mediaPlayer?.isPlaying == true) {
                                 playView.setImageResource(R.drawable.ic_baseline_play_circle_filled_24)
@@ -178,7 +200,6 @@ class PostViewHolder(
             } else {
                 mentionIds.isVisible = false
             }
-
         }
     }
 

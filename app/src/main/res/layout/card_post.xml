@@ -150,7 +150,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            app:constraint_referenced_ids="play_view, seek_bar"/>
+            app:constraint_referenced_ids="play_view, seek_bar" />
 
         <ImageView
             android:id="@+id/play_view"
@@ -166,10 +166,10 @@
             android:id="@+id/seek_bar"
             android:layout_width="0dp"
             android:layout_height="10dp"
-            app:layout_constraintStart_toEndOf="@id/play_view"
+            app:layout_constraintBottom_toBottomOf="@id/play_view"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/play_view"
-            app:layout_constraintBottom_toBottomOf="@id/play_view"/>
+            app:layout_constraintStart_toEndOf="@id/play_view"
+            app:layout_constraintTop_toTopOf="@id/play_view" />
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/footer2"
@@ -177,6 +177,47 @@
             android:layout_height="wrap_content"
             app:barrierDirection="bottom"
             app:constraint_referenced_ids="image_view, video_view, play_view" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.50" />
+
+        <ImageView
+            android:id="@+id/avatar1"
+            android:layout_width="@dimen/user_avatar_size"
+            android:layout_height="@dimen/user_avatar_size"
+            android:contentDescription="@string/description_def_author_avatar"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/like"
+            app:layout_constraintEnd_toStartOf="@id/guideline"
+            app:layout_constraintTop_toTopOf="@id/like"
+            tools:srcCompat="@sample/post.json/data/authorAvatar" />
+
+        <ImageView
+            android:id="@+id/avatar2"
+            android:layout_width="@dimen/user_avatar_size"
+            android:layout_height="@dimen/user_avatar_size"
+            android:contentDescription="@string/description_def_author_avatar"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/like"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/like"
+            tools:srcCompat="@sample/post.json/data/authorAvatar" />
+
+        <ImageView
+            android:id="@+id/avatar3"
+            android:layout_width="@dimen/user_avatar_size"
+            android:layout_height="@dimen/user_avatar_size"
+            android:contentDescription="@string/description_def_author_avatar"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/like"
+            app:layout_constraintStart_toEndOf="@id/guideline"
+            app:layout_constraintTop_toTopOf="@id/like"
+            tools:srcCompat="@sample/post.json/data/authorAvatar" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/like"

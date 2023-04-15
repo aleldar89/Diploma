@@ -4,6 +4,7 @@
     <dimen name="little_spacing">12dp</dimen>
     <dimen name="common_text_size">18sp</dimen>
     <dimen name="posts_avatar_size">48dp</dimen>
+    <dimen name="user_avatar_size">24dp</dimen>
     <dimen name="icon_button_padding">12dp</dimen>
     <dimen name="icon_button_min_size">32dp</dimen>
     <dimen name="double_spacing">32dp</dimen>
