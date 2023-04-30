@@ -7,7 +7,6 @@ import androidx.paging.map
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import ru.netology.diploma.auth.AppAuth
@@ -25,7 +24,6 @@ private val empty = Post(
     authorJob = "",
     content = "",
     published = "",
-    coords = Coordinates("", ""),
     link = "",
     likeOwnerIds = emptyList(),
     mentionIds = emptyList(),
@@ -73,10 +71,6 @@ class PostViewModel @Inject constructor(
     val postCreated: LiveData<Unit>
         get() = _postCreated
 
-    private val _addresses = MutableLiveData<MutableMap<Int, String>>()
-    val addresses: LiveData<MutableMap<Int, String>>
-        get() = _addresses
-
     val data: Flow<PagingData<Post>> = appAuth.data
         .flatMapLatest { auth ->
             repository.data
@@ -108,7 +102,7 @@ class PostViewModel @Inject constructor(
                     when (media.value) {
                         is ImageAttachment -> media.value?.let {
                             it as ImageAttachment
-                            repository.saveWithImage(post, it.file!!)
+                            repository.saveWithImage(post, it.file)
                         }
                         is AudioAttachment -> media.value?.uri?.let { uri ->
                             repository.saveWithAudio(post, uri)
@@ -190,7 +184,7 @@ class PostViewModel @Inject constructor(
         edited.value = post
     }
 
-    fun changeContent(content: String, link: String?, coords: Coordinates?) {
+    fun changeContent(content: String, link: String, coords: Coordinates?) {
         val text = content.trim()
         if (edited.value?.content == text) {
             return
@@ -202,30 +196,11 @@ class PostViewModel @Inject constructor(
         )
     }
 
-    fun getAddress() {
-        viewModelScope.launch {
-            try {
-                data.map {
-                    it.map { post ->
-                        if (post.coords != null) {
-                            _addresses.value?.put(
-                                post.id,
-                                repository.getAddress(post.coords).toString()
-                            )
-                        }
-                    }
-                }
-            } catch (e: Exception) {
-                _error.value = e
-            }
-        }
-    }
-
     fun clearEditedData() {
         edited.value = empty
     }
 
-    fun attachImage(uri: Uri, file: File?) {
+    fun attachImage(uri: Uri, file: File) {
         clearMedia()
         _media.value = ImageAttachment(uri, file)
     }

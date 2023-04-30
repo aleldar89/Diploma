@@ -15,18 +15,18 @@ enum class AttachmentType {
 }
 
 sealed interface MediaAttachment {
-    val uri: Uri?
+    val uri: Uri
 }
 
 data class ImageAttachment(
-    override val uri: Uri? = null,
-    val file: File? = null
+    override val uri: Uri,
+    val file: File
 ) : MediaAttachment
 
 data class VideoAttachment(
-    override val uri: Uri? = null
+    override val uri: Uri
 ) : MediaAttachment
 
 data class AudioAttachment(
-    override val uri: Uri? = null
+    override val uri: Uri
 ) : MediaAttachment

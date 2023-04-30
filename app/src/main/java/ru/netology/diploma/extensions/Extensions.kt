@@ -53,16 +53,3 @@ fun String.toJob(): Job {
 fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
 
 fun String.dateFormatter(): String = this + "T00:00:00.000Z"
-
-//fun Geocoder.getCityName(coords: Coordinates): String {
-//    var cityName = ""
-//    val addresses = this.getFromLocation(
-//        coords.lat?.toDouble()!!,
-//        coords.longitude?.toDouble()!!,
-//        1
-//    )
-//    if (addresses != null) {
-//        cityName = addresses[0].locality
-//    }
-//    return cityName
-//}

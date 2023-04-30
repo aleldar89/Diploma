@@ -114,7 +114,7 @@ class EventViewModel @Inject constructor(
                     when (media.value) {
                         is ImageAttachment -> media.value?.let {
                             it as ImageAttachment
-                            repository.saveWithImage(post, it.file!!)
+                            repository.saveWithImage(post, it.file)
                         }
                         is AudioAttachment -> media.value?.uri?.let { uri ->
                             repository.saveWithAudio(post, uri)
@@ -253,7 +253,8 @@ class EventViewModel @Inject constructor(
         edited.value = empty
     }
 
-    fun attachImage(uri: Uri, file: File?) {
+
+    fun attachImage(uri: Uri, file: File) {
         clearMedia()
         _media.value = ImageAttachment(uri, file)
     }

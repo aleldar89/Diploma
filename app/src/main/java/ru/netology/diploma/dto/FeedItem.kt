@@ -21,6 +21,7 @@ data class Post(
     val attachment: Attachment? = null,
     val ownedByMe: Boolean,
     val users: Map<Long, UserPreview>,
+    val address: String? = null
 ) : FeedItem
 
 data class Event(

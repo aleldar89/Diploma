@@ -25,9 +25,8 @@ class RegistrationViewModel @Inject constructor(
     private val apiService: ApiService
 ) : ViewModel() {
 
-    private val noPhoto = ImageAttachment()
-    private val _media = MutableLiveData(noPhoto)
-    val media: LiveData<ImageAttachment>
+    private val _media = MutableLiveData<ImageAttachment?>(null)
+    val media: LiveData<ImageAttachment?>
         get() = _media
 
     fun changePhoto(uri: Uri, file: File) {

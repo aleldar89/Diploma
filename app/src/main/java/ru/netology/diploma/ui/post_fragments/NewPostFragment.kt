@@ -114,7 +114,7 @@ class NewPostFragment : Fragment() {
             R.id.save -> {
                 viewModel.changeContent(
                     content = binding?.edit?.text?.toString() ?: "",
-                    link = binding?.link?.text?.toString(),
+                    link = binding?.link?.text?.toString() ?: "",
                     coords = currentLocation
                 )
                 viewModel.save()

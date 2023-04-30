@@ -3,7 +3,7 @@ package ru.netology.diploma.dto
 import com.google.gson.annotations.SerializedName
 
 data class Coordinates(
-    val lat: String?,
+    val lat: String,
     @SerializedName("long")
-    val longitude: String?,
+    val longitude: String,
 )

@@ -10,6 +10,7 @@ import com.yandex.mapkit.search.Address
 import com.yandex.mapkit.search.ToponymObjectMetadata
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import okhttp3.MultipartBody
@@ -37,9 +38,9 @@ class PostRepositoryImpl @Inject constructor(
     private val context: Context,
 ) : PostRepository {
 
-    private val apiKey = "1e4c7c64-4488-4233-a8f1-16488295ec90"
+    private val apiKey = ""
     private val baseUrl =
-        "https://geocode-maps.yandex.ru/1.x/?apikey=$apiKey&geocode="
+        "https://geocode-maps.yandex.ru/1.x/?apikey=${apiKey}&geocode="
     private val gson = Gson()
     private val client = OkHttpClient.Builder()
         .connectTimeout(30, TimeUnit.SECONDS)
@@ -58,6 +59,26 @@ class PostRepositoryImpl @Inject constructor(
     ).flow.map {
         it.map(PostEntity::toDto)
     }
+
+//    @OptIn(ExperimentalPagingApi::class)
+//    override val data: Flow<PagingData<Post>> = Pager(
+//        config = PagingConfig(pageSize = 10, enablePlaceholders = false),
+//        pagingSourceFactory = { postDao.getPagingSource() },
+//        remoteMediator = PostRemoteMediator(
+//            apiService = apiService,
+//            postDao = postDao,
+//            postRemoteKeyDao = postRemoteKeyDao,
+//            postsDb = postsDb
+//        )
+//    ).flow.map { pagingData ->
+//        pagingData.map { postEntity ->
+//            postEntity.toDto().copy(
+//                address = postEntity.coords?.let {
+//                    getAddress(it)
+//                }
+//            )
+//        }
+//    }
 
     override suspend fun getAll() {
         try {
@@ -264,7 +285,7 @@ class PostRepositoryImpl @Inject constructor(
     override suspend fun getAddress(coords: Coordinates): String? {
         try {
             val request: Request = Request.Builder()
-                .url("$baseUrl${coords.longitude},${coords.lat}&kind=locality&format=json&results=1")
+                .url("${baseUrl}${coords.longitude},${coords.lat}&kind=locality&format=json&results=1")
                 .build()
 
             return withContext(Dispatchers.IO) {
